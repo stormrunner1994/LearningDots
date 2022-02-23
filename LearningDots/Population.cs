@@ -14,23 +14,24 @@ namespace LearningDots
         double fitnessSum;
         public int gen = 1;
         int bestDotIndex = 0; //the index of the best dot in the dots[]
-        public int maxSteps = 1000;
+        public int maxSteps = -1;
         int feldhöhe;
         int feldbreite;
         Point zielPosition;
         Point startPosition;
-        List<double> bestfitnesses = new List<double>();
+        private Random rand = new Random();
 
 
-        public Population(int anzahl, int feldhöhe, int feldbreite, Point zielPosition, Point startPosition)
+        public Population(int anzahl, int feldhöhe, int feldbreite, Point zielPosition, Point startPosition, int maxSteps)
         {
+            this.maxSteps = maxSteps;
             this.zielPosition = zielPosition;
             this.feldhöhe = feldhöhe;
             this.feldbreite = feldbreite;
             this.startPosition = startPosition;
             dots = new Dot[anzahl];
             for (int i = 0; i < anzahl; i++)
-                dots[i] = new Dot(startPosition, i);
+                dots[i] = new Dot(startPosition, i, maxSteps, rand);
         }
 
         public void update()
@@ -48,6 +49,21 @@ namespace LearningDots
         {
             for (int i = 0; i < dots.Length; i++)
                 dots[i].calculateFitness(zielPosition.X, zielPosition.Y);
+        }
+
+
+        public bool SoManyReachedGoal(int prozent)
+        {
+            int zielwert = dots.Length * prozent / 100;
+            int count = 0;
+
+            foreach (Dot d in dots)
+            {
+                if (d.reachedGoal)
+                    count++;
+            }
+
+            return count >= zielwert;
         }
 
         public bool allDotsFinished()
@@ -95,6 +111,17 @@ namespace LearningDots
             return iFinished + "/" + dots.Length;
         }
 
+
+        public List<Dot> GetReihenfolge()
+        {
+            List<Dot> sorted = new List<Dot>();
+            foreach (var d in dots.OrderByDescending(i => i.fitness))
+                sorted.Add(d);
+
+            return sorted;
+        }
+
+
         public double[] GetBestWorstAvgFitness()
         {
             double[] bestWorst = new double[3];
@@ -126,8 +153,7 @@ namespace LearningDots
             calculateFitnessSum();
 
             //the champion lives on 
-            bestfitnesses.Add(dots[bestDotIndex].fitness);
-            newDots[0] = dots[bestDotIndex].getChild();
+            newDots[0] = dots[bestDotIndex].getChild(maxSteps);
             newDots[0].isBest = true;
             for (int i = 1; i < newDots.Length; i++)
             {
@@ -135,10 +161,11 @@ namespace LearningDots
                 Dot parent = selectParent(i);
 
                 // For Status
-                genInfo.RankChosen(i);
+                if (genInfo != null)
+                genInfo.RankChosen(parent.rang);
 
                 //get baby from them
-                newDots[i] = parent.getChild();
+                newDots[i] = parent.getChild(maxSteps);
             }
 
             // overwrite dots with new generation
@@ -164,7 +191,8 @@ namespace LearningDots
         Dot selectParent(int index)
         {
             double faktor = 1 / fitnessSum;
-            double rand = new Random(index).NextDouble() / faktor;
+          
+            double rand = this.rand.NextDouble() / faktor;
             double runningSum = 0;
 
             for (int i = 0; i < dots.Length; i++)
@@ -179,14 +207,35 @@ namespace LearningDots
             return dots.Last();
         }
 
+        public double durchschnittlicheÄnderungen()
+        {
+            double ratio = 0;
+
+            for (int a = 1; a < dots.Length; a++)
+            {
+                for (int b = 0; b < dots[a].brain.directions.Length; b++)
+                {
+                    if (dots[a].brain.directions[b] != dots[0].brain.directions[b])
+                        ratio++;
+                }
+            }
+
+            return ratio/ (dots.Length-1);
+        }
+
         //------------------------------------------------------------------------------------------------------------------------------------------
         //mutates all the brains of the babies
         public void mutateBabies()
         {
             for (int i = 1; i < dots.Length; i++)
             {
-                dots[i].brain.mutate(i);
+                dots[i].brain.mutate();
             }
+        }
+
+        public Dot getBestDot()
+        {
+            return dots[getBestDotIndex()];
         }
 
         //---------------------------------------------------------------------------------------------------------------------------------------------
@@ -204,27 +253,23 @@ namespace LearningDots
                 }
             }
 
-            // setze Rang anhand von Fitness
-            if (SETZERANG)
+            double größte = 0;
+            double kleinste = 1;
+            foreach (Dot d in dots)
             {
-                double größte = 0;
-                double kleinste = 1;
-                foreach (Dot d in dots)
+                int rang = dots.Length;
+
+                if (d.fitness > größte) größte = d.fitness;
+                if (d.fitness < kleinste) kleinste = d.fitness;
+
+                foreach (Dot dd in dots)
                 {
-                    int rang = 100;
+                    if (d == dd) continue;
+                    if (d.fitness > dd.fitness)
+                        rang--;
 
-                    if (d.fitness > größte) größte = d.fitness;
-                    if (d.fitness < kleinste) kleinste = d.fitness;
-
-                    foreach (Dot dd in dots)
-                    {
-                        if (d == dd) continue;
-                        if (d.fitness > dd.fitness)
-                            rang--;
-
-                    }
-                    d.rang = rang;
                 }
+                d.rang = rang;
             }
 
             //if this dot reached the goal then reset the minimum number of steps it takes to get to the goal

@@ -18,7 +18,7 @@ namespace LearningDots
             defaultforecolor = textBoxstartX.ForeColor;
             Point zielPos = new Point(panel1.Width / 2, 0);
             Point startPos = new Point(panel1.Width / 2, panel1.Height - Training.SPEZIALPUNKTEGRÖSSE);
-            training = new Training(panel1, zielPos, startPos, 100, richTextBox1);
+            training = new Training(panel1, zielPos, startPos, 100, richTextBox1, 1000);
         }
 
         private Color defaultforecolor;
@@ -29,7 +29,8 @@ namespace LearningDots
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            comboBoxanzahldots.SelectedIndex = 3;
+            comboBoxmaxSchritte.SelectedIndex = 1;
+            comboBoxanzahldots.SelectedIndex = 2;
             comboBoxmaxtrainingszeit.SelectedIndex = 3;
             textBoxstartX.Text = training.GetStartpunkt().X.ToString();
             textBoxstartY.Text = training.GetStartpunkt().Y.ToString();
@@ -46,12 +47,15 @@ namespace LearningDots
                 Point zielPos = new Point(Convert.ToInt32(textBoxzielX.Text), Convert.ToInt32(textBoxzielY.Text));
                 Point startPos = new Point(Convert.ToInt32(textBoxstartX.Text), Convert.ToInt32(textBoxstartY.Text));
                 int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
-                training.SetSettings(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked);
+                int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);
+                training.SetSettings(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps);
                 training.Starten();
                 buttonTrain.Text = "Training stoppen";
             }
             else
             {
+                // Sichere besten
+                training.SafeBest();
                 training.Stoppen();
                 buttonTrain.Text = "Training starten";
             }
@@ -160,5 +164,19 @@ namespace LearningDots
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (button1.Text == "Lade besten")
+            {
+                button1.Text = "Halte an";
+                training.LoadBest();
+                training.LasseBestenAblaufen();
+            }
+            else
+            {
+                button1.Text = "Lade besten";
+                training.HalteBestenAn();
+            }
+        }
     }
 }

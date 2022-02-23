@@ -76,9 +76,23 @@ namespace LearningDots
 
         public string GetInfo()
         {
-            return "Gen: " + iGen + ":\nBest: " + bestFitness + "\nWorst: " +
+            return "Gen: " + (iGen +1) + ":\nBest: " + bestFitness + "\nWorst: " +
                 worstFitness + "\nAvg: " + avgFitness + "\nDiff%: " + diffFitnessPercentage+ "\nDead: " + dead
-                + "\nReachedGoal: " + reachedGoal;
+                + "\nReachedGoal: " + reachedGoal + "\nChosenRank: " + GetChosenRankRatio();
+        }
+
+        private double GetChosenRankRatio()
+        {
+            double ratio = 0;
+            int count = 0;
+
+            foreach(var pair in dictRanksChosenAsParent)
+            {
+                ratio += pair.Key * pair.Value;
+                count += pair.Value;
+            }
+
+            return ratio/count;
         }
 
     }

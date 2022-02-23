@@ -143,6 +143,12 @@ namespace Invoker_
             }
         }
 
+        public static void invokeInvalidate(object myobject)
+        {
+            if (((Panel)myobject).InvokeRequired) ((Panel)myobject).Invoke((MethodInvoker)(() => ((Panel)myobject).Invalidate()));
+            else ((Panel)myobject).Invalidate();
+        }
+
         public static string invokeGetText(object myobject)
         {
             string text = "";

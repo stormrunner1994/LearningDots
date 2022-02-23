@@ -11,25 +11,33 @@ namespace LearningDots
     {
         public Vector[] directions; //series of vectors which get the dot to the goal (hopefully)
         public int step = 0;
-        public int index = 0;
+        private Random rand;
 
-        public Brain(int size, int index)
+        public Brain(int size, int index, Random rand)
         {
-            this.index = index;
+            this.rand = rand; 
             directions = new Vector[size];
             randomize();
         }
 
-        public Brain (Brain brain)
+        // für loaded Dot
+        public Brain(List<Vector> directions)
         {
-            directions = new Vector[brain.directions.Length];
-            for (int a = 0; a < directions.Length; a++)
-                directions[a] = new Vector(brain.directions[a].X, brain.directions[a].Y);
+            this.directions = new Vector[directions.Count];
+            for (int a = 0; a < directions.Count; a++)
+                this.directions[a] = directions[a];
+        }
+
+        public Brain (Brain brain, int size)
+        {
+            this.rand = brain.rand;
+            directions = new Vector[size];
+            for (int a = 0; a < size; a++)
+                directions[a] = brain.directions[a];
         }
 
         void randomize()
         {
-            Random rand = new Random(index);
             for (int i = 0; i < directions.Length; i++)
             {
                 int x = rand.Next(-1, 2);
@@ -45,13 +53,12 @@ namespace LearningDots
             }
         }
 
-        public void mutate(int index)
+        public void mutate()
         {
-            Random rand = new Random(index);
             for (int i = 0; i < directions.Length; i++)
             {
                 int irand = rand.Next(0, 100);
-                if (irand < 10)
+                if (irand < 1)
                 {
                     // random direction
                     int x = rand.Next(-1, 2);

@@ -31,6 +31,7 @@ namespace LearningDots
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBoxZuschauen = new System.Windows.Forms.CheckBox();
             this.buttonZeichneHindernis = new System.Windows.Forms.Button();
             this.comboBoxmaxtrainingszeit = new System.Windows.Forms.ComboBox();
             this.comboBoxanzahldots = new System.Windows.Forms.ComboBox();
@@ -51,7 +52,9 @@ namespace LearningDots
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.checkBoxZuschauen = new System.Windows.Forms.CheckBox();
+            this.comboBoxmaxSchritte = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -69,6 +72,9 @@ namespace LearningDots
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.comboBoxmaxSchritte);
+            this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.checkBoxZuschauen);
             this.groupBox1.Controls.Add(this.buttonZeichneHindernis);
             this.groupBox1.Controls.Add(this.comboBoxmaxtrainingszeit);
@@ -93,9 +99,19 @@ namespace LearningDots
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings:";
             // 
+            // checkBoxZuschauen
+            // 
+            this.checkBoxZuschauen.AutoSize = true;
+            this.checkBoxZuschauen.Location = new System.Drawing.Point(444, 37);
+            this.checkBoxZuschauen.Name = "checkBoxZuschauen";
+            this.checkBoxZuschauen.Size = new System.Drawing.Size(80, 17);
+            this.checkBoxZuschauen.TabIndex = 19;
+            this.checkBoxZuschauen.Text = "Zuschauen";
+            this.checkBoxZuschauen.UseVisualStyleBackColor = true;
+            // 
             // buttonZeichneHindernis
             // 
-            this.buttonZeichneHindernis.Location = new System.Drawing.Point(541, 13);
+            this.buttonZeichneHindernis.Location = new System.Drawing.Point(669, 13);
             this.buttonZeichneHindernis.Name = "buttonZeichneHindernis";
             this.buttonZeichneHindernis.Size = new System.Drawing.Size(110, 23);
             this.buttonZeichneHindernis.TabIndex = 18;
@@ -241,7 +257,7 @@ namespace LearningDots
             // 
             // buttonTrain
             // 
-            this.buttonTrain.Location = new System.Drawing.Point(541, 37);
+            this.buttonTrain.Location = new System.Drawing.Point(669, 37);
             this.buttonTrain.Name = "buttonTrain";
             this.buttonTrain.Size = new System.Drawing.Size(110, 23);
             this.buttonTrain.TabIndex = 4;
@@ -291,15 +307,38 @@ namespace LearningDots
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // checkBoxZuschauen
+            // comboBoxmaxSchritte
             // 
-            this.checkBoxZuschauen.AutoSize = true;
-            this.checkBoxZuschauen.Location = new System.Drawing.Point(444, 37);
-            this.checkBoxZuschauen.Name = "checkBoxZuschauen";
-            this.checkBoxZuschauen.Size = new System.Drawing.Size(80, 17);
-            this.checkBoxZuschauen.TabIndex = 19;
-            this.checkBoxZuschauen.Text = "Zuschauen";
-            this.checkBoxZuschauen.UseVisualStyleBackColor = true;
+            this.comboBoxmaxSchritte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxmaxSchritte.FormattingEnabled = true;
+            this.comboBoxmaxSchritte.Items.AddRange(new object[] {
+            "500",
+            "1000",
+            "2000",
+            "5000"});
+            this.comboBoxmaxSchritte.Location = new System.Drawing.Point(524, 15);
+            this.comboBoxmaxSchritte.Name = "comboBoxmaxSchritte";
+            this.comboBoxmaxSchritte.Size = new System.Drawing.Size(59, 21);
+            this.comboBoxmaxSchritte.TabIndex = 21;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(436, 16);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(82, 13);
+            this.label11.TabIndex = 20;
+            this.label11.Text = "Max Schrittzahl:";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(588, 16);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "Lade besten";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -347,6 +386,9 @@ namespace LearningDots
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.CheckBox checkBoxZuschauen;
+        private System.Windows.Forms.ComboBox comboBoxmaxSchritte;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button button1;
     }
 }
 

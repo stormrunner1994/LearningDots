@@ -11,7 +11,7 @@ namespace LearningDots
 {
     public class Dot
     {
-        public int speed = 1;
+        public const int SPEED = 5;
         public int größe = 5;
         public Color color = Color.Black;
         public Point position;
@@ -23,6 +23,8 @@ namespace LearningDots
         public double fitness = 0;
         public int index;
         public int rang = -1;
+        public int maxSteps = 0;
+        private Random rand;
 
         public Dot(int größe, Color color, Point startPosition, int index)
         {
@@ -32,10 +34,20 @@ namespace LearningDots
             this.startPosition = this.position = startPosition;
         }
 
-        public Dot(Point startPosition, int index)
+        // Für loaded Dot
+        public Dot(Point startPosition, Brain brain)
         {
+            this.startPosition = startPosition;
+            this.position = startPosition;
+            this.brain = brain;
+        }
+
+        public Dot(Point startPosition, int index, int maxSteps, Random rand)
+        {
+            this.rand = rand;
+            this.maxSteps = maxSteps;
             this.index = index;
-            brain = new Brain(400, index);
+            brain = new Brain(maxSteps, index, rand);
             this.startPosition = this.position = startPosition;
         }
 
@@ -49,9 +61,9 @@ namespace LearningDots
                 isDead = true;
             else if (Math.Abs(goalX - position.X) < 5 && Math.Abs(goalY - position.Y) < 5)
                 reachedGoal = true;
-        }    
+        }
 
-       public void move()
+        public void move()
         {
             if (brain.step >= brain.directions.Length)
             {
@@ -60,31 +72,33 @@ namespace LearningDots
             }
 
             Vector vec = brain.directions[brain.step];
-            position.X += (int)vec.X * speed;
-            position.Y += (int)vec.Y * speed;
+            position.X += (int)vec.X * SPEED;
+            position.Y += (int)vec.Y * SPEED;
             brain.step++;
         }
 
         public void calculateFitness(int goalX, int goalY)
         {
+            double distanceToGoal = Math.Sqrt(Math.Pow(goalX - position.X, 2) + Math.Pow(goalY - position.Y, 2));
+
+            if (distanceToGoal == 0) distanceToGoal = 1;
+
             if (reachedGoal)
             {
-                //if the dot reached the goal then the fitness is based on the amount of steps it took to get there
-                fitness = 1.0 / (double)(brain.step * brain.step);
+                fitness = 1.0 + 1.0 / (distanceToGoal * distanceToGoal) + 1.0 / brain.step;
             }
             else
             {
-                //if the dot didn't reach the goal then the fitness is based on how close it is to the goal
-                double distanceToGoal = Math.Sqrt(Math.Pow(goalX - position.X, 2) + Math.Pow(goalY - position.Y, 2));
                 fitness = 1.0 / (distanceToGoal * distanceToGoal);
+
             }
         }
 
-        public Dot getChild()
-        { 
-            Dot baby = new Dot(startPosition, index);
-            baby.brain = new Brain(brain); // Copy Constructor
+        public Dot getChild(int maxSteps)
+        {
+            Dot baby = new Dot(startPosition, index, maxSteps, rand);
+            baby.brain = new Brain(brain, maxSteps); // Copy Constructor
             return baby;
         }
-    } 
+    }
 }
