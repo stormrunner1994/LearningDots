@@ -36,7 +36,7 @@ namespace LearningDots
             textBoxstartY.Text = training.GetStartpunkt().Y.ToString();
             textBoxzielX.Text = training.GetZielpunkt().X.ToString();
             textBoxzielY.Text = training.GetZielpunkt().Y.ToString();
-            checkBoxZuschauen.Checked = false;
+            checkBoxZuschauen.Checked = true;
             //buttonTrain_Click(sender, e);
         }
 
