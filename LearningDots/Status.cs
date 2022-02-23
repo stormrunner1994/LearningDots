@@ -22,14 +22,22 @@ namespace LearningDots
             return genInfos.Last();
         }
 
-        public void AddGenInfo(double avgFitness, double worstFitness, double bestFitness)
+        public void AddGenInfo(double avgFitness, double worstFitness, double bestFitness, int dead, int reachedGoal)
         {
-            genInfos.Add(new GenInfo(populationSize,avgFitness, worstFitness, bestFitness));
+            genInfos.Add(new GenInfo(genInfos.Count, populationSize, avgFitness, worstFitness, bestFitness, dead, reachedGoal));
+        }
+
+        public List<GenInfo> GetGenInfos()
+        {
+            return genInfos;
         }
     }
 
     public class GenInfo
     {
+        private int dead = -1;
+        private int reachedGoal = -1;
+        private int iGen = -1;
         private double worstFitness = -1;
         private double bestFitness = -1;
         private double diffFitness = -1;
@@ -39,8 +47,12 @@ namespace LearningDots
         // wie oft wurd eine Rang als Parent ausgewählt
         private Dictionary<int, int> dictRanksChosenAsParent = new Dictionary<int, int>();
 
-        public GenInfo(int populationSize, double avgFitness, double worstFitness, double bestFitness)
+        public GenInfo(int iGen, int populationSize, double avgFitness, double worstFitness, double bestFitness
+            , int dead, int reachedGoal)
         {
+            this.dead = dead;
+            this.reachedGoal = reachedGoal;
+            this.iGen = iGen;
             this.avgFitness = avgFitness;
             this.populationSize = populationSize;
             for (int a = 0; a < populationSize; a++)
@@ -60,6 +72,13 @@ namespace LearningDots
         public void RankChosen(int rank)
         {
             dictRanksChosenAsParent[rank]++;
+        }
+
+        public string GetInfo()
+        {
+            return "Gen: " + iGen + ":\nBest: " + bestFitness + "\nWorst: " +
+                worstFitness + "\nAvg: " + avgFitness + "\nDead: " + dead 
+                + "\nReachedGoal: " + reachedGoal;
         }
 
     }

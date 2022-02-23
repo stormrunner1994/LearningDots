@@ -51,6 +51,7 @@ namespace LearningDots
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.checkBoxZuschauen = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -68,6 +69,7 @@ namespace LearningDots
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBoxZuschauen);
             this.groupBox1.Controls.Add(this.buttonZeichneHindernis);
             this.groupBox1.Controls.Add(this.comboBoxmaxtrainingszeit);
             this.groupBox1.Controls.Add(this.comboBoxanzahldots);
@@ -93,7 +95,7 @@ namespace LearningDots
             // 
             // buttonZeichneHindernis
             // 
-            this.buttonZeichneHindernis.Location = new System.Drawing.Point(463, 13);
+            this.buttonZeichneHindernis.Location = new System.Drawing.Point(541, 13);
             this.buttonZeichneHindernis.Name = "buttonZeichneHindernis";
             this.buttonZeichneHindernis.Size = new System.Drawing.Size(110, 23);
             this.buttonZeichneHindernis.TabIndex = 18;
@@ -239,7 +241,7 @@ namespace LearningDots
             // 
             // buttonTrain
             // 
-            this.buttonTrain.Location = new System.Drawing.Point(463, 42);
+            this.buttonTrain.Location = new System.Drawing.Point(541, 37);
             this.buttonTrain.Name = "buttonTrain";
             this.buttonTrain.Size = new System.Drawing.Size(110, 23);
             this.buttonTrain.TabIndex = 4;
@@ -268,6 +270,8 @@ namespace LearningDots
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.richTextBox1);
             this.groupBox2.Location = new System.Drawing.Point(603, 104);
             this.groupBox2.Name = "groupBox2";
@@ -281,11 +285,21 @@ namespace LearningDots
             this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.Location = new System.Drawing.Point(3, 16);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 19);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(230, 433);
+            this.richTextBox1.Size = new System.Drawing.Size(230, 430);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            // 
+            // checkBoxZuschauen
+            // 
+            this.checkBoxZuschauen.AutoSize = true;
+            this.checkBoxZuschauen.Location = new System.Drawing.Point(444, 37);
+            this.checkBoxZuschauen.Name = "checkBoxZuschauen";
+            this.checkBoxZuschauen.Size = new System.Drawing.Size(80, 17);
+            this.checkBoxZuschauen.TabIndex = 19;
+            this.checkBoxZuschauen.Text = "Zuschauen";
+            this.checkBoxZuschauen.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -332,6 +346,7 @@ namespace LearningDots
         private System.Windows.Forms.Button buttonZeichneHindernis;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.CheckBox checkBoxZuschauen;
     }
 }
 

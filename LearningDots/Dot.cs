@@ -70,7 +70,7 @@ namespace LearningDots
             if (reachedGoal)
             {
                 //if the dot reached the goal then the fitness is based on the amount of steps it took to get there
-                fitness = 1.0 / 16.0 + 10000.0 / (double)(brain.step * brain.step);
+                fitness = 1.0 / (double)(brain.step * brain.step);
             }
             else
             {

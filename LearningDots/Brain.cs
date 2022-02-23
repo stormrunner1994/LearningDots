@@ -47,11 +47,11 @@ namespace LearningDots
 
         public void mutate(int index)
         {
+            Random rand = new Random(index);
             for (int i = 0; i < directions.Length; i++)
             {
-                Random rand = new Random(index);
-                int irand = rand.Next(0, 2);
-                if (irand < 1)
+                int irand = rand.Next(0, 100);
+                if (irand < 10)
                 {
                     // random direction
                     int x = rand.Next(-1, 2);

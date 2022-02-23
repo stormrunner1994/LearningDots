@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,15 +16,18 @@ namespace LearningDots
         private Dot start;
         private Panel panel;
         private Population population;
-        private Timer timer = new Timer();
+        private int populationsGröße = -1;
+        private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         private RichTextBox rtbStatus;
         public Status status;
+        private bool zuschauen = false;
+        private Thread thread;
 
-        public Training(Panel panel, Point zielPos, Point startPos, int populationsGröße,
-            RichTextBox rtbStatus)
+        public Training(Panel panel, Point zielPos, Point startPos, int populationsGröße, RichTextBox rtbStatus)
         {
-            status = new Status(populationsGröße);
             this.rtbStatus = rtbStatus;
+            this.populationsGröße = populationsGröße;
+            status = new Status(populationsGröße);
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos,-1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos,-1);
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position);
@@ -33,8 +37,9 @@ namespace LearningDots
             timer.Tick += Timer_Tick;
         }
 
-        public void SetSettings(Point zielPos, Point startPos, int populationsGröße)
+        public void SetSettings(Point zielPos, Point startPos, int populationsGröße, bool zuschauen)
         {
+            this.zuschauen = zuschauen;
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos,-1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos,-1);
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position);           
@@ -87,26 +92,86 @@ namespace LearningDots
                 // generic algorithm
                 population.calculateFitnessForAllDots();
                 double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
-                status.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0]);
+                int[] deadReachedGoal = population.GetDeadReachedGoal();
+                status.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
+                deadReachedGoal[0], deadReachedGoal[1]);
 
                 population.naturalSelection(status.GetLastGenInfo());
                 population.mutateBabies();
+                UpdateStatusRichTextBox();
             }
             else
             {
                 population.update();
             }
-            rtbStatus.Text = "Gen: " + population.gen + "\nFinished: " + population.FinishedQuote();
+        }
+
+        private void UpdateStatusRichTextBox()
+        {
+            Invoker_.Invoker.invokeText(rtbStatus, "");
+            var genInfos = status.GetGenInfos();
+
+            for (int a = genInfos.Count - 1; a > -1; a--)
+            {
+                GenInfo gi = genInfos[a];
+                if (rtbStatus.Text != "") rtbStatus.Text += "\n\n" + gi.GetInfo();
+                else rtbStatus.Text += gi.GetInfo();
+            }
+        }
+
+        private void ThreadTrainieren()
+        {
+            for (int a = 0; a < 200; a++)
+            {
+                if (population.allDotsFinished())
+                {
+                    // generic algorithm
+                    population.calculateFitnessForAllDots();
+                    double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
+                    int[] deadReachedGoal = population.GetDeadReachedGoal();
+                    status.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
+                    deadReachedGoal[0], deadReachedGoal[1]);
+
+                    population.naturalSelection(status.GetLastGenInfo());
+                    population.mutateBabies();
+                    UpdateStatusRichTextBox();
+                   // panel.Invalidate();
+
+                }
+                else
+                {
+                    population.update();
+                }
+
+            }
+
+            UpdateStatusRichTextBox();
         }
 
         public void Starten()
         {
-            timer.Start();
+            status = new Status(populationsGröße);
+            if (zuschauen)
+            {
+                timer.Start();
+            }
+            else
+            {
+                thread = new Thread(delegate () { ThreadTrainieren(); });
+                thread.Start();
+            }
         }
 
         public void Stoppen()
         {
-            timer.Stop();
+            if (zuschauen)
+            {
+                timer.Stop();
+            }
+            else
+            {
+                thread.Abort();
+            }
         }
 
 
@@ -115,7 +180,7 @@ namespace LearningDots
             foreach (Dot d in population.dots)
             {
                 if (d.isBest)
-                    e.Graphics.FillEllipse(new SolidBrush(Color.Pink), d.position.X, d.position.Y, d.größe, d.größe);
+                    e.Graphics.FillEllipse(new SolidBrush(Color.DarkRed), d.position.X, d.position.Y, d.größe+3, d.größe+3);
                 else
                     e.Graphics.FillEllipse(new SolidBrush(d.color), d.position.X, d.position.Y, d.größe, d.größe);
             }

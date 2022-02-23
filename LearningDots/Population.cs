@@ -62,6 +62,27 @@ namespace LearningDots
             return true;
         }
 
+        public int[] GetDeadReachedGoal()
+        {
+            int[] res = new int[2];
+
+            if (dots.Length < 1) return res;
+
+            int dead = 0;
+            int reachedGoal = 0;
+
+            foreach (Dot d in dots)
+            {
+                if (d.isDead) dead++;
+                if (d.reachedGoal) reachedGoal++;
+            }
+
+            res[0] = dead;
+            res[1] = reachedGoal;
+
+            return res;
+        }
+
         public string FinishedQuote()
         {
             int iFinished = 0;

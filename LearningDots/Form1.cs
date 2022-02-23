@@ -46,7 +46,7 @@ namespace LearningDots
                 Point zielPos = new Point(Convert.ToInt32(textBoxzielX.Text), Convert.ToInt32(textBoxzielY.Text));
                 Point startPos = new Point(Convert.ToInt32(textBoxstartX.Text), Convert.ToInt32(textBoxstartY.Text));
                 int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
-                training.SetSettings(zielPos, startPos, populationsGröße);
+                training.SetSettings(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked);
                 training.Starten();
                 buttonTrain.Text = "Training stoppen";
             }
