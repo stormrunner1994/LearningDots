@@ -70,7 +70,6 @@ namespace LearningDots
         {
             for (int i = 0; i < dots.Length; i++)
             {
-                // Reached goal????
                 if (!dots[i].isDead && !dots[i].reachedGoal)
                     return false;
             }

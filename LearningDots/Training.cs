@@ -14,7 +14,6 @@ namespace LearningDots
     {
         private static bool STATUSBEHALTEN = true;
         public static int SPEZIALPUNKTEGRÖSSE = 10;
-        private int maxSteps = 0;
         private Dot ziel;
         private Dot start;
         private Panel panel;
@@ -26,13 +25,16 @@ namespace LearningDots
         private bool zuschauen = false;
         private Thread thread;
         private Dot loadedDot;
-        private enum TimerAktion{ trainieren, besteDot };
+        private enum TimerAktion { trainieren, besteDot };
         private TimerAktion timeraktion = TimerAktion.trainieren;
+        private ProgressBar progressbar;
+        Label labelprogressbar;
 
         public Training(Panel panel, Point zielPos, Point startPos, int populationsGröße, RichTextBox rtbStatus
-            , int maxSteps)
+            , int maxSteps, ProgressBar progressbar, Label labelprogressbar)
         {
-            this.maxSteps = maxSteps;
+            this.progressbar = progressbar;
+            this.labelprogressbar = labelprogressbar;
             this.rtbStatus = rtbStatus;
             this.populationsGröße = populationsGröße;
             status = new Status(populationsGröße);
@@ -47,7 +49,6 @@ namespace LearningDots
 
         public void SetSettings(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps)
         {
-            this.maxSteps = maxSteps;
             this.populationsGröße = populationsGröße;
             this.zuschauen = zuschauen;
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos, -1);
@@ -88,7 +89,7 @@ namespace LearningDots
 
         public void SetPopulationsGröße(int populationsGröße)
         {
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps);
+            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, population.maxSteps);
             ZeichneFeld();
         }
 
@@ -116,11 +117,18 @@ namespace LearningDots
                     population.mutateBabies();
 
                     if (STATUSBEHALTEN)
-                    UpdateStatusRichTextBox(false);
+                        UpdateStatusRichTextBox(false);
+
+                    progressbar.Value = 0;
+                    progressbar.Maximum = population.maxSteps;
                 }
                 else
                 {
                     population.update();
+
+                    if (progressbar.Value + 1 <= progressbar.Maximum)
+                        progressbar.Value++;
+                    labelprogressbar.Text = progressbar.Value + "/" + progressbar.Maximum;
                 }
             }
             else
@@ -243,6 +251,9 @@ namespace LearningDots
             status = new Status(populationsGröße);
             if (zuschauen)
             {
+                progressbar.Minimum = 0;
+                progressbar.Maximum = population.maxSteps;
+                progressbar.Value = 0;
                 timer.Start();
             }
             else
@@ -284,10 +295,10 @@ namespace LearningDots
 
             // Zeichne Goal
             e.Graphics.FillEllipse(new SolidBrush(ziel.color), ziel.position.X, ziel.position.Y, ziel.größe, ziel.größe);
-                // Zeichne Start
-                e.Graphics.FillEllipse(new SolidBrush(start.color), start.position.X, start.position.Y, start.größe, start.größe);
-            
-            
+            // Zeichne Start
+            e.Graphics.FillEllipse(new SolidBrush(start.color), start.position.X, start.position.Y, start.größe, start.größe);
+
+
         }
 
         // https://social.msdn.microsoft.com/Forums/en-US/061f3678-f31f-4ad8-926b-f364e7367ad3/draw-circle-and-move-on-a-form-in-c?forum=csharplanguage

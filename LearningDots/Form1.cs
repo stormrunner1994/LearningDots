@@ -18,7 +18,7 @@ namespace LearningDots
             defaultforecolor = textBoxstartX.ForeColor;
             Point zielPos = new Point(panel1.Width / 2, 0);
             Point startPos = new Point(panel1.Width / 2, panel1.Height - Training.SPEZIALPUNKTEGRÖSSE);
-            training = new Training(panel1, zielPos, startPos, 100, richTextBox1, 1000);
+            training = new Training(panel1, zielPos, startPos, 100, richTextBox1, 1000,progressBar1, labelprogress);
         }
 
         private Color defaultforecolor;

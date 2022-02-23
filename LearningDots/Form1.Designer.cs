@@ -31,6 +31,9 @@ namespace LearningDots
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.comboBoxmaxSchritte = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.checkBoxZuschauen = new System.Windows.Forms.CheckBox();
             this.buttonZeichneHindernis = new System.Windows.Forms.Button();
             this.comboBoxmaxtrainingszeit = new System.Windows.Forms.ComboBox();
@@ -52,9 +55,8 @@ namespace LearningDots
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.comboBoxmaxSchritte = new System.Windows.Forms.ComboBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.labelprogress = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -98,6 +100,39 @@ namespace LearningDots
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings:";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(588, 16);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "Lade besten";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // comboBoxmaxSchritte
+            // 
+            this.comboBoxmaxSchritte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxmaxSchritte.FormattingEnabled = true;
+            this.comboBoxmaxSchritte.Items.AddRange(new object[] {
+            "500",
+            "1000",
+            "2000",
+            "5000"});
+            this.comboBoxmaxSchritte.Location = new System.Drawing.Point(524, 15);
+            this.comboBoxmaxSchritte.Name = "comboBoxmaxSchritte";
+            this.comboBoxmaxSchritte.Size = new System.Drawing.Size(59, 21);
+            this.comboBoxmaxSchritte.TabIndex = 21;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(436, 16);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(82, 13);
+            this.label11.TabIndex = 20;
+            this.label11.Text = "Max Schrittzahl:";
             // 
             // checkBoxZuschauen
             // 
@@ -288,6 +323,8 @@ namespace LearningDots
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.labelprogress);
+            this.groupBox2.Controls.Add(this.progressBar1);
             this.groupBox2.Controls.Add(this.richTextBox1);
             this.groupBox2.Location = new System.Drawing.Point(603, 104);
             this.groupBox2.Name = "groupBox2";
@@ -303,42 +340,27 @@ namespace LearningDots
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox1.Location = new System.Drawing.Point(3, 19);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(230, 430);
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(230, 403);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // comboBoxmaxSchritte
+            // progressBar1
             // 
-            this.comboBoxmaxSchritte.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxmaxSchritte.FormattingEnabled = true;
-            this.comboBoxmaxSchritte.Items.AddRange(new object[] {
-            "500",
-            "1000",
-            "2000",
-            "5000"});
-            this.comboBoxmaxSchritte.Location = new System.Drawing.Point(524, 15);
-            this.comboBoxmaxSchritte.Name = "comboBoxmaxSchritte";
-            this.comboBoxmaxSchritte.Size = new System.Drawing.Size(59, 21);
-            this.comboBoxmaxSchritte.TabIndex = 21;
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(6, 428);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(227, 21);
+            this.progressBar1.TabIndex = 1;
             // 
-            // label11
+            // labelprogress
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(436, 16);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(82, 13);
-            this.label11.TabIndex = 20;
-            this.label11.Text = "Max Schrittzahl:";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(588, 16);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "Lade besten";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.labelprogress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelprogress.AutoSize = true;
+            this.labelprogress.Location = new System.Drawing.Point(98, 436);
+            this.labelprogress.Name = "labelprogress";
+            this.labelprogress.Size = new System.Drawing.Size(0, 13);
+            this.labelprogress.TabIndex = 2;
             // 
             // Form1
             // 
@@ -356,6 +378,7 @@ namespace LearningDots
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -389,6 +412,8 @@ namespace LearningDots
         private System.Windows.Forms.ComboBox comboBoxmaxSchritte;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label labelprogress;
     }
 }
 
