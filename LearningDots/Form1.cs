@@ -37,7 +37,7 @@ namespace LearningDots
             textBoxzielX.Text = training.GetZielpunkt().X.ToString();
             textBoxzielY.Text = training.GetZielpunkt().Y.ToString();
             checkBoxZuschauen.Checked = false;
-            buttonTrain_Click(sender, e);
+            //buttonTrain_Click(sender, e);
         }
 
         private void buttonTrain_Click(object sender, EventArgs e)
