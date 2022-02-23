@@ -98,7 +98,7 @@ namespace LearningDots
 
                 population.naturalSelection(status.GetLastGenInfo());
                 population.mutateBabies();
-                UpdateStatusRichTextBox();
+                UpdateStatusRichTextBox(false);
             }
             else
             {
@@ -106,22 +106,27 @@ namespace LearningDots
             }
         }
 
-        private void UpdateStatusRichTextBox()
+        private void UpdateStatusRichTextBox(bool nurLetzte)
         {
-            Invoker_.Invoker.invokeText(rtbStatus, "");
-            var genInfos = status.GetGenInfos();
-
-            for (int a = genInfos.Count - 1; a > -1; a--)
+            if (!nurLetzte)
             {
-                GenInfo gi = genInfos[a];
-                if (rtbStatus.Text != "") rtbStatus.Text += "\n\n" + gi.GetInfo();
-                else rtbStatus.Text += gi.GetInfo();
+                Invoker_.Invoker.invokeText(rtbStatus, "");
+                var genInfos = status.GetGenInfos();
+
+                for (int a = genInfos.Count - 1; a > -1; a--)
+                {
+                    GenInfo gi = genInfos[a];
+                    if (Invoker_.Invoker.invokeGetText(rtbStatus) != "") Invoker_.Invoker.invokeAppendText(rtbStatus, "\n\n" + gi.GetInfo());
+                    else Invoker_.Invoker.invokeAppendText(rtbStatus, gi.GetInfo());
+                }
             }
+            else
+                Invoker_.Invoker.invokeText(rtbStatus, status.GetLastGenInfo().GetInfo());
         }
 
         private void ThreadTrainieren()
         {
-            for (int a = 0; a < 200; a++)
+            for (int a = 0; a < 2000 * population.maxSteps; a++)
             {
                 if (population.allDotsFinished())
                 {
@@ -134,7 +139,7 @@ namespace LearningDots
 
                     population.naturalSelection(status.GetLastGenInfo());
                     population.mutateBabies();
-                    UpdateStatusRichTextBox();
+                    //UpdateStatusRichTextBox();
                    // panel.Invalidate();
 
                 }
@@ -144,8 +149,8 @@ namespace LearningDots
                 }
 
             }
-
-            UpdateStatusRichTextBox();
+            panel.Invalidate();
+            UpdateStatusRichTextBox(true);
         }
 
         public void Starten()

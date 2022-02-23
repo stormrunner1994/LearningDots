@@ -77,7 +77,7 @@ namespace LearningDots
         public string GetInfo()
         {
             return "Gen: " + iGen + ":\nBest: " + bestFitness + "\nWorst: " +
-                worstFitness + "\nAvg: " + avgFitness + "\nDead: " + dead 
+                worstFitness + "\nAvg: " + avgFitness + "\nDiff%: " + diffFitnessPercentage+ "\nDead: " + dead
                 + "\nReachedGoal: " + reachedGoal;
         }
 

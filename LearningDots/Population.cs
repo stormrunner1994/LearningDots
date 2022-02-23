@@ -14,7 +14,7 @@ namespace LearningDots
         double fitnessSum;
         public int gen = 1;
         int bestDotIndex = 0; //the index of the best dot in the dots[]
-        int maxSteps = 1000;
+        public int maxSteps = 1000;
         int feldhöhe;
         int feldbreite;
         Point zielPosition;

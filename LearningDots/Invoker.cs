@@ -136,6 +136,62 @@ namespace Invoker_
                 if (((Button)myobject).InvokeRequired) ((Button)myobject).Invoke((MethodInvoker)(() => ((Button)myobject).Text = text));
                 else ((Button)myobject).Text = text;
             }
+            else if (myobject is RichTextBox)
+            {
+                if (((RichTextBox)myobject).InvokeRequired) ((RichTextBox)myobject).Invoke((MethodInvoker)(() => ((RichTextBox)myobject).Text = text));
+                else ((RichTextBox)myobject).Text = text;
+            }
+        }
+
+        public static string invokeGetText(object myobject)
+        {
+            string text = "";
+            if (myobject is Label)
+            {
+                if (((Label)myobject).InvokeRequired) ((Label)myobject).Invoke((MethodInvoker)(() => text = ((Label)myobject).Text));
+                else  text = ((Label)myobject).Text;
+            }
+            else if (myobject is TextBox)
+            {
+                if (((TextBox)myobject).InvokeRequired) ((TextBox)myobject).Invoke((MethodInvoker)(() => text = ((TextBox)myobject).Text));
+                else text = ((TextBox)myobject).Text;
+            }
+            else if (myobject is Button)
+            {
+                if (((Button)myobject).InvokeRequired) ((Button)myobject).Invoke((MethodInvoker)(() => text = ((Button)myobject).Text));
+                else text = ((Button)myobject).Text;
+            }
+            else if (myobject is RichTextBox)
+            {
+                if (((RichTextBox)myobject).InvokeRequired) ((RichTextBox)myobject).Invoke((MethodInvoker)(() => text = ((RichTextBox)myobject).Text));
+                else text = ((RichTextBox)myobject).Text;
+            }
+
+            return text;
+        }
+
+        public static void invokeAppendText(object myobject, string text)
+        {
+            if (myobject is Label)
+            {
+                if (((Label)myobject).InvokeRequired) ((Label)myobject).Invoke((MethodInvoker)(() => ((Label)myobject).Text += text));
+                else ((Label)myobject).Text += text;
+            }
+            else if (myobject is TextBox)
+            {
+                if (((TextBox)myobject).InvokeRequired) ((TextBox)myobject).Invoke((MethodInvoker)(() => ((TextBox)myobject).Text += text));
+                else ((TextBox)myobject).Text += text;
+            }
+            else if (myobject is Button)
+            {
+                if (((Button)myobject).InvokeRequired) ((Button)myobject).Invoke((MethodInvoker)(() => ((Button)myobject).Text += text));
+                else ((Button)myobject).Text += text;
+            }
+            else if (myobject is RichTextBox)
+            {
+                if (((RichTextBox)myobject).InvokeRequired) ((RichTextBox)myobject).Invoke((MethodInvoker)(() => ((RichTextBox)myobject).Text += text));
+                else ((RichTextBox)myobject).Text += text;
+            }
         }
 
     }
