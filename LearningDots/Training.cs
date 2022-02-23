@@ -12,7 +12,7 @@ namespace LearningDots
 {
     public class Training
     {
-        private static bool STATUSBEHALTEN = false;
+        private static bool STATUSBEHALTEN = true;
         public static int SPEZIALPUNKTEGRÖSSE = 10;
         private int maxSteps = 0;
         private Dot ziel;
