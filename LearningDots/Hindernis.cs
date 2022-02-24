@@ -15,6 +15,7 @@ namespace LearningDots
         public int länge;
         public int höhe;
         public Color color;
+        // public int drehung
 
 
         public Hindernis(Point position, int länge, int höhe, Typ typ, Color color)

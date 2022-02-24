@@ -34,7 +34,7 @@ namespace LearningDots
         {
             comboBoxmaxSchritte.SelectedIndex = 1;
             comboBoxanzahldots.SelectedIndex = 2;
-            comboBoxmaxtrainingszeit.SelectedIndex = 3;
+            comboBoxmaxtrainingszeit.SelectedIndex = 0;
             textBoxstartX.Text = training.GetStartpunkt().X.ToString();
             textBoxstartY.Text = training.GetStartpunkt().Y.ToString();
             textBoxzielX.Text = training.GetZielpunkt().X.ToString();
@@ -170,7 +170,11 @@ namespace LearningDots
         {
             if (buttonZeichneHindernis.Text == "Zeichne Hindernis")
             {
-                hindernisse.Add(new Hindernis(new Point(200, 200), 400, 5, Hindernis.Typ.Rechteck, Color.Blue));
+                // schweres Hindernis
+                //hindernisse.Add(new Hindernis(new Point(10, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
+                // einfaches Hindernis
+                hindernisse.Add(new Hindernis(new Point(200, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
+
                 buttonZeichneHindernis.Text = "Verstecke Hindernis";
                 panel1.Invalidate();
             }
