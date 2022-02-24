@@ -103,7 +103,7 @@ namespace LearningDots
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(588, 16);
+            this.button1.Location = new System.Drawing.Point(541, 13);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 18;
@@ -120,7 +120,7 @@ namespace LearningDots
             "1000",
             "2000",
             "5000"});
-            this.comboBoxmaxSchritte.Location = new System.Drawing.Point(524, 15);
+            this.comboBoxmaxSchritte.Location = new System.Drawing.Point(473, 15);
             this.comboBoxmaxSchritte.Name = "comboBoxmaxSchritte";
             this.comboBoxmaxSchritte.Size = new System.Drawing.Size(59, 21);
             this.comboBoxmaxSchritte.TabIndex = 21;
@@ -128,7 +128,7 @@ namespace LearningDots
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(436, 16);
+            this.label11.Location = new System.Drawing.Point(385, 18);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(82, 13);
             this.label11.TabIndex = 20;
@@ -137,7 +137,7 @@ namespace LearningDots
             // checkBoxZuschauen
             // 
             this.checkBoxZuschauen.AutoSize = true;
-            this.checkBoxZuschauen.Location = new System.Drawing.Point(444, 37);
+            this.checkBoxZuschauen.Location = new System.Drawing.Point(388, 41);
             this.checkBoxZuschauen.Name = "checkBoxZuschauen";
             this.checkBoxZuschauen.Size = new System.Drawing.Size(80, 17);
             this.checkBoxZuschauen.TabIndex = 19;
@@ -146,7 +146,7 @@ namespace LearningDots
             // 
             // buttonZeichneHindernis
             // 
-            this.buttonZeichneHindernis.Location = new System.Drawing.Point(669, 13);
+            this.buttonZeichneHindernis.Location = new System.Drawing.Point(714, 9);
             this.buttonZeichneHindernis.Name = "buttonZeichneHindernis";
             this.buttonZeichneHindernis.Size = new System.Drawing.Size(110, 23);
             this.buttonZeichneHindernis.TabIndex = 18;
@@ -165,7 +165,7 @@ namespace LearningDots
             "1min",
             "5min",
             "10min"});
-            this.comboBoxmaxtrainingszeit.Location = new System.Drawing.Point(370, 36);
+            this.comboBoxmaxtrainingszeit.Location = new System.Drawing.Point(323, 38);
             this.comboBoxmaxtrainingszeit.Name = "comboBoxmaxtrainingszeit";
             this.comboBoxmaxtrainingszeit.Size = new System.Drawing.Size(59, 21);
             this.comboBoxmaxtrainingszeit.TabIndex = 16;
@@ -181,7 +181,7 @@ namespace LearningDots
             "100",
             "500",
             "1000"});
-            this.comboBoxanzahldots.Location = new System.Drawing.Point(370, 13);
+            this.comboBoxanzahldots.Location = new System.Drawing.Point(323, 12);
             this.comboBoxanzahldots.Name = "comboBoxanzahldots";
             this.comboBoxanzahldots.Size = new System.Drawing.Size(59, 21);
             this.comboBoxanzahldots.TabIndex = 15;
@@ -189,7 +189,7 @@ namespace LearningDots
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(248, 39);
+            this.label8.Location = new System.Drawing.Point(201, 42);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(116, 13);
             this.label8.TabIndex = 14;
@@ -198,7 +198,7 @@ namespace LearningDots
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(248, 16);
+            this.label7.Location = new System.Drawing.Point(201, 18);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(67, 13);
             this.label7.TabIndex = 2;
@@ -207,7 +207,7 @@ namespace LearningDots
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(139, 42);
+            this.label4.Location = new System.Drawing.Point(136, 41);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(17, 13);
             this.label4.TabIndex = 12;
@@ -215,7 +215,7 @@ namespace LearningDots
             // 
             // textBoxzielY
             // 
-            this.textBoxzielY.Location = new System.Drawing.Point(162, 39);
+            this.textBoxzielY.Location = new System.Drawing.Point(159, 39);
             this.textBoxzielY.Name = "textBoxzielY";
             this.textBoxzielY.Size = new System.Drawing.Size(36, 20);
             this.textBoxzielY.TabIndex = 11;
@@ -250,7 +250,7 @@ namespace LearningDots
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(139, 16);
+            this.label3.Location = new System.Drawing.Point(136, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(17, 13);
             this.label3.TabIndex = 7;
@@ -258,7 +258,7 @@ namespace LearningDots
             // 
             // textBoxstartY
             // 
-            this.textBoxstartY.Location = new System.Drawing.Point(162, 13);
+            this.textBoxstartY.Location = new System.Drawing.Point(159, 13);
             this.textBoxstartY.Name = "textBoxstartY";
             this.textBoxstartY.Size = new System.Drawing.Size(36, 20);
             this.textBoxstartY.TabIndex = 6;
@@ -267,7 +267,7 @@ namespace LearningDots
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(71, 16);
+            this.label2.Location = new System.Drawing.Point(71, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(17, 13);
             this.label2.TabIndex = 5;
@@ -284,7 +284,7 @@ namespace LearningDots
             // 
             // textBoxstartX
             // 
-            this.textBoxstartX.Location = new System.Drawing.Point(94, 13);
+            this.textBoxstartX.Location = new System.Drawing.Point(94, 12);
             this.textBoxstartX.Name = "textBoxstartX";
             this.textBoxstartX.Size = new System.Drawing.Size(36, 20);
             this.textBoxstartX.TabIndex = 3;
@@ -292,7 +292,7 @@ namespace LearningDots
             // 
             // buttonTrain
             // 
-            this.buttonTrain.Location = new System.Drawing.Point(669, 37);
+            this.buttonTrain.Location = new System.Drawing.Point(714, 41);
             this.buttonTrain.Name = "buttonTrain";
             this.buttonTrain.Size = new System.Drawing.Size(110, 23);
             this.buttonTrain.TabIndex = 4;
