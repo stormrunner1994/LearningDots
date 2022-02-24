@@ -32,7 +32,7 @@ namespace LearningDots
         Label labelprogressbar;
 
         public Training(Panel panel, Point zielPos, Point startPos, int populationsGröße, RichTextBox rtbStatus
-            , int maxSteps, ProgressBar progressbar, Label labelprogressbar)
+            , int maxSteps, ProgressBar progressbar, Label labelprogressbar, List<Hindernis> hindernisse)
         {
             this.progressbar = progressbar;
             this.labelprogressbar = labelprogressbar;
@@ -41,7 +41,7 @@ namespace LearningDots
             status = new Status(populationsGröße);
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos, -1);
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps, erlaubeDiagonaleZüge);
+            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps, erlaubeDiagonaleZüge, hindernisse);
             this.panel = panel;
             panel.Paint += new PaintEventHandler(panel_Paint);
             timer.Interval = 10;
@@ -49,14 +49,14 @@ namespace LearningDots
         }
 
         public void SetSettings(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps,
-            bool erlaubeDiagonaleZüge)
+            bool erlaubeDiagonaleZüge, List<Hindernis> hindernisse)
         {
             this.populationsGröße = populationsGröße;
             this.zuschauen = zuschauen;
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos, -1);
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps,
-                erlaubeDiagonaleZüge);
+                erlaubeDiagonaleZüge, hindernisse);
         }
 
         public void ZeichneFeld()
@@ -93,7 +93,7 @@ namespace LearningDots
         public void SetPopulationsGröße(int populationsGröße)
         {
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, population.maxSteps,
-                erlaubeDiagonaleZüge);
+                erlaubeDiagonaleZüge,population.hindernisse);
             ZeichneFeld();
         }
 

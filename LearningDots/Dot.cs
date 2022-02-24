@@ -25,7 +25,9 @@ namespace LearningDots
         public int rang = -1;
         public int maxSteps = 0;
         private Random rand;
+        private List<Hindernis> hindernisse;
 
+        // Spezial Dots
         public Dot(int größe, Color color, Point startPosition, int index)
         {
             this.index = index;
@@ -42,13 +44,14 @@ namespace LearningDots
             this.brain = brain;
         }
 
-        public Dot(Point startPosition, int index, int maxSteps, Random rand, bool erlaubeDiagonaleZüge)
+        public Dot(Point startPosition, int index, int maxSteps, Random rand, bool erlaubeDiagonaleZüge, List<Hindernis> hindernisse)
         {
             this.rand = rand;
             this.maxSteps = maxSteps;
             this.index = index;
             brain = new Brain(maxSteps, index, rand, erlaubeDiagonaleZüge);
             this.startPosition = this.position = startPosition;
+            this.hindernisse = hindernisse;
         }
 
 
@@ -57,10 +60,29 @@ namespace LearningDots
             if (isDead || reachedGoal) return;
 
             move();
+            // Rand
             if (position.X < 2 || position.Y < 2 || position.X > feldbreite - 2 || position.Y > feldhöhe - 2)
                 isDead = true;
+            // Ziel erreicht
             else if (Math.Abs(goalX - position.X) < 5 && Math.Abs(goalY - position.Y) < 5)
                 reachedGoal = true;
+            // An Hindernis gestoßen
+            else if (AnHindernisGestoßen())
+                isDead = true;
+            
+        }
+
+        private bool AnHindernisGestoßen()
+        {
+            foreach (Hindernis h in hindernisse)
+            {
+                // Liegt im Hindernis?
+                if (position.X >= h.position.X && position.X <= h.position.X + h.länge
+                    && position.Y >= h.position.Y && position.Y <= h.position.Y + h.höhe)
+                    return true;
+            }
+
+            return false;
         }
 
         public void move()
@@ -96,7 +118,7 @@ namespace LearningDots
 
         public Dot getChild(int maxSteps)
         {
-            Dot baby = new Dot(startPosition, index, maxSteps, rand, brain.erlaubeDiagonaleZüge);
+            Dot baby = new Dot(startPosition, index, maxSteps, rand, brain.erlaubeDiagonaleZüge, hindernisse);
             baby.brain = new Brain(brain, maxSteps); // Copy Constructor
             return baby;
         }

@@ -19,12 +19,14 @@ namespace LearningDots
             labelprogress.BackColor = Color.Transparent;
             Point zielPos = new Point(panel1.Width / 2, 0);
             Point startPos = new Point(panel1.Width / 2, panel1.Height - Training.SPEZIALPUNKTEGRÖSSE);
-            training = new Training(panel1, zielPos, startPos, 100, richTextBox1, 1000,progressBar1, labelprogress);
+            training = new Training(panel1, zielPos, startPos, 100, richTextBox1, 1000,progressBar1, labelprogress,
+                hindernisse);
         }
 
         private Color defaultforecolor;
         enum Richtung { Höhe, Breite };
 
+        private List<Hindernis> hindernisse = new List<Hindernis>();
         Training training;
 
 
@@ -51,9 +53,10 @@ namespace LearningDots
                 int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
                 int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);
                 training.SetSettings(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps,
-                    checkBoxdiagonal.Checked);
+                    checkBoxdiagonal.Checked, hindernisse);
                 training.Starten();
                 buttonTrain.Text = "Training stoppen";
+                textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = false;
             }
             else
             {
@@ -61,6 +64,7 @@ namespace LearningDots
                 training.SafeBest();
                 training.Stoppen();
                 buttonTrain.Text = "Training starten";
+                textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = true;
             }
         }
 
@@ -164,7 +168,18 @@ namespace LearningDots
 
         private void buttonZeichneHindernis_Click(object sender, EventArgs e)
         {
-
+            if (buttonZeichneHindernis.Text == "Zeichne Hindernis")
+            {
+                hindernisse.Add(new Hindernis(new Point(200, 200), 400, 5, Hindernis.Typ.Rechteck, Color.Blue));
+                buttonZeichneHindernis.Text = "Verstecke Hindernis";
+                panel1.Invalidate();
+            }
+            else
+            {
+                buttonZeichneHindernis.Text = "Zeichne Hindernis";
+                hindernisse.Clear();
+                panel1.Refresh();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -179,6 +194,15 @@ namespace LearningDots
             {
                 button1.Text = "Lade besten";
                 training.HalteBestenAn();
+            }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            foreach (Hindernis h in hindernisse)
+            {
+                if (h.typ == Hindernis.Typ.Rechteck)
+                    e.Graphics.FillRectangle(new SolidBrush(h.color), h.position.X, h.position.Y, h.länge, h.höhe);
             }
         }
     }
