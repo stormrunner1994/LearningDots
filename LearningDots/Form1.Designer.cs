@@ -57,6 +57,7 @@ namespace LearningDots
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.labelprogress = new System.Windows.Forms.Label();
+            this.checkBoxdiagonal = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -74,6 +75,7 @@ namespace LearningDots
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBoxdiagonal);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.comboBoxmaxSchritte);
             this.groupBox1.Controls.Add(this.label11);
@@ -137,7 +139,7 @@ namespace LearningDots
             // checkBoxZuschauen
             // 
             this.checkBoxZuschauen.AutoSize = true;
-            this.checkBoxZuschauen.Location = new System.Drawing.Point(388, 41);
+            this.checkBoxZuschauen.Location = new System.Drawing.Point(541, 41);
             this.checkBoxZuschauen.Name = "checkBoxZuschauen";
             this.checkBoxZuschauen.Size = new System.Drawing.Size(80, 17);
             this.checkBoxZuschauen.TabIndex = 19;
@@ -362,6 +364,16 @@ namespace LearningDots
             this.labelprogress.Size = new System.Drawing.Size(0, 13);
             this.labelprogress.TabIndex = 1;
             // 
+            // checkBoxdiagonal
+            // 
+            this.checkBoxdiagonal.AutoSize = true;
+            this.checkBoxdiagonal.Location = new System.Drawing.Point(388, 41);
+            this.checkBoxdiagonal.Name = "checkBoxdiagonal";
+            this.checkBoxdiagonal.Size = new System.Drawing.Size(104, 17);
+            this.checkBoxdiagonal.TabIndex = 18;
+            this.checkBoxdiagonal.Text = "erlaube diagonal";
+            this.checkBoxdiagonal.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -414,6 +426,7 @@ namespace LearningDots
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label labelprogress;
+        private System.Windows.Forms.CheckBox checkBoxdiagonal;
     }
 }
 

@@ -38,6 +38,7 @@ namespace LearningDots
             textBoxzielX.Text = training.GetZielpunkt().X.ToString();
             textBoxzielY.Text = training.GetZielpunkt().Y.ToString();
             checkBoxZuschauen.Checked = true;
+            checkBoxdiagonal.Checked = true;
             //buttonTrain_Click(sender, e);
         }
 
@@ -49,7 +50,8 @@ namespace LearningDots
                 Point startPos = new Point(Convert.ToInt32(textBoxstartX.Text), Convert.ToInt32(textBoxstartY.Text));
                 int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
                 int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);
-                training.SetSettings(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps);
+                training.SetSettings(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps,
+                    checkBoxdiagonal.Checked);
                 training.Starten();
                 buttonTrain.Text = "Training stoppen";
             }

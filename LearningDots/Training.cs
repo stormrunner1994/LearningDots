@@ -12,7 +12,7 @@ namespace LearningDots
 {
     public class Training
     {
-        private bool ERLAUBEDIAGONALEZÜGE = false;
+        private bool erlaubeDiagonaleZüge = false;
         private static bool STATUSBEHALTEN = true;
         public static int SPEZIALPUNKTEGRÖSSE = 10;
         private Dot ziel;
@@ -41,21 +41,22 @@ namespace LearningDots
             status = new Status(populationsGröße);
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos, -1);
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps, ERLAUBEDIAGONALEZÜGE);
+            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps, erlaubeDiagonaleZüge);
             this.panel = panel;
             panel.Paint += new PaintEventHandler(panel_Paint);
             timer.Interval = 10;
             timer.Tick += Timer_Tick;
         }
 
-        public void SetSettings(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps)
+        public void SetSettings(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps,
+            bool erlaubeDiagonaleZüge)
         {
             this.populationsGröße = populationsGröße;
             this.zuschauen = zuschauen;
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos, -1);
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps,
-                ERLAUBEDIAGONALEZÜGE);
+                erlaubeDiagonaleZüge);
         }
 
         public void ZeichneFeld()
@@ -92,7 +93,7 @@ namespace LearningDots
         public void SetPopulationsGröße(int populationsGröße)
         {
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, population.maxSteps,
-                ERLAUBEDIAGONALEZÜGE);
+                erlaubeDiagonaleZüge);
             ZeichneFeld();
         }
 
