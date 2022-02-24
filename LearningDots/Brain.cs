@@ -12,9 +12,11 @@ namespace LearningDots
         public Vector[] directions; //series of vectors which get the dot to the goal (hopefully)
         public int step = 0;
         private Random rand;
+        public bool erlaubeDiagonaleZüge;
 
-        public Brain(int size, int index, Random rand)
+        public Brain(int size, int index, Random rand, bool erlaubeDiagonaleZüge)
         {
+            this.erlaubeDiagonaleZüge = erlaubeDiagonaleZüge;
             this.rand = rand; 
             directions = new Vector[size];
             randomize();
@@ -30,6 +32,7 @@ namespace LearningDots
 
         public Brain (Brain brain, int size)
         {
+            this.erlaubeDiagonaleZüge = brain.erlaubeDiagonaleZüge;
             this.rand = brain.rand;
             directions = new Vector[size];
             for (int a = 0; a < size; a++)
@@ -40,17 +43,39 @@ namespace LearningDots
         {
             for (int i = 0; i < directions.Length; i++)
             {
-                int x = rand.Next(-1, 2);
-                int y = rand.Next(-1, 2);
+                int[] xy = GetRandomXY();
+                directions[i] = new Vector(xy[0], xy[1]);
+            }
+        }
 
+        private int[] GetRandomXY()
+        {
+            int[] xy = new int[2];
+
+            int x = rand.Next(-1, 2);
+            int y = rand.Next(-1, 2);
+
+            if (erlaubeDiagonaleZüge)
+            {
                 while (x == 0 && y == 0)
                 {
                     x = rand.Next(-1, 2);
                     y = rand.Next(-1, 2);
                 }
-
-                directions[i] = new Vector(x, y);
             }
+            else
+            {
+                // nur eines von beiden darf null sein, sonst ist diagonal
+                while (!(x == 0 ^ y == 0))
+                {
+                    x = rand.Next(-1, 2);
+                    y = rand.Next(-1, 2);
+                }
+            }
+
+            xy[0] = x;
+            xy[1] = y;
+            return xy;
         }
 
         public void mutate()
@@ -60,10 +85,8 @@ namespace LearningDots
                 int irand = rand.Next(0, 100);
                 if (irand < 1)
                 {
-                    // random direction
-                    int x = rand.Next(-1, 2);
-                    int y = rand.Next(-1, 2);
-                    directions[i] = new Vector(x, y);
+                    int[] xy = GetRandomXY();
+                    directions[i] = new Vector(xy[0], xy[1]);
                 }
             }
         }

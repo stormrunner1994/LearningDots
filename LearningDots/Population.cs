@@ -22,7 +22,7 @@ namespace LearningDots
         private Random rand = new Random();
 
 
-        public Population(int anzahl, int feldhöhe, int feldbreite, Point zielPosition, Point startPosition, int maxSteps)
+        public Population(int anzahl, int feldhöhe, int feldbreite, Point zielPosition, Point startPosition, int maxSteps, bool erlaubeDiagonaleZüge)
         {
             this.maxSteps = maxSteps;
             this.zielPosition = zielPosition;
@@ -31,7 +31,7 @@ namespace LearningDots
             this.startPosition = startPosition;
             dots = new Dot[anzahl];
             for (int i = 0; i < anzahl; i++)
-                dots[i] = new Dot(startPosition, i, maxSteps, rand);
+                dots[i] = new Dot(startPosition, i, maxSteps, rand, erlaubeDiagonaleZüge);
         }
 
         public void update()

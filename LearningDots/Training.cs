@@ -12,6 +12,7 @@ namespace LearningDots
 {
     public class Training
     {
+        private bool ERLAUBEDIAGONALEZÜGE = false;
         private static bool STATUSBEHALTEN = true;
         public static int SPEZIALPUNKTEGRÖSSE = 10;
         private Dot ziel;
@@ -40,7 +41,7 @@ namespace LearningDots
             status = new Status(populationsGröße);
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos, -1);
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps);
+            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps, ERLAUBEDIAGONALEZÜGE);
             this.panel = panel;
             panel.Paint += new PaintEventHandler(panel_Paint);
             timer.Interval = 10;
@@ -53,7 +54,8 @@ namespace LearningDots
             this.zuschauen = zuschauen;
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos, -1);
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps);
+            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps,
+                ERLAUBEDIAGONALEZÜGE);
         }
 
         public void ZeichneFeld()
@@ -89,7 +91,8 @@ namespace LearningDots
 
         public void SetPopulationsGröße(int populationsGröße)
         {
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, population.maxSteps);
+            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, population.maxSteps,
+                ERLAUBEDIAGONALEZÜGE);
             ZeichneFeld();
         }
 
@@ -190,12 +193,17 @@ namespace LearningDots
                         status.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
                         deadReachedGoal[0], deadReachedGoal[1]);
 
+                        if (population.SoManyReachedGoal(80))
+                            break;
+
                         var reihenfolge = population.GetReihenfolge();
 
                         population.naturalSelection(status.GetLastGenInfo());
                     }
                     else
                     {
+                        if (population.SoManyReachedGoal(80))
+                            break;
                         population.naturalSelection(null);
                     }
                     population.mutateBabies();
@@ -204,8 +212,6 @@ namespace LearningDots
                         var ratio = population.durchschnittlicheÄnderungen();
                         GenInfo last = status.GetLastGenInfo();
                     }
-                    if (population.SoManyReachedGoal(50))
-                        break;
                 }
                 else
                 {
@@ -271,6 +277,8 @@ namespace LearningDots
             }
             else
             {
+                Invoker_.Invoker.invokeInvalidate(panel);
+                UpdateStatusRichTextBox(true);
                 thread.Abort();
             }
         }

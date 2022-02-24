@@ -360,7 +360,7 @@ namespace LearningDots
             this.labelprogress.Location = new System.Drawing.Point(98, 436);
             this.labelprogress.Name = "labelprogress";
             this.labelprogress.Size = new System.Drawing.Size(0, 13);
-            this.labelprogress.TabIndex = 2;
+            this.labelprogress.TabIndex = 1;
             // 
             // Form1
             // 

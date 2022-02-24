@@ -42,12 +42,12 @@ namespace LearningDots
             this.brain = brain;
         }
 
-        public Dot(Point startPosition, int index, int maxSteps, Random rand)
+        public Dot(Point startPosition, int index, int maxSteps, Random rand, bool erlaubeDiagonaleZüge)
         {
             this.rand = rand;
             this.maxSteps = maxSteps;
             this.index = index;
-            brain = new Brain(maxSteps, index, rand);
+            brain = new Brain(maxSteps, index, rand, erlaubeDiagonaleZüge);
             this.startPosition = this.position = startPosition;
         }
 
@@ -96,7 +96,7 @@ namespace LearningDots
 
         public Dot getChild(int maxSteps)
         {
-            Dot baby = new Dot(startPosition, index, maxSteps, rand);
+            Dot baby = new Dot(startPosition, index, maxSteps, rand, brain.erlaubeDiagonaleZüge);
             baby.brain = new Brain(brain, maxSteps); // Copy Constructor
             return baby;
         }
