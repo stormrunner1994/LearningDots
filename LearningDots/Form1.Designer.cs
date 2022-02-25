@@ -385,6 +385,7 @@ namespace LearningDots
             // 
             // buttonnextgen
             // 
+            this.buttonnextgen.Enabled = false;
             this.buttonnextgen.Location = new System.Drawing.Point(104, 18);
             this.buttonnextgen.Name = "buttonnextgen";
             this.buttonnextgen.Size = new System.Drawing.Size(92, 23);
@@ -394,6 +395,7 @@ namespace LearningDots
             // 
             // buttonprevgen
             // 
+            this.buttonprevgen.Enabled = false;
             this.buttonprevgen.Location = new System.Drawing.Point(6, 18);
             this.buttonprevgen.Name = "buttonprevgen";
             this.buttonprevgen.Size = new System.Drawing.Size(92, 23);

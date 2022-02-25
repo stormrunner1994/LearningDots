@@ -223,6 +223,7 @@ namespace LearningDots
             }
 
             sw.Stop();
+            SafeBest();
             Invoker.invokeInvalidate(panel);
             Invoker.invokeProgressBarValue(progressbar, Invoker.invokeProgressBarGetMax(progressbar));
             Invoker.invokeText(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
