@@ -58,6 +58,8 @@ namespace LearningDots
             this.labelprogress = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.buttonnextgen = new System.Windows.Forms.Button();
+            this.buttonprevgen = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -170,11 +172,10 @@ namespace LearningDots
             // comboBoxmaxtrainingszeit
             // 
             this.comboBoxmaxtrainingszeit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxmaxtrainingszeit.Enabled = false;
             this.comboBoxmaxtrainingszeit.FormattingEnabled = true;
             this.comboBoxmaxtrainingszeit.Items.AddRange(new object[] {
-            "10sek",
-            "30sek",
+            "10sec",
+            "30sec",
             "1min",
             "5min",
             "10min"});
@@ -340,6 +341,8 @@ namespace LearningDots
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.buttonprevgen);
+            this.groupBox2.Controls.Add(this.buttonnextgen);
             this.groupBox2.Controls.Add(this.labelprogress);
             this.groupBox2.Controls.Add(this.progressBar1);
             this.groupBox2.Controls.Add(this.richTextBox1);
@@ -348,7 +351,7 @@ namespace LearningDots
             this.groupBox2.Size = new System.Drawing.Size(239, 455);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Status:";
+            this.groupBox2.Text = "History:";
             // 
             // labelprogress
             // 
@@ -372,12 +375,30 @@ namespace LearningDots
             this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.Location = new System.Drawing.Point(3, 19);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 47);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(230, 403);
+            this.richTextBox1.Size = new System.Drawing.Size(230, 375);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            // 
+            // buttonnextgen
+            // 
+            this.buttonnextgen.Location = new System.Drawing.Point(104, 18);
+            this.buttonnextgen.Name = "buttonnextgen";
+            this.buttonnextgen.Size = new System.Drawing.Size(92, 23);
+            this.buttonnextgen.TabIndex = 2;
+            this.buttonnextgen.Text = "Next Gen";
+            this.buttonnextgen.UseVisualStyleBackColor = true;
+            // 
+            // buttonprevgen
+            // 
+            this.buttonprevgen.Location = new System.Drawing.Point(6, 18);
+            this.buttonprevgen.Name = "buttonprevgen";
+            this.buttonprevgen.Size = new System.Drawing.Size(92, 23);
+            this.buttonprevgen.TabIndex = 3;
+            this.buttonprevgen.Text = "Previous Gen";
+            this.buttonprevgen.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -432,6 +453,8 @@ namespace LearningDots
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label labelprogress;
         private System.Windows.Forms.CheckBox checkBoxdiagonal;
+        private System.Windows.Forms.Button buttonprevgen;
+        private System.Windows.Forms.Button buttonnextgen;
     }
 }
 

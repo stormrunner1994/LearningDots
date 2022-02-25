@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace LearningDots
 {
-    public class Status
+    public class Verlauf
     {
         List<GenInfo> genInfos = new List<GenInfo>();
         int populationSize;
 
-        public Status(int populationSize)
+        public Verlauf(int populationSize)
         {
             this.populationSize = populationSize;
         }

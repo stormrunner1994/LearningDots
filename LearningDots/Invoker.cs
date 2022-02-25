@@ -25,6 +25,18 @@ namespace Invoker_
             }
         }
 
+        public static void invokeProgressBarValue(ProgressBar myobject, int value)
+        {
+            if (myobject.InvokeRequired)
+            {
+                myobject.Invoke((MethodInvoker)(() => myobject.Value = value));
+            }
+            else
+            {
+                myobject.Value = value;
+            }
+        }
+
         public static void invokeVisible(object myobject, bool visible)
         {
             if (myobject is Label)

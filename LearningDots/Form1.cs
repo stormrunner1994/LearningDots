@@ -20,7 +20,7 @@ namespace LearningDots
             Point zielPos = new Point(panel1.Width / 2, 0);
             Point startPos = new Point(panel1.Width / 2, panel1.Height - Training.SPEZIALPUNKTEGRÖSSE);
 
-            setting = new Setting(zielPos, startPos, 100, true, 1000, true, new List<Hindernis>());
+            setting = new Setting(zielPos, startPos, 100, true, 1000, true, new List<Hindernis>(),1);
             training = new Training(panel1, setting, richTextBox1, progressBar1, labelprogress);
         }
 
@@ -56,7 +56,7 @@ namespace LearningDots
                 int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
                 int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);
                 setting = new Setting(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps, checkBoxdiagonal.Checked,
-                    hindernisse);
+                    hindernisse, Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text));
                 training.SetSettings(setting);
                 training.Starten();
                 buttonTrain.Text = "Training stoppen";

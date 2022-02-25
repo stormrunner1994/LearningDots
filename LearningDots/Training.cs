@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -13,7 +14,6 @@ namespace LearningDots
     public class Training
     {
         private bool erlaubeDiagonaleZüge = false;
-        private static bool STATUSBEHALTEN = true;
         public static int SPEZIALPUNKTEGRÖSSE = 10;
         private Dot ziel;
         private Dot start;
@@ -22,7 +22,7 @@ namespace LearningDots
         private int populationsGröße = -1;
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         private RichTextBox rtbStatus;
-        public Status status;
+        public Verlauf verlauf;
         private bool zuschauen = false;
         private Thread thread;
         private Dot loadedDot;
@@ -39,7 +39,7 @@ namespace LearningDots
             this.labelprogressbar = labelprogressbar;
             this.rtbStatus = rtbStatus;
             this.populationsGröße = setting.populationsGröße;
-            status = new Status(populationsGröße);
+            verlauf = new Verlauf(populationsGröße);
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, setting.startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps, setting.erlaubeDiagonaleZüge, setting.hindernisse);
@@ -108,21 +108,14 @@ namespace LearningDots
                 {
                     // generic algorithm
                     population.calculateFitnessForAllDots();
-
-                    if (STATUSBEHALTEN)
-                    {
+                                        
                         double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
                         int[] deadReachedGoal = population.GetDeadReachedGoal();
-                        status.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
+                        verlauf.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
                         deadReachedGoal[0], deadReachedGoal[1]);
-                        population.naturalSelection(status.GetLastGenInfo());
-                    }
-                    else
-                        population.naturalSelection(null);
+                        population.naturalSelection(verlauf.GetLastGenInfo());
 
                     population.mutateBabies();
-
-                    if (STATUSBEHALTEN)
                         UpdateStatusRichTextBox(false);
 
                     progressbar.Value = 0;
@@ -156,7 +149,7 @@ namespace LearningDots
             if (!nurLetzte)
             {
                 Invoker_.Invoker.invokeText(rtbStatus, "");
-                var genInfos = status.GetGenInfos();
+                var genInfos = verlauf.GetGenInfos();
 
                 for (int a = genInfos.Count - 1; a > -1; a--)
                 {
@@ -166,7 +159,12 @@ namespace LearningDots
                 }
             }
             else
-                Invoker_.Invoker.invokeText(rtbStatus, status.GetLastGenInfo().GetInfo());
+            {
+                if (verlauf.GetLastGenInfo() != null)
+                Invoker_.Invoker.invokeText(rtbStatus, verlauf.GetLastGenInfo().GetInfo());
+                else
+                    Invoker_.Invoker.invokeText(rtbStatus, "no Generation yet");
+            }
         }
 
         public void LasseBestenAblaufen()
@@ -183,46 +181,43 @@ namespace LearningDots
 
         private void ThreadTrainieren()
         {
-            while (true)
+            Invoker_.Invoker.invokeProgressBar(progressbar, 0, 0, setting.maxTrainingTime);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            int secs = 0;
+            while (sw.ElapsedMilliseconds < setting.maxTrainingTime * 1000)
             {
+                if ((sw.ElapsedMilliseconds / 1000) > secs)
+                {
+                    secs = (int)(sw.ElapsedMilliseconds / 1000);
+                    Invoker_.Invoker.invokeProgressBarValue(progressbar, secs);
+                }
+
                 if (population.allDotsFinished())
                 {
                     // generic algorithm
                     population.calculateFitnessForAllDots();
-                    if (STATUSBEHALTEN)
-                    {
-                        double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
-                        int[] deadReachedGoal = population.GetDeadReachedGoal();
-                        status.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
-                        deadReachedGoal[0], deadReachedGoal[1]);
+                    double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
+                    int[] deadReachedGoal = population.GetDeadReachedGoal();
+                    verlauf.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
+                    deadReachedGoal[0], deadReachedGoal[1]);
 
-                        if (population.SoManyReachedGoal(80))
-                            break;
+                    if (population.SoManyReachedGoal(80))
+                        break;
 
-                        var reihenfolge = population.GetReihenfolge();
+                    var reihenfolge = population.GetReihenfolge();
 
-                        population.naturalSelection(status.GetLastGenInfo());
-                    }
-                    else
-                    {
-                        if (population.SoManyReachedGoal(80))
-                            break;
-                        population.naturalSelection(null);
-                    }
+                    population.naturalSelection(verlauf.GetLastGenInfo());
                     population.mutateBabies();
-                    if (STATUSBEHALTEN)
-                    {
-                        var ratio = population.durchschnittlicheÄnderungen();
-                        GenInfo last = status.GetLastGenInfo();
-                    }
+                    var ratio = population.durchschnittlicheÄnderungen();
+                    GenInfo last = verlauf.GetLastGenInfo();
                 }
                 else
-                {
                     population.update();
-                }
-
             }
 
+            sw.Stop();
             Invoker_.Invoker.invokeInvalidate(panel);
             UpdateStatusRichTextBox(true);
         }
@@ -257,7 +252,7 @@ namespace LearningDots
 
         public void Starten()
         {
-            status = new Status(populationsGröße);
+            verlauf = new Verlauf(populationsGröße);
             if (zuschauen)
             {
                 progressbar.Minimum = 0;

@@ -9,17 +9,19 @@ namespace LearningDots
 {
     public class Setting
     {
-        public  Point zielPos;
-        public  Point startPos;
-        public  int populationsGröße;
-        public  bool zuschauen;
-        public  int maxSteps;
-        public  bool erlaubeDiagonaleZüge;
-        public  List<Hindernis> hindernisse;
+        public Point zielPos;
+        public Point startPos;
+        public int populationsGröße;
+        public bool zuschauen;
+        public int maxSteps;
+        public bool erlaubeDiagonaleZüge;
+        public List<Hindernis> hindernisse;
+        public int maxTrainingTime;
 
         public Setting(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps, bool erlaubeDiagonaleZüge
-            , List<Hindernis> hindernisse)
+            , List<Hindernis> hindernisse, int maxTrainingTime)
         {
+            this.maxTrainingTime = maxTrainingTime;
             this.zielPos = zielPos;
             this.startPos = startPos;
             this.populationsGröße = populationsGröße;
@@ -27,6 +29,34 @@ namespace LearningDots
             this.maxSteps = maxSteps;
             this.erlaubeDiagonaleZüge = erlaubeDiagonaleZüge;
             this.hindernisse = hindernisse;
+        }
+
+        public static int GetTimeInSecs(string time)
+        {
+            int secs = 0;
+            string number = "";
+            int iout;
+            int index = 0;
+            try
+            {
+                while (Int32.TryParse(time[index].ToString(), out iout))
+                    number += time[index++];
+
+                string text = time.Substring(index, time.Length - index).Trim();
+
+                secs = Convert.ToInt32(number);
+
+                if (text == "min")
+                    secs *= 60;
+                else if (text == "h")
+                    secs *= 3600;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+
+            return secs;
         }
     }
 }
