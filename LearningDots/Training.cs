@@ -30,33 +30,34 @@ namespace LearningDots
         private TimerAktion timeraktion = TimerAktion.trainieren;
         private ProgressBar progressbar;
         Label labelprogressbar;
+        private Setting setting;
 
-        public Training(Panel panel, Point zielPos, Point startPos, int populationsGröße, RichTextBox rtbStatus
-            , int maxSteps, ProgressBar progressbar, Label labelprogressbar, List<Hindernis> hindernisse)
+        public Training(Panel panel, Setting setting, RichTextBox rtbStatus, ProgressBar progressbar, Label labelprogressbar)
         {
+            this.setting = setting;
             this.progressbar = progressbar;
             this.labelprogressbar = labelprogressbar;
             this.rtbStatus = rtbStatus;
-            this.populationsGröße = populationsGröße;
+            this.populationsGröße = setting.populationsGröße;
             status = new Status(populationsGröße);
-            start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos, -1);
-            ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos, -1);
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps, erlaubeDiagonaleZüge, hindernisse);
+            start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, setting.startPos, -1);
+            ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
+            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps, setting.erlaubeDiagonaleZüge, setting.hindernisse);
             this.panel = panel;
             panel.Paint += new PaintEventHandler(panel_Paint);
             timer.Interval = 10;
             timer.Tick += Timer_Tick;
         }
 
-        public void SetSettings(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps,
-            bool erlaubeDiagonaleZüge, List<Hindernis> hindernisse)
+        public void SetSettings(Setting setting)
         {
-            this.populationsGröße = populationsGröße;
-            this.zuschauen = zuschauen;
-            start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, startPos, -1);
-            ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, zielPos, -1);
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, maxSteps,
-                erlaubeDiagonaleZüge, hindernisse);
+            this.setting = setting;
+            this.populationsGröße = setting.populationsGröße;
+            this.zuschauen = setting.zuschauen;
+            start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, setting.startPos, -1);
+            ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
+            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps,
+                setting.erlaubeDiagonaleZüge, setting.hindernisse);
         }
 
         public void ZeichneFeld()
@@ -92,6 +93,7 @@ namespace LearningDots
 
         public void SetPopulationsGröße(int populationsGröße)
         {
+            setting.populationsGröße = populationsGröße;
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, population.maxSteps,
                 erlaubeDiagonaleZüge,population.hindernisse);
             ZeichneFeld();

@@ -19,10 +19,13 @@ namespace LearningDots
             labelprogress.BackColor = Color.Transparent;
             Point zielPos = new Point(panel1.Width / 2, 0);
             Point startPos = new Point(panel1.Width / 2, panel1.Height - Training.SPEZIALPUNKTEGRÖSSE);
-            training = new Training(panel1, zielPos, startPos, 100, richTextBox1, 1000,progressBar1, labelprogress,
-                hindernisse);
+
+            setting = new Setting(zielPos, startPos, 100, true, 1000, true, new List<Hindernis>());
+            training = new Training(panel1, setting, richTextBox1, progressBar1, labelprogress);
         }
 
+
+        private Setting setting;
         private Color defaultforecolor;
         enum Richtung { Höhe, Breite };
 
@@ -52,8 +55,9 @@ namespace LearningDots
                 Point startPos = new Point(Convert.ToInt32(textBoxstartX.Text), Convert.ToInt32(textBoxstartY.Text));
                 int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
                 int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);
-                training.SetSettings(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps,
-                    checkBoxdiagonal.Checked, hindernisse);
+                setting = new Setting(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps, checkBoxdiagonal.Checked,
+                    hindernisse);
+                training.SetSettings(setting);
                 training.Starten();
                 buttonTrain.Text = "Training stoppen";
                 textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = false;
@@ -68,11 +72,12 @@ namespace LearningDots
             }
         }
 
-        private bool TextBoxValide(string text, Richtung richtung)
+        private bool TextBoxValide(string text, Richtung richtung, bool bMessagebox)
         {
             int iout;
             if (!Int32.TryParse(text, out iout))
             {
+                if (bMessagebox)
                 MessageBox.Show("Wert muss eine Ganzzahl sein.");
                 return false;
             }
@@ -80,18 +85,20 @@ namespace LearningDots
             int wert = Convert.ToInt32(text);
             if (wert < 0)
             {
-                MessageBox.Show("Wert darf nicht kleiner 0 sein.");
+                if (bMessagebox)
+                    MessageBox.Show("Wert darf nicht kleiner 0 sein.");
                 return false;
             }
             if (richtung == Richtung.Breite && wert > panel1.Width)
             {
-
-                MessageBox.Show("Wert darf nicht größer als Feldbreite [" + panel1.Width + " sein.");
+                if (bMessagebox)
+                    MessageBox.Show("Wert darf nicht größer als Feldbreite [" + panel1.Width + " sein.");
                 return false;
             }
             else if (richtung == Richtung.Höhe && wert > panel1.Height)
             {
-                MessageBox.Show("Wert darf nicht größer als FEldhöhe [" + panel1.Height + " sein.");
+                if (bMessagebox)
+                    MessageBox.Show("Wert darf nicht größer als Feldhöhe [" + panel1.Height + " sein.");
                 return false;
             }
             return true;
@@ -102,7 +109,7 @@ namespace LearningDots
             if (e.KeyData != Keys.Enter) return;
 
             TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite))
+            if (!TextBoxValide(tb.Text, Richtung.Breite, true))
             {
                 buttonTrain.Enabled = false;
                 tb.ForeColor = Color.Red;
@@ -119,7 +126,7 @@ namespace LearningDots
             if (e.KeyData != Keys.Enter) return;
 
             TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite))
+            if (!TextBoxValide(tb.Text, Richtung.Breite, true))
             {
                 buttonTrain.Enabled = false;
                 tb.ForeColor = Color.Red;
@@ -137,7 +144,7 @@ namespace LearningDots
             if (e.KeyData != Keys.Enter) return;
 
             TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite))
+            if (!TextBoxValide(tb.Text, Richtung.Breite, true))
             {
                 buttonTrain.Enabled = false;
                 tb.ForeColor = Color.Red;
@@ -154,7 +161,7 @@ namespace LearningDots
             if (e.KeyData != Keys.Enter) return;
 
             TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite))
+            if (!TextBoxValide(tb.Text, Richtung.Breite, true))
             {
                 buttonTrain.Enabled = false;
                 tb.ForeColor = Color.Red;
@@ -208,6 +215,66 @@ namespace LearningDots
                 if (h.typ == Hindernis.Typ.Rechteck)
                     e.Graphics.FillRectangle(new SolidBrush(h.color), h.position.X, h.position.Y, h.länge, h.höhe);
             }
+        }
+
+        private void textBoxstartX_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (!TextBoxValide(tb.Text, Richtung.Breite, false))
+            {
+                buttonTrain.Enabled = false;
+                tb.ForeColor = Color.Red;
+                return;
+            }
+
+            buttonTrain.Enabled = true;
+            tb.ForeColor = defaultforecolor;
+            training.SetStartpunkt(new Point(Convert.ToInt32(tb.Text), training.GetStartpunkt().Y));
+        }
+
+        private void textBoxstartY_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (!TextBoxValide(tb.Text, Richtung.Breite, false))
+            {
+                buttonTrain.Enabled = false;
+                tb.ForeColor = Color.Red;
+                return;
+            }
+
+            buttonTrain.Enabled = true;
+            tb.ForeColor = defaultforecolor;
+            training.SetStartpunkt(new Point(training.GetStartpunkt().X, Convert.ToInt32(tb.Text)));
+        }
+
+        private void textBoxzielX_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (!TextBoxValide(tb.Text, Richtung.Breite, false))
+            {
+                buttonTrain.Enabled = false;
+                tb.ForeColor = Color.Red;
+                return;
+            }
+
+            buttonTrain.Enabled = true;
+            tb.ForeColor = defaultforecolor;
+            training.SetZielpunkt(new Point(Convert.ToInt32(tb.Text), training.GetZielpunkt().Y));
+        }
+
+        private void textBoxzielY_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (!TextBoxValide(tb.Text, Richtung.Breite, false))
+            {
+                buttonTrain.Enabled = false;
+                tb.ForeColor = Color.Red;
+                return;
+            }
+
+            buttonTrain.Enabled = true;
+            tb.ForeColor = defaultforecolor;
+            training.SetZielpunkt(new Point(training.GetZielpunkt().X, Convert.ToInt32(tb.Text)));
         }
     }
 }

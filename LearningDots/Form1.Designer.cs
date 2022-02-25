@@ -31,6 +31,7 @@ namespace LearningDots
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBoxdiagonal = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.comboBoxmaxSchritte = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -54,10 +55,9 @@ namespace LearningDots
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.labelprogress = new System.Windows.Forms.Label();
-            this.checkBoxdiagonal = new System.Windows.Forms.CheckBox();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -104,13 +104,23 @@ namespace LearningDots
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings:";
             // 
+            // checkBoxdiagonal
+            // 
+            this.checkBoxdiagonal.AutoSize = true;
+            this.checkBoxdiagonal.Location = new System.Drawing.Point(388, 41);
+            this.checkBoxdiagonal.Name = "checkBoxdiagonal";
+            this.checkBoxdiagonal.Size = new System.Drawing.Size(127, 17);
+            this.checkBoxdiagonal.TabIndex = 18;
+            this.checkBoxdiagonal.Text = "allow diagonal moves";
+            this.checkBoxdiagonal.UseVisualStyleBackColor = true;
+            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(541, 13);
+            this.button1.Location = new System.Drawing.Point(561, 13);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(95, 23);
             this.button1.TabIndex = 18;
-            this.button1.Text = "Lade besten";
+            this.button1.Text = "Load best dot";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -123,7 +133,7 @@ namespace LearningDots
             "1000",
             "2000",
             "5000"});
-            this.comboBoxmaxSchritte.Location = new System.Drawing.Point(473, 15);
+            this.comboBoxmaxSchritte.Location = new System.Drawing.Point(496, 15);
             this.comboBoxmaxSchritte.Name = "comboBoxmaxSchritte";
             this.comboBoxmaxSchritte.Size = new System.Drawing.Size(59, 21);
             this.comboBoxmaxSchritte.TabIndex = 21;
@@ -133,18 +143,18 @@ namespace LearningDots
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(385, 18);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(82, 13);
+            this.label11.Size = new System.Drawing.Size(105, 13);
             this.label11.TabIndex = 20;
-            this.label11.Text = "Max Schrittzahl:";
+            this.label11.Text = "Max number of steps";
             // 
             // checkBoxZuschauen
             // 
             this.checkBoxZuschauen.AutoSize = true;
-            this.checkBoxZuschauen.Location = new System.Drawing.Point(541, 41);
+            this.checkBoxZuschauen.Location = new System.Drawing.Point(561, 39);
             this.checkBoxZuschauen.Name = "checkBoxZuschauen";
-            this.checkBoxZuschauen.Size = new System.Drawing.Size(80, 17);
+            this.checkBoxZuschauen.Size = new System.Drawing.Size(69, 17);
             this.checkBoxZuschauen.TabIndex = 19;
-            this.checkBoxZuschauen.Text = "Zuschauen";
+            this.checkBoxZuschauen.Text = "Spectate";
             this.checkBoxZuschauen.UseVisualStyleBackColor = true;
             // 
             // buttonZeichneHindernis
@@ -153,7 +163,7 @@ namespace LearningDots
             this.buttonZeichneHindernis.Name = "buttonZeichneHindernis";
             this.buttonZeichneHindernis.Size = new System.Drawing.Size(110, 23);
             this.buttonZeichneHindernis.TabIndex = 18;
-            this.buttonZeichneHindernis.Text = "Zeichne Hindernis";
+            this.buttonZeichneHindernis.Text = "Draw obstacle";
             this.buttonZeichneHindernis.UseVisualStyleBackColor = true;
             this.buttonZeichneHindernis.Click += new System.EventHandler(this.buttonZeichneHindernis_Click);
             // 
@@ -194,18 +204,18 @@ namespace LearningDots
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(201, 42);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(116, 13);
+            this.label8.Size = new System.Drawing.Size(89, 13);
             this.label8.TabIndex = 14;
-            this.label8.Text = "Maximale Trainingszeit:";
+            this.label8.Text = "Max training time:";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(201, 18);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(67, 13);
+            this.label7.Size = new System.Drawing.Size(82, 13);
             this.label7.TabIndex = 2;
-            this.label7.Text = "Anzahl Dots:";
+            this.label7.Text = "Number of dots:";
             // 
             // label4
             // 
@@ -222,6 +232,7 @@ namespace LearningDots
             this.textBoxzielY.Name = "textBoxzielY";
             this.textBoxzielY.Size = new System.Drawing.Size(36, 20);
             this.textBoxzielY.TabIndex = 11;
+            this.textBoxzielY.TextChanged += new System.EventHandler(this.textBoxzielY_TextChanged);
             this.textBoxzielY.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxzielY_KeyDown);
             // 
             // label5
@@ -238,9 +249,9 @@ namespace LearningDots
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 42);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 13);
+            this.label6.Size = new System.Drawing.Size(52, 13);
             this.label6.TabIndex = 8;
-            this.label6.Text = "Zielpunkt:";
+            this.label6.Text = "Endpoint:";
             // 
             // textBoxzielX
             // 
@@ -248,6 +259,7 @@ namespace LearningDots
             this.textBoxzielX.Name = "textBoxzielX";
             this.textBoxzielX.Size = new System.Drawing.Size(36, 20);
             this.textBoxzielX.TabIndex = 9;
+            this.textBoxzielX.TextChanged += new System.EventHandler(this.textBoxzielX_TextChanged);
             this.textBoxzielX.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxzielX_KeyDown);
             // 
             // label3
@@ -265,6 +277,7 @@ namespace LearningDots
             this.textBoxstartY.Name = "textBoxstartY";
             this.textBoxstartY.Size = new System.Drawing.Size(36, 20);
             this.textBoxstartY.TabIndex = 6;
+            this.textBoxstartY.TextChanged += new System.EventHandler(this.textBoxstartY_TextChanged);
             this.textBoxstartY.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxstartY_KeyDown);
             // 
             // label2
@@ -281,9 +294,9 @@ namespace LearningDots
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Startpunkt:";
+            this.label1.Text = "Startpoint:";
             // 
             // textBoxstartX
             // 
@@ -291,6 +304,7 @@ namespace LearningDots
             this.textBoxstartX.Name = "textBoxstartX";
             this.textBoxstartX.Size = new System.Drawing.Size(36, 20);
             this.textBoxstartX.TabIndex = 3;
+            this.textBoxstartX.TextChanged += new System.EventHandler(this.textBoxstartX_TextChanged);
             this.textBoxstartX.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxstartX_KeyDown);
             // 
             // buttonTrain
@@ -299,7 +313,7 @@ namespace LearningDots
             this.buttonTrain.Name = "buttonTrain";
             this.buttonTrain.Size = new System.Drawing.Size(110, 23);
             this.buttonTrain.TabIndex = 4;
-            this.buttonTrain.Text = "Training starten";
+            this.buttonTrain.Text = "Start training";
             this.buttonTrain.UseVisualStyleBackColor = true;
             this.buttonTrain.Click += new System.EventHandler(this.buttonTrain_Click);
             // 
@@ -336,6 +350,23 @@ namespace LearningDots
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Status:";
             // 
+            // labelprogress
+            // 
+            this.labelprogress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelprogress.AutoSize = true;
+            this.labelprogress.Location = new System.Drawing.Point(98, 436);
+            this.labelprogress.Name = "labelprogress";
+            this.labelprogress.Size = new System.Drawing.Size(0, 13);
+            this.labelprogress.TabIndex = 1;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(6, 428);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(227, 21);
+            this.progressBar1.TabIndex = 1;
+            // 
             // richTextBox1
             // 
             this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -347,33 +378,6 @@ namespace LearningDots
             this.richTextBox1.Size = new System.Drawing.Size(230, 403);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(6, 428);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(227, 21);
-            this.progressBar1.TabIndex = 1;
-            // 
-            // labelprogress
-            // 
-            this.labelprogress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelprogress.AutoSize = true;
-            this.labelprogress.Location = new System.Drawing.Point(98, 436);
-            this.labelprogress.Name = "labelprogress";
-            this.labelprogress.Size = new System.Drawing.Size(0, 13);
-            this.labelprogress.TabIndex = 1;
-            // 
-            // checkBoxdiagonal
-            // 
-            this.checkBoxdiagonal.AutoSize = true;
-            this.checkBoxdiagonal.Location = new System.Drawing.Point(388, 41);
-            this.checkBoxdiagonal.Name = "checkBoxdiagonal";
-            this.checkBoxdiagonal.Size = new System.Drawing.Size(104, 17);
-            this.checkBoxdiagonal.TabIndex = 18;
-            this.checkBoxdiagonal.Text = "erlaube diagonal";
-            this.checkBoxdiagonal.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

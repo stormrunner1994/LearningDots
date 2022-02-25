@@ -7,14 +7,26 @@ using System.Threading.Tasks;
 
 namespace LearningDots
 {
-    public class Settings
+    public class Setting
     {
-        public static Point zielPos;
-        public static Point startPos;
-        public static int populationsGröße;
-        public static bool zuschauen;
-        public static int maxSteps;
-        public static bool erlaubeDiagonaleZüge;
-        public static List<Hindernis> hindernisse;
+        public  Point zielPos;
+        public  Point startPos;
+        public  int populationsGröße;
+        public  bool zuschauen;
+        public  int maxSteps;
+        public  bool erlaubeDiagonaleZüge;
+        public  List<Hindernis> hindernisse;
+
+        public Setting(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps, bool erlaubeDiagonaleZüge
+            , List<Hindernis> hindernisse)
+        {
+            this.zielPos = zielPos;
+            this.startPos = startPos;
+            this.populationsGröße = populationsGröße;
+            this.zuschauen = zuschauen;
+            this.maxSteps = maxSteps;
+            this.erlaubeDiagonaleZüge = erlaubeDiagonaleZüge;
+            this.hindernisse = hindernisse;
+        }
     }
 }
