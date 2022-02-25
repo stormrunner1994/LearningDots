@@ -68,12 +68,12 @@ namespace LearningDots
                 reachedGoal = true;
             // An Hindernis gestoßen
             else if (AnHindernisGestoßen())
-                isDead = true;
-            
+                isDead = true;            
         }
 
         private bool AnHindernisGestoßen()
         {
+            // TODO hindernis greift nicht immer
             foreach (Hindernis h in hindernisse)
             {
                 // Hängt davon ab, wie Viereck gedreht ist
@@ -112,8 +112,7 @@ namespace LearningDots
             }
             else
             {
-                fitness = 1.0 / (distanceToGoal * distanceToGoal);
-
+                fitness = 1.0 / (distanceToGoal * distanceToGoal) + 1 / (maxSteps - (brain.step - 2));
             }
         }
 

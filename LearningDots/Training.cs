@@ -99,7 +99,7 @@ namespace LearningDots
         {
             setting.populationsGröße = populationsGröße;
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, population.maxSteps,
-                erlaubeDiagonaleZüge,population.hindernisse);
+                erlaubeDiagonaleZüge, population.hindernisse);
             ZeichneFeld();
         }
 
@@ -112,15 +112,15 @@ namespace LearningDots
                 {
                     // generic algorithm
                     population.calculateFitnessForAllDots();
-                                        
-                        double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
-                        int[] deadReachedGoal = population.GetDeadReachedGoal();
-                        verlauf.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
-                        deadReachedGoal[0], deadReachedGoal[1]);
-                        population.naturalSelection(verlauf.GetLastGenInfo());
+
+                    double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
+                    int[] deadReachedGoal = population.GetDeadReachedGoal();
+                    verlauf.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
+                    deadReachedGoal[0], deadReachedGoal[1], population.maxSteps);
+                    population.naturalSelection(verlauf.GetLastGenInfo());
 
                     population.mutateBabies();
-                        UpdateStatusRichTextBox(false);
+                    UpdateStatusRichTextBox(false);
 
                     progressbar.Value = 0;
                     progressbar.Maximum = population.maxSteps;
@@ -165,7 +165,7 @@ namespace LearningDots
             else
             {
                 if (verlauf.GetLastGenInfo() != null)
-                Invoker_.Invoker.invokeText(rtbStatus, verlauf.GetLastGenInfo().GetInfo());
+                    Invoker_.Invoker.invokeText(rtbStatus, verlauf.GetLastGenInfo().GetInfo());
                 else
                     Invoker_.Invoker.invokeText(rtbStatus, "no Generation yet");
             }
@@ -190,7 +190,7 @@ namespace LearningDots
             sw.Start();
 
             int secs = 0;
-            while (sw.ElapsedMilliseconds < setting.maxTrainingTime * 1000)
+            while (true)
             {
                 if ((sw.ElapsedMilliseconds / 1000) > secs)
                 {
@@ -206,9 +206,10 @@ namespace LearningDots
                     double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
                     int[] deadReachedGoal = population.GetDeadReachedGoal();
                     verlauf.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
-                    deadReachedGoal[0], deadReachedGoal[1]);
+                    deadReachedGoal[0], deadReachedGoal[1], population.maxSteps);
 
-                    if (population.SoManyReachedGoal(80))
+                    // Beende Loop
+                    if (population.SoManyReachedGoal(80) || sw.ElapsedMilliseconds >= setting.maxTrainingTime * 1000)
                         break;
 
                     var reihenfolge = population.GetReihenfolge();

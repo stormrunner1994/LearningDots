@@ -22,9 +22,10 @@ namespace LearningDots
             return genInfos.Last();
         }
 
-        public void AddGenInfo(double avgFitness, double worstFitness, double bestFitness, int dead, int reachedGoal)
+        public void AddGenInfo(double avgFitness, double worstFitness, double bestFitness, int dead, int reachedGoal,
+            int maxSteps)
         {
-            genInfos.Add(new GenInfo(genInfos.Count, populationSize, avgFitness, worstFitness, bestFitness, dead, reachedGoal));
+            genInfos.Add(new GenInfo(genInfos.Count, populationSize, avgFitness, worstFitness, bestFitness, dead, reachedGoal, maxSteps));
         }
 
         public List<GenInfo> GetGenInfos()
@@ -44,12 +45,14 @@ namespace LearningDots
         private int populationSize = 0;
         private double avgFitness = -1;
         private int diffFitnessPercentage = -1;
+        private int maxSteps = 0;
         // wie oft wurd eine Rang als Parent ausgewählt
         private Dictionary<int, int> dictRanksChosenAsParent = new Dictionary<int, int>();
 
         public GenInfo(int iGen, int populationSize, double avgFitness, double worstFitness, double bestFitness
-            , int dead, int reachedGoal)
+            , int dead, int reachedGoal, int maxSteps)
         {
+            this.maxSteps = maxSteps;
             this.dead = dead;
             this.reachedGoal = reachedGoal;
             this.iGen = iGen;
@@ -78,7 +81,8 @@ namespace LearningDots
         {
             return "Gen: " + (iGen +1) + ":\nBest: " + bestFitness + "\nWorst: " +
                 worstFitness + "\nAvg: " + avgFitness + "\nDiff%: " + diffFitnessPercentage+ "\nDead: " + dead
-                + "\nReachedGoal: " + reachedGoal + "\nChosenRank: " + GetChosenRankRatio();
+                + "\nReachedGoal: " + reachedGoal + "\nChosenRank: " + GetChosenRankRatio()
+                + "\nMaxSteps: " + maxSteps;
         }
 
         private double GetChosenRankRatio()

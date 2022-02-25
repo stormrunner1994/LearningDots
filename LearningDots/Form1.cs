@@ -178,9 +178,9 @@ namespace LearningDots
             if (buttonZeichneHindernis.Text == "Draw obstacle")
             {
                 // schweres Hindernis
-                //hindernisse.Add(new Hindernis(new Point(10, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
+                hindernisse.Add(new Hindernis(new Point(10, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
                 // einfaches Hindernis
-                hindernisse.Add(new Hindernis(new Point(200, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
+                //hindernisse.Add(new Hindernis(new Point(200, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
 
                 buttonZeichneHindernis.Text = "Hide obstacle";
                 panel1.Invalidate();
