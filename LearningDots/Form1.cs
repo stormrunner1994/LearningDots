@@ -21,7 +21,7 @@ namespace LearningDots
             Point startPos = new Point(panel1.Width / 2, panel1.Height - Training.SPEZIALPUNKTEGRÖSSE);
 
             setting = new Setting(zielPos, startPos, 100, true, 1000, true, new List<Hindernis>(),1);
-            training = new Training(panel1, setting, richTextBox1, progressBar1, labelprogress);
+            training = new Training(panel1, setting, richTextBox1, progressBar1, labelprogress, buttonTrain);
         }
 
 
@@ -49,7 +49,7 @@ namespace LearningDots
 
         private void buttonTrain_Click(object sender, EventArgs e)
         {
-            if (buttonTrain.Text == "Training starten")
+            if (buttonTrain.Text == "Start training")
             {
                 Point zielPos = new Point(Convert.ToInt32(textBoxzielX.Text), Convert.ToInt32(textBoxzielY.Text));
                 Point startPos = new Point(Convert.ToInt32(textBoxstartX.Text), Convert.ToInt32(textBoxstartY.Text));
@@ -59,7 +59,7 @@ namespace LearningDots
                     hindernisse, Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text));
                 training.SetSettings(setting);
                 training.Starten();
-                buttonTrain.Text = "Training stoppen";
+                buttonTrain.Text = "Stop training";
                 textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = false;
             }
             else
@@ -67,7 +67,7 @@ namespace LearningDots
                 // Sichere besten
                 training.SafeBest();
                 training.Stoppen();
-                buttonTrain.Text = "Training starten";
+                buttonTrain.Text = "Start training";
                 textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = true;
             }
         }
@@ -175,19 +175,19 @@ namespace LearningDots
 
         private void buttonZeichneHindernis_Click(object sender, EventArgs e)
         {
-            if (buttonZeichneHindernis.Text == "Zeichne Hindernis")
+            if (buttonZeichneHindernis.Text == "Draw obstacle")
             {
                 // schweres Hindernis
                 //hindernisse.Add(new Hindernis(new Point(10, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
                 // einfaches Hindernis
                 hindernisse.Add(new Hindernis(new Point(200, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
 
-                buttonZeichneHindernis.Text = "Verstecke Hindernis";
+                buttonZeichneHindernis.Text = "Hide obstacle";
                 panel1.Invalidate();
             }
             else
             {
-                buttonZeichneHindernis.Text = "Zeichne Hindernis";
+                buttonZeichneHindernis.Text = "Draw obstacle";
                 hindernisse.Clear();
                 panel1.Refresh();
             }
@@ -195,15 +195,15 @@ namespace LearningDots
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (button1.Text == "Lade besten")
+            if (button1.Text == "Load best dot")
             {
-                button1.Text = "Halte an";
+                button1.Text = "Stop best dot";
                 training.LoadBest();
                 training.LasseBestenAblaufen();
             }
             else
             {
-                button1.Text = "Lade besten";
+                button1.Text = "Load best dot";
                 training.HalteBestenAn();
             }
         }
@@ -275,6 +275,11 @@ namespace LearningDots
             buttonTrain.Enabled = true;
             tb.ForeColor = defaultforecolor;
             training.SetZielpunkt(new Point(training.GetZielpunkt().X, Convert.ToInt32(tb.Text)));
+        }
+
+        private void checkBoxZuschauen_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBoxmaxtrainingszeit.Enabled = !checkBoxZuschauen.Checked;
         }
     }
 }

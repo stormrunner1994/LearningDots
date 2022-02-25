@@ -158,6 +158,7 @@ namespace LearningDots
             this.checkBoxZuschauen.TabIndex = 19;
             this.checkBoxZuschauen.Text = "Spectate";
             this.checkBoxZuschauen.UseVisualStyleBackColor = true;
+            this.checkBoxZuschauen.CheckedChanged += new System.EventHandler(this.checkBoxZuschauen_CheckedChanged);
             // 
             // buttonZeichneHindernis
             // 

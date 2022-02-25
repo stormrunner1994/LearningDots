@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Invoker_;
 
 namespace LearningDots
 {
@@ -31,9 +32,12 @@ namespace LearningDots
         private ProgressBar progressbar;
         Label labelprogressbar;
         private Setting setting;
+        private Button buttonStart;
 
-        public Training(Panel panel, Setting setting, RichTextBox rtbStatus, ProgressBar progressbar, Label labelprogressbar)
+        public Training(Panel panel, Setting setting, RichTextBox rtbStatus, ProgressBar progressbar, Label labelprogressbar,
+            Button buttonStart)
         {
+            this.buttonStart = buttonStart;
             this.setting = setting;
             this.progressbar = progressbar;
             this.labelprogressbar = labelprogressbar;
@@ -181,7 +185,7 @@ namespace LearningDots
 
         private void ThreadTrainieren()
         {
-            Invoker_.Invoker.invokeProgressBar(progressbar, 0, 0, setting.maxTrainingTime);
+            Invoker.invokeProgressBar(progressbar, 0, 0, setting.maxTrainingTime);
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
@@ -191,7 +195,8 @@ namespace LearningDots
                 if ((sw.ElapsedMilliseconds / 1000) > secs)
                 {
                     secs = (int)(sw.ElapsedMilliseconds / 1000);
-                    Invoker_.Invoker.invokeProgressBarValue(progressbar, secs);
+                    Invoker.invokeProgressBarValue(progressbar, secs);
+                    Invoker.invokeText(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
                 }
 
                 if (population.allDotsFinished())
@@ -218,8 +223,11 @@ namespace LearningDots
             }
 
             sw.Stop();
-            Invoker_.Invoker.invokeInvalidate(panel);
+            Invoker.invokeInvalidate(panel);
+            Invoker.invokeProgressBarValue(progressbar, Invoker.invokeProgressBarGetMax(progressbar));
+            Invoker.invokeText(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
             UpdateStatusRichTextBox(true);
+            Invoker.invokeText(buttonStart, "Start training");
         }
 
         public void SafeBest()

@@ -25,6 +25,20 @@ namespace Invoker_
             }
         }
 
+        public static int invokeProgressBarGetMax(ProgressBar myobject)
+        {
+            int max = 0;
+            if (myobject.InvokeRequired)
+            {
+                myobject.Invoke((MethodInvoker)(() => max = myobject.Maximum));
+            }
+            else
+            {
+                max = myobject.Maximum;
+            }
+            return max;
+        }
+
         public static void invokeProgressBarValue(ProgressBar myobject, int value)
         {
             if (myobject.InvokeRequired)
