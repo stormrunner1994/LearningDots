@@ -36,7 +36,6 @@ namespace LearningDots
             this.comboBoxmaxSchritte = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.checkBoxZuschauen = new System.Windows.Forms.CheckBox();
-            this.buttonZeichneHindernis = new System.Windows.Forms.Button();
             this.comboBoxmaxtrainingszeit = new System.Windows.Forms.ComboBox();
             this.comboBoxanzahldots = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -55,11 +54,12 @@ namespace LearningDots
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonprevgen = new System.Windows.Forms.Button();
+            this.buttonnextgen = new System.Windows.Forms.Button();
             this.labelprogress = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.buttonnextgen = new System.Windows.Forms.Button();
-            this.buttonprevgen = new System.Windows.Forms.Button();
+            this.comboBoxobstacle = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -78,12 +78,12 @@ namespace LearningDots
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.comboBoxobstacle);
             this.groupBox1.Controls.Add(this.checkBoxdiagonal);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.comboBoxmaxSchritte);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.checkBoxZuschauen);
-            this.groupBox1.Controls.Add(this.buttonZeichneHindernis);
             this.groupBox1.Controls.Add(this.comboBoxmaxtrainingszeit);
             this.groupBox1.Controls.Add(this.comboBoxanzahldots);
             this.groupBox1.Controls.Add(this.label8);
@@ -159,16 +159,6 @@ namespace LearningDots
             this.checkBoxZuschauen.Text = "Spectate";
             this.checkBoxZuschauen.UseVisualStyleBackColor = true;
             this.checkBoxZuschauen.CheckedChanged += new System.EventHandler(this.checkBoxZuschauen_CheckedChanged);
-            // 
-            // buttonZeichneHindernis
-            // 
-            this.buttonZeichneHindernis.Location = new System.Drawing.Point(714, 9);
-            this.buttonZeichneHindernis.Name = "buttonZeichneHindernis";
-            this.buttonZeichneHindernis.Size = new System.Drawing.Size(110, 23);
-            this.buttonZeichneHindernis.TabIndex = 18;
-            this.buttonZeichneHindernis.Text = "Draw obstacle";
-            this.buttonZeichneHindernis.UseVisualStyleBackColor = true;
-            this.buttonZeichneHindernis.Click += new System.EventHandler(this.buttonZeichneHindernis_Click);
             // 
             // comboBoxmaxtrainingszeit
             // 
@@ -354,6 +344,26 @@ namespace LearningDots
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "History:";
             // 
+            // buttonprevgen
+            // 
+            this.buttonprevgen.Enabled = false;
+            this.buttonprevgen.Location = new System.Drawing.Point(6, 18);
+            this.buttonprevgen.Name = "buttonprevgen";
+            this.buttonprevgen.Size = new System.Drawing.Size(92, 23);
+            this.buttonprevgen.TabIndex = 3;
+            this.buttonprevgen.Text = "Previous Gen";
+            this.buttonprevgen.UseVisualStyleBackColor = true;
+            // 
+            // buttonnextgen
+            // 
+            this.buttonnextgen.Enabled = false;
+            this.buttonnextgen.Location = new System.Drawing.Point(104, 18);
+            this.buttonnextgen.Name = "buttonnextgen";
+            this.buttonnextgen.Size = new System.Drawing.Size(92, 23);
+            this.buttonnextgen.TabIndex = 2;
+            this.buttonnextgen.Text = "Next Gen";
+            this.buttonnextgen.UseVisualStyleBackColor = true;
+            // 
             // labelprogress
             // 
             this.labelprogress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -383,25 +393,19 @@ namespace LearningDots
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // buttonnextgen
+            // comboBoxobstacle
             // 
-            this.buttonnextgen.Enabled = false;
-            this.buttonnextgen.Location = new System.Drawing.Point(104, 18);
-            this.buttonnextgen.Name = "buttonnextgen";
-            this.buttonnextgen.Size = new System.Drawing.Size(92, 23);
-            this.buttonnextgen.TabIndex = 2;
-            this.buttonnextgen.Text = "Next Gen";
-            this.buttonnextgen.UseVisualStyleBackColor = true;
-            // 
-            // buttonprevgen
-            // 
-            this.buttonprevgen.Enabled = false;
-            this.buttonprevgen.Location = new System.Drawing.Point(6, 18);
-            this.buttonprevgen.Name = "buttonprevgen";
-            this.buttonprevgen.Size = new System.Drawing.Size(92, 23);
-            this.buttonprevgen.TabIndex = 3;
-            this.buttonprevgen.Text = "Previous Gen";
-            this.buttonprevgen.UseVisualStyleBackColor = true;
+            this.comboBoxobstacle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxobstacle.FormattingEnabled = true;
+            this.comboBoxobstacle.Items.AddRange(new object[] {
+            "no obstacle",
+            "easy obstacle",
+            "hard obstacle"});
+            this.comboBoxobstacle.Location = new System.Drawing.Point(714, 16);
+            this.comboBoxobstacle.Name = "comboBoxobstacle";
+            this.comboBoxobstacle.Size = new System.Drawing.Size(110, 21);
+            this.comboBoxobstacle.TabIndex = 18;
+            this.comboBoxobstacle.SelectedIndexChanged += new System.EventHandler(this.comboBoxobstacle_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -446,7 +450,6 @@ namespace LearningDots
         private System.Windows.Forms.ComboBox comboBoxmaxtrainingszeit;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button buttonZeichneHindernis;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.CheckBox checkBoxZuschauen;
@@ -458,6 +461,7 @@ namespace LearningDots
         private System.Windows.Forms.CheckBox checkBoxdiagonal;
         private System.Windows.Forms.Button buttonprevgen;
         private System.Windows.Forms.Button buttonnextgen;
+        private System.Windows.Forms.ComboBox comboBoxobstacle;
     }
 }
 

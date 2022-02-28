@@ -35,6 +35,7 @@ namespace LearningDots
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            comboBoxobstacle.SelectedIndex = 0;
             comboBoxmaxSchritte.SelectedIndex = 1;
             comboBoxanzahldots.SelectedIndex = 2;
             comboBoxmaxtrainingszeit.SelectedIndex = 0;
@@ -173,25 +174,6 @@ namespace LearningDots
             training.SetZielpunkt(new Point(training.GetZielpunkt().X, Convert.ToInt32(tb.Text)));
         }
 
-        private void buttonZeichneHindernis_Click(object sender, EventArgs e)
-        {
-            if (buttonZeichneHindernis.Text == "Draw obstacle")
-            {
-                // schweres Hindernis
-                hindernisse.Add(new Hindernis(new Point(10, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
-                // einfaches Hindernis
-                //hindernisse.Add(new Hindernis(new Point(200, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
-
-                buttonZeichneHindernis.Text = "Hide obstacle";
-                panel1.Invalidate();
-            }
-            else
-            {
-                buttonZeichneHindernis.Text = "Draw obstacle";
-                hindernisse.Clear();
-                panel1.Refresh();
-            }
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -281,5 +263,24 @@ namespace LearningDots
         {
             comboBoxmaxtrainingszeit.Enabled = !checkBoxZuschauen.Checked;
         }
+
+        private void comboBoxobstacle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            hindernisse.Clear();
+            if (comboBoxobstacle.SelectedIndex == 0)
+            {
+                panel1.Refresh();
+            }
+            else if (comboBoxobstacle.SelectedIndex == 1)
+            {
+                hindernisse.Add(new Hindernis(new Point(200, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
+                panel1.Invalidate();
+            }
+            else
+            {
+                hindernisse.Add(new Hindernis(new Point(10, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
+                panel1.Invalidate();
+            }
+        }            
     }
 }
