@@ -145,7 +145,7 @@ namespace Invoker_
             }
         }
 
-        public static void invokeText(object myobject, string text)
+        public static void invokeTextSet(object myobject, string text)
         {
             if (myobject is Label)
             {
@@ -167,6 +167,11 @@ namespace Invoker_
                 if (((RichTextBox)myobject).InvokeRequired) ((RichTextBox)myobject).Invoke((MethodInvoker)(() => ((RichTextBox)myobject).Text = text));
                 else ((RichTextBox)myobject).Text = text;
             }
+            else if (myobject is GroupBox)
+            {
+                if (((GroupBox)myobject).InvokeRequired) ((GroupBox)myobject).Invoke((MethodInvoker)(() => ((GroupBox)myobject).Text = text));
+                else ((GroupBox)myobject).Text = text;
+            }
         }
 
         public static void invokeInvalidate(object myobject)
@@ -175,7 +180,7 @@ namespace Invoker_
             else ((Panel)myobject).Invalidate();
         }
 
-        public static string invokeGetText(object myobject)
+        public static string invokeTextGet(object myobject)
         {
             string text = "";
             if (myobject is Label)
@@ -197,6 +202,11 @@ namespace Invoker_
             {
                 if (((RichTextBox)myobject).InvokeRequired) ((RichTextBox)myobject).Invoke((MethodInvoker)(() => text = ((RichTextBox)myobject).Text));
                 else text = ((RichTextBox)myobject).Text;
+            }
+            else if (myobject is GroupBox)
+            {
+                if (((GroupBox)myobject).InvokeRequired) ((GroupBox)myobject).Invoke((MethodInvoker)(() => text = ((GroupBox)myobject).Text));
+                else text = ((GroupBox)myobject).Text;
             }
 
             return text;

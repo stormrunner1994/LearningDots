@@ -152,22 +152,22 @@ namespace LearningDots
         {
             if (!nurLetzte)
             {
-                Invoker_.Invoker.invokeText(rtbStatus, "");
+                Invoker_.Invoker.invokeTextSet(rtbStatus, "");
                 var genInfos = verlauf.GetGenInfos();
 
                 for (int a = genInfos.Count - 1; a > -1; a--)
                 {
                     GenInfo gi = genInfos[a];
-                    if (Invoker_.Invoker.invokeGetText(rtbStatus) != "") Invoker_.Invoker.invokeAppendText(rtbStatus, "\n\n" + gi.GetInfo());
-                    else Invoker_.Invoker.invokeAppendText(rtbStatus, gi.GetInfo());
+                    if (Invoker.invokeTextGet(rtbStatus) != "") Invoker_.Invoker.invokeAppendText(rtbStatus, "\n\n" + gi.GetInfo());
+                    else Invoker.invokeAppendText(rtbStatus, gi.GetInfo());
                 }
             }
             else
             {
                 if (verlauf.GetLastGenInfo() != null)
-                    Invoker_.Invoker.invokeText(rtbStatus, verlauf.GetLastGenInfo().GetInfo());
+                    Invoker.invokeTextSet(rtbStatus, verlauf.GetLastGenInfo().GetInfo());
                 else
-                    Invoker_.Invoker.invokeText(rtbStatus, "no Generation yet");
+                    Invoker.invokeTextSet(rtbStatus, "no Generation yet");
             }
         }
 
@@ -196,7 +196,7 @@ namespace LearningDots
                 {
                     secs = (int)(sw.ElapsedMilliseconds / 1000);
                     Invoker.invokeProgressBarValue(progressbar, secs);
-                    Invoker.invokeText(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
+                    Invoker.invokeTextSet(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
                 }
 
                 if (population.allDotsFinished())
@@ -227,9 +227,9 @@ namespace LearningDots
             SafeBest();
             Invoker.invokeInvalidate(panel);
             Invoker.invokeProgressBarValue(progressbar, Invoker.invokeProgressBarGetMax(progressbar));
-            Invoker.invokeText(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
+            Invoker.invokeTextSet(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
             UpdateStatusRichTextBox(true);
-            Invoker.invokeText(buttonStart, "Start training");
+            Invoker.invokeTextSet(buttonStart, "Start training");
         }
 
         public void SafeBest()
