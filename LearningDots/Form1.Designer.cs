@@ -62,6 +62,7 @@ namespace LearningDots
             this.labelprogress = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.buttonresetTraining = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -72,14 +73,15 @@ namespace LearningDots
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(62, 110);
+            this.panel1.Location = new System.Drawing.Point(62, 116);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(535, 449);
+            this.panel1.Size = new System.Drawing.Size(535, 464);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonresetTraining);
             this.groupBox1.Controls.Add(this.buttonLoadObstacle);
             this.groupBox1.Controls.Add(this.buttonSaveObstacle);
             this.groupBox1.Controls.Add(this.comboBoxobstacle);
@@ -105,14 +107,14 @@ namespace LearningDots
             this.groupBox1.Controls.Add(this.buttonTrain);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(830, 70);
+            this.groupBox1.Size = new System.Drawing.Size(830, 98);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings:";
             // 
             // buttonLoadObstacle
             // 
-            this.buttonLoadObstacle.Location = new System.Drawing.Point(778, 38);
+            this.buttonLoadObstacle.Location = new System.Drawing.Point(582, 16);
             this.buttonLoadObstacle.Name = "buttonLoadObstacle";
             this.buttonLoadObstacle.Size = new System.Drawing.Size(46, 23);
             this.buttonLoadObstacle.TabIndex = 22;
@@ -122,7 +124,7 @@ namespace LearningDots
             // 
             // buttonSaveObstacle
             // 
-            this.buttonSaveObstacle.Location = new System.Drawing.Point(778, 13);
+            this.buttonSaveObstacle.Location = new System.Drawing.Point(530, 16);
             this.buttonSaveObstacle.Name = "buttonSaveObstacle";
             this.buttonSaveObstacle.Size = new System.Drawing.Size(46, 23);
             this.buttonSaveObstacle.TabIndex = 18;
@@ -138,9 +140,8 @@ namespace LearningDots
             "no obstacle",
             "easy obstacle",
             "hard obstacle",
-            "labyrinth",
             "Draw by yourself"});
-            this.comboBoxobstacle.Location = new System.Drawing.Point(662, 15);
+            this.comboBoxobstacle.Location = new System.Drawing.Point(414, 18);
             this.comboBoxobstacle.Name = "comboBoxobstacle";
             this.comboBoxobstacle.Size = new System.Drawing.Size(110, 21);
             this.comboBoxobstacle.TabIndex = 18;
@@ -149,7 +150,7 @@ namespace LearningDots
             // checkBoxdiagonal
             // 
             this.checkBoxdiagonal.AutoSize = true;
-            this.checkBoxdiagonal.Location = new System.Drawing.Point(364, 42);
+            this.checkBoxdiagonal.Location = new System.Drawing.Point(204, 67);
             this.checkBoxdiagonal.Name = "checkBoxdiagonal";
             this.checkBoxdiagonal.Size = new System.Drawing.Size(127, 17);
             this.checkBoxdiagonal.TabIndex = 18;
@@ -158,11 +159,11 @@ namespace LearningDots
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(561, 13);
+            this.button1.Location = new System.Drawing.Point(646, 16);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(95, 23);
             this.button1.TabIndex = 18;
-            this.button1.Text = "Load best dot";
+            this.button1.Text = "Show best dot";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -175,7 +176,7 @@ namespace LearningDots
             "1000",
             "2000",
             "5000"});
-            this.comboBoxmaxSchritte.Location = new System.Drawing.Point(483, 15);
+            this.comboBoxmaxSchritte.Location = new System.Drawing.Point(312, 40);
             this.comboBoxmaxSchritte.Name = "comboBoxmaxSchritte";
             this.comboBoxmaxSchritte.Size = new System.Drawing.Size(59, 21);
             this.comboBoxmaxSchritte.TabIndex = 21;
@@ -183,7 +184,7 @@ namespace LearningDots
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(361, 19);
+            this.label11.Location = new System.Drawing.Point(201, 43);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(105, 13);
             this.label11.TabIndex = 20;
@@ -192,7 +193,7 @@ namespace LearningDots
             // checkBoxZuschauen
             // 
             this.checkBoxZuschauen.AutoSize = true;
-            this.checkBoxZuschauen.Location = new System.Drawing.Point(497, 41);
+            this.checkBoxZuschauen.Location = new System.Drawing.Point(415, 47);
             this.checkBoxZuschauen.Name = "checkBoxZuschauen";
             this.checkBoxZuschauen.Size = new System.Drawing.Size(69, 17);
             this.checkBoxZuschauen.TabIndex = 19;
@@ -205,12 +206,13 @@ namespace LearningDots
             this.comboBoxmaxtrainingszeit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxmaxtrainingszeit.FormattingEnabled = true;
             this.comboBoxmaxtrainingszeit.Items.AddRange(new object[] {
+            "5sec",
             "10sec",
             "30sec",
             "1min",
             "5min",
             "10min"});
-            this.comboBoxmaxtrainingszeit.Location = new System.Drawing.Point(296, 39);
+            this.comboBoxmaxtrainingszeit.Location = new System.Drawing.Point(101, 68);
             this.comboBoxmaxtrainingszeit.Name = "comboBoxmaxtrainingszeit";
             this.comboBoxmaxtrainingszeit.Size = new System.Drawing.Size(59, 21);
             this.comboBoxmaxtrainingszeit.TabIndex = 16;
@@ -226,7 +228,7 @@ namespace LearningDots
             "100",
             "500",
             "1000"});
-            this.comboBoxanzahldots.Location = new System.Drawing.Point(296, 12);
+            this.comboBoxanzahldots.Location = new System.Drawing.Point(312, 13);
             this.comboBoxanzahldots.Name = "comboBoxanzahldots";
             this.comboBoxanzahldots.Size = new System.Drawing.Size(59, 21);
             this.comboBoxanzahldots.TabIndex = 15;
@@ -234,7 +236,7 @@ namespace LearningDots
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(201, 42);
+            this.label8.Location = new System.Drawing.Point(6, 71);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(89, 13);
             this.label8.TabIndex = 14;
@@ -341,7 +343,7 @@ namespace LearningDots
             // 
             // buttonTrain
             // 
-            this.buttonTrain.Location = new System.Drawing.Point(662, 41);
+            this.buttonTrain.Location = new System.Drawing.Point(530, 43);
             this.buttonTrain.Name = "buttonTrain";
             this.buttonTrain.Size = new System.Drawing.Size(110, 23);
             this.buttonTrain.TabIndex = 4;
@@ -352,7 +354,7 @@ namespace LearningDots
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(9, 110);
+            this.label9.Location = new System.Drawing.Point(9, 116);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(47, 13);
             this.label9.TabIndex = 17;
@@ -362,7 +364,7 @@ namespace LearningDots
             // 
             this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(550, 562);
+            this.label10.Location = new System.Drawing.Point(550, 583);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(47, 13);
             this.label10.TabIndex = 17;
@@ -377,9 +379,9 @@ namespace LearningDots
             this.groupBox2.Controls.Add(this.labelprogress);
             this.groupBox2.Controls.Add(this.progressBar1);
             this.groupBox2.Controls.Add(this.richTextBox1);
-            this.groupBox2.Location = new System.Drawing.Point(603, 104);
+            this.groupBox2.Location = new System.Drawing.Point(603, 116);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(239, 455);
+            this.groupBox2.Size = new System.Drawing.Size(239, 464);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "History:";
@@ -408,7 +410,7 @@ namespace LearningDots
             // 
             this.labelprogress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelprogress.AutoSize = true;
-            this.labelprogress.Location = new System.Drawing.Point(98, 436);
+            this.labelprogress.Location = new System.Drawing.Point(98, 445);
             this.labelprogress.Name = "labelprogress";
             this.labelprogress.Size = new System.Drawing.Size(0, 13);
             this.labelprogress.TabIndex = 1;
@@ -416,7 +418,7 @@ namespace LearningDots
             // progressBar1
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(6, 428);
+            this.progressBar1.Location = new System.Drawing.Point(6, 437);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(227, 21);
             this.progressBar1.TabIndex = 1;
@@ -429,15 +431,25 @@ namespace LearningDots
             this.richTextBox1.Location = new System.Drawing.Point(3, 47);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(230, 375);
+            this.richTextBox1.Size = new System.Drawing.Size(230, 384);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            // 
+            // buttonresetTraining
+            // 
+            this.buttonresetTraining.Location = new System.Drawing.Point(646, 43);
+            this.buttonresetTraining.Name = "buttonresetTraining";
+            this.buttonresetTraining.Size = new System.Drawing.Size(110, 23);
+            this.buttonresetTraining.TabIndex = 23;
+            this.buttonresetTraining.Text = "Reset training";
+            this.buttonresetTraining.UseVisualStyleBackColor = true;
+            this.buttonresetTraining.Click += new System.EventHandler(this.buttonresetTraining_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(854, 584);
+            this.ClientSize = new System.Drawing.Size(854, 605);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
@@ -490,6 +502,7 @@ namespace LearningDots
         private System.Windows.Forms.ComboBox comboBoxobstacle;
         private System.Windows.Forms.Button buttonSaveObstacle;
         private System.Windows.Forms.Button buttonLoadObstacle;
+        private System.Windows.Forms.Button buttonresetTraining;
     }
 }
 

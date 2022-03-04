@@ -143,6 +143,11 @@ namespace Invoker_
                 if (((GroupBox)myobject).InvokeRequired) ((GroupBox)myobject).Invoke((MethodInvoker)(() => ((GroupBox)myobject).Enabled = enable));
                 else ((GroupBox)myobject).Enabled = enable;
             }
+            else if (myobject is Button)
+            {
+                if (((Button)myobject).InvokeRequired) ((Button)myobject).Invoke((MethodInvoker)(() => ((Button)myobject).Enabled = enable));
+                else ((Button)myobject).Enabled = enable;
+            }
         }
 
         public static void invokeTextSet(object myobject, string text)

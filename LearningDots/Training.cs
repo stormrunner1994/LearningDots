@@ -33,10 +33,12 @@ namespace LearningDots
         Label labelprogressbar;
         private Setting setting;
         private Button buttonStart;
+        private Button buttonReset;
 
         public Training(Panel panel, Setting setting, RichTextBox rtbStatus, ProgressBar progressbar, Label labelprogressbar,
-            Button buttonStart)
+            Button buttonStart, Button buttonReset)
         {
+            this.buttonReset = buttonReset;
             this.buttonStart = buttonStart;
             this.setting = setting;
             this.progressbar = progressbar;
@@ -53,6 +55,13 @@ namespace LearningDots
             timer.Tick += Timer_Tick;
         }
 
+        public string GetLoadedDotStats()
+        {
+            if (loadedDot == null) return "No dot loaded";
+
+            return loadedDot.brain.directions.Length + " steps";
+        }
+
         public void SetSettings(Setting setting)
         {
             this.setting = setting;
@@ -62,6 +71,16 @@ namespace LearningDots
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps,
                 setting.erlaubeDiagonaleZüge, setting.hindernisse,setting.speed);
+        }
+
+        public void SetMaxTrainingTime(int time)
+        {
+            setting.maxTrainingTime = time;
+        }
+
+        public void SetZuschauen(bool zuschauen)
+        {
+            this.zuschauen = setting.zuschauen = zuschauen;
         }
 
         public void ZeichneFeld()
@@ -152,14 +171,19 @@ namespace LearningDots
         {
             if (!nurLetzte)
             {
-                Invoker_.Invoker.invokeTextSet(rtbStatus, "");
+                Invoker.invokeTextSet(rtbStatus, "");
                 var genInfos = verlauf.GetGenInfos();
 
+                // zeige nur die letzen 20
+                int count = 0;
                 for (int a = genInfos.Count - 1; a > -1; a--)
                 {
+                    if (count == 20) break;
+
                     GenInfo gi = genInfos[a];
-                    if (Invoker.invokeTextGet(rtbStatus) != "") Invoker_.Invoker.invokeAppendText(rtbStatus, "\n\n" + gi.GetInfo());
+                    if (Invoker.invokeTextGet(rtbStatus) != "") Invoker.invokeAppendText(rtbStatus, "\n\n" + gi.GetInfo());
                     else Invoker.invokeAppendText(rtbStatus, gi.GetInfo());
+                    count++;
                 }
             }
             else
@@ -183,6 +207,31 @@ namespace LearningDots
             timeraktion = TimerAktion.trainieren;
         }
 
+        private string GetRestTime(int secs, int max)
+        {
+            int diff = max - secs;
+
+            int h = diff / 3600;
+            diff -= h * 3600;
+            int min = diff / 60;
+            diff -= min * 60;
+            int sec = diff;
+
+            string strH = h.ToString();
+            if (h < 10) strH = "0" + strH;
+            string strMin = min.ToString();
+            if (min < 10) strMin = "0" + strMin;
+            string strSec = sec.ToString();
+            if (sec < 10) strSec = "0" + strSec;
+
+            string output = "";
+            if (h > 0) output = strH + ":" + strMin + ":" + strSec + "h";
+            else if (min > 0) output = strMin + ":" + strSec + "min";
+            else if (sec > 0) output = strSec + "sec";
+
+            return output;
+        }
+
         private void ThreadTrainieren()
         {
             Invoker.invokeProgressBar(progressbar, 0, 0, setting.maxTrainingTime);
@@ -196,7 +245,7 @@ namespace LearningDots
                 {
                     secs = (int)(sw.ElapsedMilliseconds / 1000);
                     Invoker.invokeProgressBarValue(progressbar, secs);
-                    Invoker.invokeTextSet(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
+                    Invoker.invokeTextSet(labelprogressbar, GetRestTime(secs, Invoker.invokeProgressBarGetMax(progressbar)));
                 }
 
                 if (population.allDotsFinished())
@@ -209,7 +258,7 @@ namespace LearningDots
                     deadReachedGoal[0], deadReachedGoal[1], population.maxSteps);
 
                     // Beende Loop
-                    if (population.SoManyReachedGoal(80) || sw.ElapsedMilliseconds >= setting.maxTrainingTime * 1000)
+                    if (population.SoManyReachedGoal(100) || sw.ElapsedMilliseconds >= setting.maxTrainingTime * 1000)
                         break;
 
                     var reihenfolge = population.GetReihenfolge();
@@ -229,7 +278,8 @@ namespace LearningDots
             Invoker.invokeProgressBarValue(progressbar, Invoker.invokeProgressBarGetMax(progressbar));
             Invoker.invokeTextSet(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
             UpdateStatusRichTextBox(true);
-            Invoker.invokeTextSet(buttonStart, "Start training");
+            Invoker.invokeTextSet(buttonStart, "Continue training");
+            Invoker.invokeEnable(buttonReset, true);
         }
 
         public void SafeBest()
@@ -260,9 +310,8 @@ namespace LearningDots
             loadedDot = new Dot(start.position, brain);
         }
 
-        public void Starten()
+        public void Continue()
         {
-            verlauf = new Verlauf(populationsGröße);
             if (zuschauen)
             {
                 progressbar.Minimum = 0;
@@ -277,6 +326,12 @@ namespace LearningDots
             }
         }
 
+        public void Starten()
+        {
+            verlauf = new Verlauf(populationsGröße);
+            Continue();
+        }
+
         public void Stoppen()
         {
             if (zuschauen)
@@ -285,7 +340,7 @@ namespace LearningDots
             }
             else
             {
-                Invoker_.Invoker.invokeInvalidate(panel);
+                Invoker.invokeInvalidate(panel);
                 UpdateStatusRichTextBox(true);
                 thread.Abort();
             }
