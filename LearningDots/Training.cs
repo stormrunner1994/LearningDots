@@ -46,7 +46,7 @@ namespace LearningDots
             verlauf = new Verlauf(populationsGröße);
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, setting.startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps, setting.erlaubeDiagonaleZüge, setting.hindernisse);
+            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps, setting.erlaubeDiagonaleZüge, setting.hindernisse, setting.speed);
             this.panel = panel;
             panel.Paint += new PaintEventHandler(panel_Paint);
             timer.Interval = 10;
@@ -56,12 +56,12 @@ namespace LearningDots
         public void SetSettings(Setting setting)
         {
             this.setting = setting;
-            this.populationsGröße = setting.populationsGröße;
-            this.zuschauen = setting.zuschauen;
+            populationsGröße = setting.populationsGröße;
+            zuschauen = setting.zuschauen;
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, setting.startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps,
-                setting.erlaubeDiagonaleZüge, setting.hindernisse);
+                setting.erlaubeDiagonaleZüge, setting.hindernisse,setting.speed);
         }
 
         public void ZeichneFeld()
@@ -99,7 +99,7 @@ namespace LearningDots
         {
             setting.populationsGröße = populationsGröße;
             population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, population.maxSteps,
-                erlaubeDiagonaleZüge, population.hindernisse);
+                erlaubeDiagonaleZüge, population.hindernisse, setting.speed);
             ZeichneFeld();
         }
 

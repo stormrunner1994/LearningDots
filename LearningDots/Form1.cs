@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,18 +21,43 @@ namespace LearningDots
             Point zielPos = new Point(panel1.Width / 2, 0);
             Point startPos = new Point(panel1.Width / 2, panel1.Height - Training.SPEZIALPUNKTEGRÖSSE);
 
-            setting = new Setting(zielPos, startPos, 100, true, 1000, true, new List<Hindernis>(),1);
+            setting = new Setting(zielPos, startPos, 100, true, 1000, true, new List<Hindernis>(),1, speed);
             training = new Training(panel1, setting, richTextBox1, progressBar1, labelprogress, buttonTrain);
+            panel1.MouseDown += Panel1_MouseDown;
+            panel1.MouseUp += Panel1_MouseUp;
         }
 
-
+        private int speed = 5;
         private Setting setting;
         private Color defaultforecolor;
         enum Richtung { Höhe, Breite };
 
         private List<Hindernis> hindernisse = new List<Hindernis>();
         Training training;
+        Point linienStart = new Point();
+        Point linienZiel = new Point();
 
+        private void Panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            linienZiel = new Point(e.X, e.Y);
+
+            if (!linienStart.IsEmpty && !linienZiel.IsEmpty && comboBoxobstacle.SelectedIndex == 4)
+            {
+                int länge = Convert.ToInt32(Math.Abs(linienZiel.X - linienStart.X));
+                int höhe = Convert.ToInt32(Math.Abs(linienZiel.Y - linienStart.Y));
+
+                if (länge > höhe) höhe = speed + 1;
+                else if (höhe > länge) länge = speed + 1;
+
+                hindernisse.Add(new Hindernis(linienStart, länge, höhe, Hindernis.Typ.Rechteck, Color.Blue));
+                panel1.Invalidate();
+            }
+        }
+
+        private void Panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            linienStart = new Point(e.X, e.Y);
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -55,9 +81,9 @@ namespace LearningDots
                 Point zielPos = new Point(Convert.ToInt32(textBoxzielX.Text), Convert.ToInt32(textBoxzielY.Text));
                 Point startPos = new Point(Convert.ToInt32(textBoxstartX.Text), Convert.ToInt32(textBoxstartY.Text));
                 int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
-                int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);
+                int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);               
                 setting = new Setting(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps, checkBoxdiagonal.Checked,
-                    hindernisse, Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text));
+                    hindernisse, Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text),speed);
                 training.SetSettings(setting);
                 training.Starten();
                 buttonTrain.Text = "Stop training";
@@ -276,11 +302,44 @@ namespace LearningDots
                 hindernisse.Add(new Hindernis(new Point(200, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
                 panel1.Invalidate();
             }
-            else
+            else if (comboBoxobstacle.SelectedIndex == 2)
             {
                 hindernisse.Add(new Hindernis(new Point(10, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
                 panel1.Invalidate();
             }
-        }            
+            else if (comboBoxobstacle.SelectedIndex == 3)
+            {
+                hindernisse.Add(new Hindernis(new Point(300,0), 10, 800, Hindernis.Typ.Rechteck, Color.Blue));
+                panel1.Invalidate();
+            }
+            else
+            {
+
+            }
+        }
+
+        private void buttonSaveObstacle_Click(object sender, EventArgs e)
+        {
+            StreamWriter sw = new StreamWriter("obstacle.csv");
+            foreach (Hindernis h in hindernisse)
+                sw.WriteLine(h.GetHindernis());
+            sw.Close();
+        }
+
+        private void buttonLoadObstacle_Click(object sender, EventArgs e)
+        {
+            hindernisse.Clear();
+            StreamReader sr = new StreamReader("obstacle.csv");
+            while (!sr.EndOfStream)
+            {
+                string zeile = sr.ReadLine();
+                Hindernis h = new Hindernis(zeile);
+                hindernisse.Add(h);
+            }
+            sr.Close();
+
+            if (hindernisse.Count > 0)
+            panel1.Invalidate();
+        }
     }
 }

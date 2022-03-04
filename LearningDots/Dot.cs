@@ -11,7 +11,7 @@ namespace LearningDots
 {
     public class Dot
     {
-        public const int SPEED = 5;
+        public int speed = 5;
         public int größe = 5;
         public Color color = Color.Black;
         public Point position;
@@ -26,6 +26,7 @@ namespace LearningDots
         public int maxSteps = 0;
         private Random rand;
         private List<Hindernis> hindernisse;
+        public Dictionary<string, int> besuchtePositionen = new Dictionary<string, int>(); // X;Y
 
         // Spezial Dots
         public Dot(int größe, Color color, Point startPosition, int index)
@@ -44,8 +45,10 @@ namespace LearningDots
             this.brain = brain;
         }
 
-        public Dot(Point startPosition, int index, int maxSteps, Random rand, bool erlaubeDiagonaleZüge, List<Hindernis> hindernisse)
+        public Dot(Point startPosition, int index, int maxSteps, Random rand, bool erlaubeDiagonaleZüge, List<Hindernis> hindernisse,
+            int speed)
         {
+            this.speed = speed;
             this.rand = rand;
             this.maxSteps = maxSteps;
             this.index = index;
@@ -95,30 +98,52 @@ namespace LearningDots
             }
 
             Vector vec = brain.directions[brain.step];
-            position.X += (int)vec.X * SPEED;
-            position.Y += (int)vec.Y * SPEED;
+            position.X += (int)vec.X * speed;
+            position.Y += (int)vec.Y * speed;
+
+            string pos = position.X + ";" + position.Y;
+            if (besuchtePositionen.ContainsKey(pos))
+                besuchtePositionen[pos]++;
+            else
+                besuchtePositionen.Add(pos, 1);
+
             brain.step++;
         }
 
         public void calculateFitness(int goalX, int goalY)
         {
+            // bei obstacle ist distanz zum ziel egal
             double distanceToGoal = Math.Sqrt(Math.Pow(goalX - position.X, 2) + Math.Pow(goalY - position.Y, 2));
-
-            if (distanceToGoal == 0) distanceToGoal = 1;
 
             if (reachedGoal)
             {
-                fitness = 1.0 + 1.0 / (distanceToGoal * distanceToGoal) + 1.0 / brain.step;
+                fitness = 1.0 + 1.0 / brain.step;
             }
             else
             {
-                fitness = 1.0 / (distanceToGoal * distanceToGoal) + 1 / (maxSteps - (brain.step - 2));
+                // bleibe hier <= 1
+                // belohne, wer viele Schritte getan hat
+                int stepDiff = maxSteps - brain.step;
+
+                fitness = 1.0 / (distanceToGoal + stepDiff);
             }
+        }
+
+        private int AnzahlMehrfachBesuchtePunkte()
+        {
+            // Abzug für jeden mehrfach besuchten Ort
+            int anzahl = 0;
+            foreach (KeyValuePair<string, int> s in besuchtePositionen.OrderByDescending(i => i.Value))
+            {
+                if (s.Value == 1) break;
+                anzahl += s.Value;
+            }
+            return anzahl;
         }
 
         public Dot getChild(int maxSteps)
         {
-            Dot baby = new Dot(startPosition, index, maxSteps, rand, brain.erlaubeDiagonaleZüge, hindernisse);
+            Dot baby = new Dot(startPosition, index, maxSteps, rand, brain.erlaubeDiagonaleZüge, hindernisse, speed);
             baby.brain = new Brain(brain, maxSteps); // Copy Constructor
             return baby;
         }

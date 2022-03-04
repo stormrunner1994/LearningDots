@@ -24,7 +24,7 @@ namespace LearningDots
 
 
         public Population(int anzahl, int feldhöhe, int feldbreite, Point zielPosition, Point startPosition, int maxSteps, bool erlaubeDiagonaleZüge,
-            List<Hindernis> hindernisse)
+            List<Hindernis> hindernisse, int speed)
         {
             this.hindernisse = hindernisse;
             this.maxSteps = maxSteps;
@@ -34,7 +34,7 @@ namespace LearningDots
             this.startPosition = startPosition;
             dots = new Dot[anzahl];
             for (int i = 0; i < anzahl; i++)
-                dots[i] = new Dot(startPosition, i, maxSteps, rand, erlaubeDiagonaleZüge, hindernisse);
+                dots[i] = new Dot(startPosition, i, maxSteps, rand, erlaubeDiagonaleZüge, hindernisse, speed);
         }
 
         public void update()
@@ -255,8 +255,8 @@ namespace LearningDots
                 }
             }
 
-            double größte = 0;
-            double kleinste = 1;
+            double größte = dots.First().fitness;
+            double kleinste = größte;
             foreach (Dot d in dots)
             {
                 int rang = dots.Length;

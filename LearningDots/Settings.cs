@@ -17,9 +17,10 @@ namespace LearningDots
         public bool erlaubeDiagonaleZüge;
         public List<Hindernis> hindernisse;
         public int maxTrainingTime;
+        public int speed;
 
         public Setting(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps, bool erlaubeDiagonaleZüge
-            , List<Hindernis> hindernisse, int maxTrainingTime)
+            , List<Hindernis> hindernisse, int maxTrainingTime, int speed)
         {
             this.maxTrainingTime = maxTrainingTime;
             this.zielPos = zielPos;
@@ -29,6 +30,7 @@ namespace LearningDots
             this.maxSteps = maxSteps;
             this.erlaubeDiagonaleZüge = erlaubeDiagonaleZüge;
             this.hindernisse = hindernisse;
+            this.speed = speed;
         }
 
         public static int GetTimeInSecs(string time)
