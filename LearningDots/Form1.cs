@@ -216,7 +216,7 @@ namespace LearningDots
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (button1.Text == "Load best dot")
+            if (button1.Text == "Show best dot")
             {
                 button1.Text = "Stop best dot";
                 training.LoadBest();
@@ -225,7 +225,7 @@ namespace LearningDots
             }
             else
             {
-                button1.Text = "Load best dot";
+                button1.Text = "Show best dot";
                 training.HalteBestenAn();
             }
         }

@@ -124,8 +124,9 @@ namespace LearningDots
                 // bleibe hier <= 1
                 // belohne, wer viele Schritte getan hat
                 int stepDiff = maxSteps - brain.step;
+                double besuchtAnteil = (0.0 +  AnzahlMehrfachBesuchtePunkte()) / 100;
 
-                fitness = 1.0 / (distanceToGoal + stepDiff);
+                fitness = 1.0 / (distanceToGoal + stepDiff + besuchtAnteil);
             }
         }
 
@@ -136,7 +137,7 @@ namespace LearningDots
             foreach (KeyValuePair<string, int> s in besuchtePositionen.OrderByDescending(i => i.Value))
             {
                 if (s.Value == 1) break;
-                anzahl += s.Value;
+                anzahl += s.Value - 1;
             }
             return anzahl;
         }
