@@ -130,15 +130,15 @@ namespace LearningDots
                 if (population.allDotsFinished())
                 {
                     // generic algorithm
-                    population.calculateFitnessForAllDots();
+                    population.CalculateFitnessForAllDots();
 
                     double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
                     int[] deadReachedGoal = population.GetDeadReachedGoal();
                     verlauf.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
                     deadReachedGoal[0], deadReachedGoal[1], population.maxSteps);
-                    population.naturalSelection(verlauf.GetLastGenInfo());
+                    population.NaturalSelection(verlauf.GetLastGenInfo());
 
-                    population.mutateBabies();
+                    population.MutateBabies();
                     UpdateStatusRichTextBox(false);
 
                     progressbar.Value = 0;
@@ -146,7 +146,7 @@ namespace LearningDots
                 }
                 else
                 {
-                    population.update();
+                    population.Update();
 
                     if (progressbar.Value + 1 <= progressbar.Maximum)
                         progressbar.Value++;
@@ -161,7 +161,7 @@ namespace LearningDots
                     loadedDot.brain.step = 0;
                     loadedDot.isDead = loadedDot.reachedGoal = false;
                 }
-                loadedDot.move();
+                loadedDot.Move();
             }
             panel.Invalidate();
         }
@@ -251,7 +251,7 @@ namespace LearningDots
                 if (population.allDotsFinished())
                 {
                     // generic algorithm
-                    population.calculateFitnessForAllDots();
+                    population.CalculateFitnessForAllDots();
                     double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
                     int[] deadReachedGoal = population.GetDeadReachedGoal();
                     verlauf.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
@@ -263,13 +263,13 @@ namespace LearningDots
 
                     var reihenfolge = population.GetReihenfolge();
 
-                    population.naturalSelection(verlauf.GetLastGenInfo());
-                    population.mutateBabies();
-                    var ratio = population.durchschnittlicheÄnderungen();
+                    population.NaturalSelection(verlauf.GetLastGenInfo());
+                    population.MutateBabies();
+                    var ratio = population.DurchschnittlicheÄnderungen();
                     GenInfo last = verlauf.GetLastGenInfo();
                 }
                 else
-                    population.update();
+                    population.Update();
             }
 
             sw.Stop();

@@ -37,7 +37,7 @@ namespace LearningDots
                 dots[i] = new Dot(startPosition, i, maxSteps, rand, erlaubeDiagonaleZüge, hindernisse, speed);
         }
 
-        public void update()
+        public void Update()
         {
             for (int i = 0; i < dots.Length; i++)
             {
@@ -48,10 +48,10 @@ namespace LearningDots
             }
         }
 
-        public void calculateFitnessForAllDots()
+        public void CalculateFitnessForAllDots()
         {
             for (int i = 0; i < dots.Length; i++)
-                dots[i].calculateFitness(zielPosition.X, zielPosition.Y);
+                dots[i].CalculateFitness(zielPosition.X, zielPosition.Y);
         }
 
 
@@ -148,11 +148,11 @@ namespace LearningDots
         }
 
         // next generation of dots
-        public void naturalSelection(GenInfo genInfo)
+        public void NaturalSelection(GenInfo genInfo)
         {
             Dot[] newDots = new Dot[dots.Length]; //next gen
-            bestDotIndex = getBestDotIndex();
-            calculateFitnessSum();
+            bestDotIndex = GetBestDotIndex();
+            CalculateFitnessSum();
 
             //the champion lives on 
             newDots[0] = dots[bestDotIndex].getChild(maxSteps);
@@ -160,7 +160,7 @@ namespace LearningDots
             for (int i = 1; i < newDots.Length; i++)
             {
                 //select parent based on fitness
-                Dot parent = selectParent(i);
+                Dot parent = SelectParent(i);
 
                 // For Status
                 if (genInfo != null)
@@ -176,7 +176,7 @@ namespace LearningDots
             gen++;
         }
 
-        public void calculateFitnessSum()
+        public void CalculateFitnessSum()
         {
             fitnessSum = 0;
             for (int i = 0; i < dots.Length; i++)
@@ -190,7 +190,7 @@ namespace LearningDots
         //this function works by randomly choosing a value between 0 and the sum of all the fitnesses
         //then go through all the dots and add their fitness to a running sum and if that sum is greater than the random value generated that dot is chosen
         //since dots with a higher fitness function add more to the running sum then they have a higher chance of being chosen
-        Dot selectParent(int index)
+        Dot SelectParent(int index)
         {
             double faktor = 1 / fitnessSum;
           
@@ -209,7 +209,7 @@ namespace LearningDots
             return dots.Last();
         }
 
-        public double durchschnittlicheÄnderungen()
+        public double DurchschnittlicheÄnderungen()
         {
             double ratio = 0;
 
@@ -227,7 +227,7 @@ namespace LearningDots
 
         //------------------------------------------------------------------------------------------------------------------------------------------
         //mutates all the brains of the babies
-        public void mutateBabies()
+        public void MutateBabies()
         {
             for (int i = 1; i < dots.Length; i++)
             {
@@ -237,12 +237,12 @@ namespace LearningDots
 
         public Dot getBestDot()
         {
-            return dots[getBestDotIndex()];
+            return dots[GetBestDotIndex()];
         }
 
         //---------------------------------------------------------------------------------------------------------------------------------------------
         //finds the dot with the highest fitness and sets it as the best dot
-        public int getBestDotIndex()
+        public int GetBestDotIndex()
         {
             double max = 0;
             int maxIndex = 0;

@@ -62,7 +62,7 @@ namespace LearningDots
         {
             if (isDead || reachedGoal) return;
 
-            move();
+            Move();
             // Rand
             if (position.X < 2 || position.Y < 2 || position.X > feldbreite - 2 || position.Y > feldhöhe - 2)
                 isDead = true;
@@ -89,7 +89,7 @@ namespace LearningDots
             return false;
         }
 
-        public void move()
+        public void Move()
         {
             if (brain.step >= brain.directions.Length)
             {
@@ -110,24 +110,50 @@ namespace LearningDots
             brain.step++;
         }
 
-        public void calculateFitness(int goalX, int goalY)
+        public void CalculateFitness(int goalX, int goalY)
         {
-            // bei obstacle ist distanz zum ziel egal
-            double distanceToGoal = Math.Sqrt(Math.Pow(goalX - position.X, 2) + Math.Pow(goalY - position.Y, 2));
-
+            double besuchtAnteil = (0.0 + AnzahlMehrfachBesuchtePunkte()) / 100;
+            double direkteUmkehr = (0.0 + AnzahlDirekteUmkehr()) / 10;
+            
             if (reachedGoal)
             {
-                fitness = 1.0 + 1.0 / brain.step;
+                fitness = 1.0 + 1.0 / (brain.step + besuchtAnteil + direkteUmkehr);
             }
             else
             {
                 // bleibe hier <= 1
                 // belohne, wer viele Schritte getan hat
-                int stepDiff = maxSteps - brain.step;
-                double besuchtAnteil = (0.0 +  AnzahlMehrfachBesuchtePunkte()) / 100;
+                int nichtGenutzeSchritte = maxSteps - brain.step;
 
-                fitness = 1.0 / (distanceToGoal + stepDiff + besuchtAnteil);
+                // Hindernisse vorhanden, bei obstacle ist distanz zum ziel egal
+                if (hindernisse.Count > 0)
+                    fitness = 1.0 / (nichtGenutzeSchritte + besuchtAnteil + direkteUmkehr);
+                else
+                {
+                    double distanceToGoal = Math.Sqrt(Math.Pow(goalX - position.X, 2) + Math.Pow(goalY - position.Y, 2));
+                    fitness = 1.0 / (distanceToGoal + nichtGenutzeSchritte + besuchtAnteil + direkteUmkehr);
+                }
             }
+        }
+
+        private int AnzahlDirekteUmkehr()
+        {
+            // Abzug für jede direkte Umkehr
+            int anzahl = 0;
+            Vector letzte = brain.directions[0];
+
+            for (int a = 1; a < brain.directions.Length; a++)
+            {
+                Vector vec = brain.directions[a];
+
+                // gleicht sich aus
+                if (letzte.X + vec.X == 0 && letzte.Y + vec.X == 0)
+                    anzahl++;
+
+                letzte = vec;
+            }
+
+            return anzahl;
         }
 
         private int AnzahlMehrfachBesuchtePunkte()
