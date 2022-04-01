@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LearningDots
 {
-    class Population
+    public class Population
     {
         const bool SETZERANG = true;
         public Dot[] dots;
@@ -19,6 +19,7 @@ namespace LearningDots
         int feldbreite;
         Point zielPosition;
         Point startPosition;
+        public Dictionary<string, int> dictDeathLocations = new Dictionary<string, int>(); // x,y
         private Random rand = new Random();
         public List<Hindernis> hindernisse;
 
@@ -51,11 +52,41 @@ namespace LearningDots
         public void CalculateFitnessForAllDots()
         {
             for (int i = 0; i < dots.Length; i++)
-                dots[i].CalculateFitness(zielPosition.X, zielPosition.Y);
+                dots[i].CalculateFitness(zielPosition.X, zielPosition.Y, this);
         }
 
 
-        public bool SoManyReachedGoal(int prozent)
+        public void SavePlacesWhereDotsDied()
+        {
+            foreach(Dot d in dots)
+            {
+                // skip, because we want to keep best dot, even if he chooses same way again
+                // and logically dies at same place again
+                if (d.isBest) continue;
+
+                string place = d.position.X + ";" + d.position.Y;
+                if (dictDeathLocations.ContainsKey(place))
+                    dictDeathLocations[place]++;
+                else
+                    dictDeathLocations.Add(place, 1);
+            }
+        }
+
+        public bool SoManyReachedGoal(int amount)
+        {
+            int count = 0;
+
+            foreach (Dot d in dots)
+            {
+                if (d.reachedGoal)
+                    count++;
+            }
+
+            return count >= amount;
+        }
+
+
+        public bool SoManyReachedGoalPercent(int prozent)
         {
             int zielwert = dots.Length * prozent / 100;
             int count = 0;
@@ -157,10 +188,11 @@ namespace LearningDots
             //the champion lives on 
             newDots[0] = dots[bestDotIndex].getChild(maxSteps);
             newDots[0].isBest = true;
+
             for (int i = 1; i < newDots.Length; i++)
             {
                 //select parent based on fitness
-                Dot parent = SelectParent(i);
+                Dot parent = SelectParent();
 
                 // For Status
                 if (genInfo != null)
@@ -190,7 +222,7 @@ namespace LearningDots
         //this function works by randomly choosing a value between 0 and the sum of all the fitnesses
         //then go through all the dots and add their fitness to a running sum and if that sum is greater than the random value generated that dot is chosen
         //since dots with a higher fitness function add more to the running sum then they have a higher chance of being chosen
-        Dot SelectParent(int index)
+        Dot SelectParent()
         {
             double faktor = 1 / fitnessSum;
           
@@ -231,6 +263,8 @@ namespace LearningDots
         {
             for (int i = 1; i < dots.Length; i++)
             {
+                // just mutate which are not the best
+                if (!dots[i].isBest)
                 dots[i].brain.mutate();
             }
         }

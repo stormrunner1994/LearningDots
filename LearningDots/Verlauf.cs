@@ -16,6 +16,11 @@ namespace LearningDots
             this.populationSize = populationSize;
         }
 
+        public void Clear()
+        {
+            genInfos.Clear();
+        }
+
         public GenInfo GetLastGenInfo()
         {
             if (genInfos.Count == 0) return null;

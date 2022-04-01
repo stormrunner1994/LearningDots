@@ -19,7 +19,7 @@ namespace LearningDots
         private Dot ziel;
         private Dot start;
         private Panel panel;
-        private Population population;
+        public Population population;
         private int populationsGröße = -1;
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         private RichTextBox rtbStatus;
@@ -34,10 +34,12 @@ namespace LearningDots
         private Setting setting;
         private Button buttonStart;
         private Button buttonReset;
+        private Button buttonShowBestDot;
 
         public Training(Panel panel, Setting setting, RichTextBox rtbStatus, ProgressBar progressbar, Label labelprogressbar,
-            Button buttonStart, Button buttonReset)
+            Button buttonStart, Button buttonReset, Button buttonShowBestDot)
         {
+            this.buttonShowBestDot = buttonShowBestDot;
             this.buttonReset = buttonReset;
             this.buttonStart = buttonStart;
             this.setting = setting;
@@ -53,6 +55,11 @@ namespace LearningDots
             panel.Paint += new PaintEventHandler(panel_Paint);
             timer.Interval = 10;
             timer.Tick += Timer_Tick;
+        }
+
+        public Dictionary<string,int> GetDeathLocations()
+        {
+            return population.dictDeathLocations;
         }
 
         public string GetLoadedDotStats()
@@ -73,9 +80,18 @@ namespace LearningDots
                 setting.erlaubeDiagonaleZüge, setting.hindernisse,setting.speed);
         }
 
-        public void SetMaxTrainingTime(int time)
+        public void SetEndBedingung(int time)
         {
             setting.maxTrainingTime = time;
+            SetEndBedingung(Setting.Endbedingung.Time);
+        }
+
+        public void SetEndBedingung(Setting.Endbedingung endbedingung)
+        {
+            setting.endbedingung = endbedingung;
+
+            if (endbedingung == Setting.Endbedingung.NextGen)
+                setting.actualGen = population.gen;
         }
 
         public void SetZuschauen(bool zuschauen)
@@ -129,6 +145,9 @@ namespace LearningDots
             {
                 if (population.allDotsFinished())
                 {
+                    // safe places where dots have died
+                    population.SavePlacesWhereDotsDied();
+
                     // generic algorithm
                     population.CalculateFitnessForAllDots();
 
@@ -234,6 +253,7 @@ namespace LearningDots
 
         private void ThreadTrainieren()
         {
+            if (setting.endbedingung == Setting.Endbedingung.Time)
             Invoker.invokeProgressBar(progressbar, 0, 0, setting.maxTrainingTime);
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -241,25 +261,33 @@ namespace LearningDots
             int secs = 0;
             while (true)
             {
-                if ((sw.ElapsedMilliseconds / 1000) > secs)
+                if (setting.endbedingung == Setting.Endbedingung.Time
+                    && (sw.ElapsedMilliseconds / 1000) > secs)
                 {
                     secs = (int)(sw.ElapsedMilliseconds / 1000);
-                    Invoker.invokeProgressBarValue(progressbar, secs);
+
+                    if (secs <= Invoker.invokeProgressBarGetMax(progressbar))
+                        Invoker.invokeProgressBarValue(progressbar, secs);
                     Invoker.invokeTextSet(labelprogressbar, GetRestTime(secs, Invoker.invokeProgressBarGetMax(progressbar)));
                 }
 
                 if (population.allDotsFinished())
                 {
+                    // Beende Loop
+                    if (setting.endbedingung == Setting.Endbedingung.Time && sw.ElapsedMilliseconds >= setting.maxTrainingTime * 1000
+                        || setting.endbedingung == Setting.Endbedingung.NextGen && population.gen > setting.actualGen
+                        || setting.endbedingung == Setting.Endbedingung.FoundGoal && population.SoManyReachedGoal(1))
+                        break;
+
+                    // safe places where dots have died
+                    population.SavePlacesWhereDotsDied();
+
                     // generic algorithm
                     population.CalculateFitnessForAllDots();
                     double[] bestWorstAvgFitness = population.GetBestWorstAvgFitness();
                     int[] deadReachedGoal = population.GetDeadReachedGoal();
                     verlauf.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
                     deadReachedGoal[0], deadReachedGoal[1], population.maxSteps);
-
-                    // Beende Loop
-                    if (population.SoManyReachedGoal(100) || sw.ElapsedMilliseconds >= setting.maxTrainingTime * 1000)
-                        break;
 
                     var reihenfolge = population.GetReihenfolge();
 
@@ -280,6 +308,7 @@ namespace LearningDots
             UpdateStatusRichTextBox(true);
             Invoker.invokeTextSet(buttonStart, "Continue training");
             Invoker.invokeEnable(buttonReset, true);
+            Invoker.invokeEnable(buttonShowBestDot, true);
         }
 
         public void SafeBest()
@@ -312,6 +341,8 @@ namespace LearningDots
 
         public void Continue()
         {
+
+            buttonShowBestDot.Enabled = false;
             if (zuschauen)
             {
                 progressbar.Minimum = 0;
@@ -332,6 +363,12 @@ namespace LearningDots
             Continue();
         }
 
+        public void Reset(Setting setting)
+        {            
+            SetSettings(setting);
+            verlauf = new Verlauf(setting.populationsGröße);
+        }
+
         public void Stoppen()
         {
             if (zuschauen)
@@ -344,6 +381,7 @@ namespace LearningDots
                 UpdateStatusRichTextBox(true);
                 thread.Abort();
             }
+            buttonShowBestDot.Enabled = true;
         }
 
 

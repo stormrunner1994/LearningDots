@@ -21,14 +21,16 @@ namespace LearningDots
             Point zielPos = new Point(panel1.Width / 2, 0);
             Point startPos = new Point(panel1.Width / 2, panel1.Height - Training.SPEZIALPUNKTEGRÖSSE);
 
-            setting = new Setting(zielPos, startPos, 100, true, 1000, true, new List<Hindernis>(),1, speed);
-            training = new Training(panel1, setting, richTextBox1, progressBar1, labelprogress, buttonTrain, buttonresetTraining);
+            Setting setting = new Setting(zielPos, startPos, 100, true, 1000, true, new List<Hindernis>(),1, speed);
+            training = new Training(panel1, setting, richTextBox1, progressBar1, labelprogress, buttonTrain, buttonresetTraining,
+                button1);
             panel1.MouseDown += Panel1_MouseDown;
             panel1.MouseUp += Panel1_MouseUp;
         }
 
+        private List<Pixel> deathRegionDots = new List<Pixel>();
         private int speed = 5;
-        private Setting setting;
+        //private Setting setting;
         private Color defaultforecolor;
         enum Richtung { Höhe, Breite };
 
@@ -63,15 +65,15 @@ namespace LearningDots
         {
             buttonLoadObstacle.Enabled = File.Exists("obstacle.csv");
             buttonresetTraining.Enabled = false;
-            comboBoxobstacle.SelectedIndex = 0;
-            comboBoxmaxSchritte.SelectedIndex = 1;
-            comboBoxanzahldots.SelectedIndex = 2;
+            comboBoxobstacle.SelectedIndex = 2;
+            comboBoxmaxSchritte.SelectedIndex = 0;
+            comboBoxanzahldots.SelectedIndex = 8;
             comboBoxmaxtrainingszeit.SelectedIndex = 0;
             textBoxstartX.Text = training.GetStartpunkt().X.ToString();
             textBoxstartY.Text = training.GetStartpunkt().Y.ToString();
             textBoxzielX.Text = training.GetZielpunkt().X.ToString();
             textBoxzielY.Text = training.GetZielpunkt().Y.ToString();
-            checkBoxZuschauen.Checked = true;
+            checkBoxZuschauen.Checked = false;
             checkBoxdiagonal.Checked = true;
             //buttonTrain_Click(sender, e);
         }
@@ -81,13 +83,7 @@ namespace LearningDots
             if (buttonTrain.Text == "Start training")
             {
                 buttonresetTraining.Enabled = false;
-                Point zielPos = new Point(Convert.ToInt32(textBoxzielX.Text), Convert.ToInt32(textBoxzielY.Text));
-                Point startPos = new Point(Convert.ToInt32(textBoxstartX.Text), Convert.ToInt32(textBoxstartY.Text));
-                int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
-                int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);               
-                setting = new Setting(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps, checkBoxdiagonal.Checked,
-                    hindernisse, Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text),speed);
-                training.SetSettings(setting);
+                training.SetSettings(GetActualSetting());
                 training.Starten();
                 buttonTrain.Text = "Stop training";
                 textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = false;
@@ -96,7 +92,7 @@ namespace LearningDots
             {
                 buttonresetTraining.Enabled = false;
                 training.SetZuschauen(checkBoxZuschauen.Checked);
-                training.SetMaxTrainingTime(Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text));
+                training.SetEndBedingung(Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text));
                 training.Continue();
                 buttonTrain.Text = "Stop training";
                 textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = false;
@@ -237,6 +233,11 @@ namespace LearningDots
                 if (h.typ == Hindernis.Typ.Rechteck)
                     e.Graphics.FillRectangle(new SolidBrush(h.color), h.position.X, h.position.Y, h.länge, h.höhe);
             }
+
+            foreach (Pixel p in deathRegionDots)
+            {
+                e.Graphics.FillRegion(new SolidBrush(p.color), new Region(new Rectangle(p.location.X, p.location.Y, 5, 5)));
+            }
         }
 
         private void textBoxstartX_TextChanged(object sender, EventArgs e)
@@ -348,13 +349,120 @@ namespace LearningDots
             panel1.Invalidate();
         }
 
+        private Setting GetActualSetting()
+        {
+            Point zielPos = new Point(Convert.ToInt32(textBoxzielX.Text), Convert.ToInt32(textBoxzielY.Text));
+            Point startPos = new Point(Convert.ToInt32(textBoxstartX.Text), Convert.ToInt32(textBoxstartY.Text));
+            int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
+            int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);
+            Setting setting = new Setting(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps, checkBoxdiagonal.Checked,
+                    hindernisse, Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text), speed);
+            return setting;
+        }
+
         private void buttonresetTraining_Click(object sender, EventArgs e)
         {
             // Sichere besten
-            training.SafeBest();
-            training.Stoppen();
+            training.SafeBest();          
+            training.Reset(GetActualSetting());
             buttonTrain.Text = "Start training";
             textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = true;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void checkBoxShowDeathDistribution_CheckedChanged(object sender, EventArgs e)
+        {
+            deathRegionDots.Clear();
+            if (!checkBoxShowDeathDistribution.Checked)
+            {
+                panel1.Refresh();
+                return;
+            }
+
+            /*                	
+                    linen #FAF0E6 250,240,230
+                    LightSalmon #FFA07A 255,160,122
+                    coral #FF7F50 255,127,80
+                    OrangeRed3 #CD3700 205,55,0
+                    firebrick #B22222 178,34,34
+                    red4 #8B0000 139,0,0     
+                */
+
+            if (training.GetDeathLocations().Count == 0)
+            {
+                return;
+            }
+
+            List<Color> colors = new List<Color>();
+            colors.Add(Color.FromArgb(250, 240, 230));
+            colors.Add(Color.FromArgb(255, 160, 122));
+            colors.Add(Color.FromArgb(255, 127, 80));
+            colors.Add(Color.FromArgb(205, 55, 0));
+            colors.Add(Color.FromArgb(178, 34, 34));
+            colors.Add(Color.FromArgb(139, 0, 0));
+            int highestVisit = training.GetDeathLocations().OrderByDescending(i => i.Value).First().Value;
+            int max = 0;
+
+            Dictionary<int, int> verteilung = new Dictionary<int, int>();
+            for (int a = 0; a < colors.Count; a++)
+                verteilung.Add(a, 0);
+
+            foreach (KeyValuePair<string, int> pair in training.GetDeathLocations())
+            {
+                string[] splits = pair.Key.Split(';');               
+
+                double compare = (0.0 + pair.Value) / ((0.0 + highestVisit) / colors.Count);
+
+                int index = GetIndex(colors.Count, compare);
+
+                if (index > colors.Count - 1) index--;
+
+                if (index == colors.Count - 1) 
+                    max++;
+
+                verteilung[index]++;
+
+                Color c = colors[index];
+                Point p = new Point(Convert.ToInt32(splits[0].ToString()),
+                    Convert.ToInt32(splits[1].ToString()));
+                deathRegionDots.Add(new Pixel(c, p));
+            }
+            panel1.Invalidate();
+        }
+
+        private int GetIndex(int count, double compare)
+        {
+            for (int a = count; a > 1; a--)
+            {
+                double log = Math.Log(a)/1.5;
+                if (compare > log)
+                    return a - 1;
+            }
+
+            return 0;
+        }
+
+        private void buttonnextgen_Click(object sender, EventArgs e)
+        {
+            buttonresetTraining.Enabled = false;           
+
+            if (training.population.gen <= 1)
+                training.Reset(GetActualSetting());
+
+            training.SetEndBedingung(Setting.Endbedingung.NextGen);
+            training.Continue();
+            buttonTrain.Text = "Stop training";
+            textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = false;
+
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FormView fv = new FormView();
+            fv.ShowDialog();
         }
     }
 }

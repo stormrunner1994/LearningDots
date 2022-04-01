@@ -9,6 +9,8 @@ namespace LearningDots
 {
     public class Setting
     {
+        public enum Endbedingung { Time, NextGen, FoundGoal}
+        public Endbedingung endbedingung;
         public Point zielPos;
         public Point startPos;
         public int populationsGröße;
@@ -18,10 +20,13 @@ namespace LearningDots
         public List<Hindernis> hindernisse;
         public int maxTrainingTime;
         public int speed;
+        public int actualGen = 0;
 
         public Setting(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps, bool erlaubeDiagonaleZüge
-            , List<Hindernis> hindernisse, int maxTrainingTime, int speed)
+            , List<Hindernis> hindernisse, int maxTrainingTime, int speed,
+            Endbedingung endbedingung = Endbedingung.Time)
         {
+            this.endbedingung = endbedingung;
             this.maxTrainingTime = maxTrainingTime;
             this.zielPos = zielPos;
             this.startPos = startPos;

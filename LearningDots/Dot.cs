@@ -110,28 +110,35 @@ namespace LearningDots
             brain.step++;
         }
 
-        public void CalculateFitness(int goalX, int goalY)
-        {
-            double besuchtAnteil = (0.0 + AnzahlMehrfachBesuchtePunkte()) / 100;
-            double direkteUmkehr = (0.0 + AnzahlDirekteUmkehr()) / 10;
-            
+        public void CalculateFitness(int goalX, int goalY, Population population)
+        {           
+
             if (reachedGoal)
             {
+                double besuchtAnteil = (0.0 + AnzahlMehrfachBesuchtePunkte()) / 100;
+                double direkteUmkehr = (0.0 + AnzahlDirekteUmkehr()) / 10;
                 fitness = 1.0 + 1.0 / (brain.step + besuchtAnteil + direkteUmkehr);
             }
             else
             {
                 // bleibe hier <= 1
                 // belohne, wer viele Schritte getan hat
-                int nichtGenutzeSchritte = maxSteps - brain.step;
+                // int nichtGenutzeSchritte = maxSteps - brain.step;
+
+                string pos = position.X + ";" + position.Y;
+                int amountOfDotsDiedHere = population.dictDeathLocations[pos];
 
                 // Hindernisse vorhanden, bei obstacle ist distanz zum ziel egal
                 if (hindernisse.Count > 0)
-                    fitness = 1.0 / (nichtGenutzeSchritte + besuchtAnteil + direkteUmkehr);
+                    fitness = 1.0 / (
+                        //nichtGenutzeSchritte + besuchtAnteil + direkteUmkehr +
+                        amountOfDotsDiedHere);
                 else
                 {
                     double distanceToGoal = Math.Sqrt(Math.Pow(goalX - position.X, 2) + Math.Pow(goalY - position.Y, 2));
-                    fitness = 1.0 / (distanceToGoal + nichtGenutzeSchritte + besuchtAnteil + direkteUmkehr);
+                    fitness = 1.0 / (distanceToGoal
+                        // + nichtGenutzeSchritte + besuchtAnteil + direkteUmkehr
+                        );
                 }
             }
         }

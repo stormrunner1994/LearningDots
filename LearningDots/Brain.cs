@@ -83,7 +83,7 @@ namespace LearningDots
             for (int i = 0; i < directions.Length; i++)
             {
                 int irand = rand.Next(0, 100);
-                if (irand < 5)
+                if (irand < 1)
                 {
                     int[] xy = GetRandomXY();
                     directions[i] = new Vector(xy[0], xy[1]);
