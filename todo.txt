@@ -1,0 +1,1 @@
+alle form != null entfernen, vlt durch vererbung von trainings klassen

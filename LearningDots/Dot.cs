@@ -26,7 +26,7 @@ namespace LearningDots
         public int maxSteps = 0;
         private Random rand;
         private List<Hindernis> hindernisse;
-        public Dictionary<string, int> besuchtePositionen = new Dictionary<string, int>(); // X;Y
+       // public Dictionary<string, int> besuchtePositionen = new Dictionary<string, int>(); // X;Y
 
         // Spezial Dots
         public Dot(int größe, Color color, Point startPosition, int index)
@@ -101,23 +101,24 @@ namespace LearningDots
             position.X += (int)vec.X * speed;
             position.Y += (int)vec.Y * speed;
 
-            string pos = position.X + ";" + position.Y;
+            /*string pos = position.X + ";" + position.Y;
             if (besuchtePositionen.ContainsKey(pos))
                 besuchtePositionen[pos]++;
             else
-                besuchtePositionen.Add(pos, 1);
+                besuchtePositionen.Add(pos, 1);*/
 
             brain.step++;
         }
 
         public void CalculateFitness(int goalX, int goalY, Population population)
-        {           
-
+        {          
             if (reachedGoal)
             {
-                double besuchtAnteil = (0.0 + AnzahlMehrfachBesuchtePunkte()) / 100;
+                //double besuchtAnteil = (0.0 + AnzahlMehrfachBesuchtePunkte()) / 100;
                 double direkteUmkehr = (0.0 + AnzahlDirekteUmkehr()) / 10;
-                fitness = 1.0 + 1.0 / (brain.step + besuchtAnteil + direkteUmkehr);
+                fitness = 1.0 + 1.0 / (brain.step +
+                    //besuchtAnteil
+                     direkteUmkehr);
             }
             else
             {
@@ -163,6 +164,7 @@ namespace LearningDots
             return anzahl;
         }
 
+        /*
         private int AnzahlMehrfachBesuchtePunkte()
         {
             // Abzug für jeden mehrfach besuchten Ort
@@ -174,6 +176,7 @@ namespace LearningDots
             }
             return anzahl;
         }
+        */
 
         public Dot getChild(int maxSteps)
         {

@@ -10,8 +10,8 @@ namespace LearningDots
 {
     public class Setting
     {
-        public enum Endbedingung { Time, NextGen, FoundGoal, Generations}
-        public Endbedingung endbedingung;
+        public enum AbbruchBedingung { Time, NextGen, FoundGoal, Generations}
+        public Dictionary<AbbruchBedingung, int> abbruchBedingungen;
         public Point zielPos;
         public Point startPos;
         public int populationsGröße;
@@ -19,16 +19,13 @@ namespace LearningDots
         public int maxSteps;
         public bool erlaubeDiagonaleZüge;
         public List<Hindernis> hindernisse;
-        public int endValue; // value, where it should stop trying
         public int speed;
-        public int actualGen = 0;
 
         public Setting(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps, bool erlaubeDiagonaleZüge
-            , List<Hindernis> hindernisse, int endValue, int speed,
-            Endbedingung endbedingung = Endbedingung.Time)
+            , List<Hindernis> hindernisse, int speed,
+           Dictionary<AbbruchBedingung, int> abbruchBedingungen)
         {
-            this.endbedingung = endbedingung;
-            this.endValue = endValue;
+            this.abbruchBedingungen = abbruchBedingungen;
             this.zielPos = zielPos;
             this.startPos = startPos;
             this.populationsGröße = populationsGröße;

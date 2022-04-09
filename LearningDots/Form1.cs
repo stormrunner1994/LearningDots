@@ -19,7 +19,9 @@ namespace LearningDots
             labelprogress.BackColor = Color.Transparent;
             
             formStartEndpoint = new FormStartEndpoint(panel1);
-            Setting setting = new Setting(formStartEndpoint.zielPos, formStartEndpoint.startPos, 100, true, 1000, true, new List<Hindernis>(),1, speed);
+            Setting setting = new Setting(formStartEndpoint.zielPos,
+                formStartEndpoint.startPos, 100, true, 1000, true,
+                new List<Hindernis>(), speed, new Dictionary<Setting.AbbruchBedingung,int>());
             training = new Training(panel1, setting, this);
             panel1.MouseDown += Panel1_MouseDown;
             panel1.MouseUp += Panel1_MouseUp;
@@ -27,8 +29,6 @@ namespace LearningDots
 
         private FormStartEndpoint formStartEndpoint;
         FormTrainingsmodus ftm;
-
-        private List<Pixel> deathRegionDots = new List<Pixel>();
         private int speed = 5;
         //private Setting setting;
 
@@ -77,7 +77,7 @@ namespace LearningDots
             if (buttonTrain.Text == "Start training")
             {
                 buttonresetTraining.Enabled = false;
-                training.SetSettings(GetActualSetting());
+                training.SetSettings(GetActualSetting(Setting.AbbruchBedingung.Time));
                 training.Starten();
                 buttonTrain.Text = "Stop training";
             }
@@ -85,7 +85,7 @@ namespace LearningDots
             {
                 buttonresetTraining.Enabled = false;
                 training.SetZuschauen(checkBoxZuschauen.Checked);
-                training.SetEndBedingung(Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text));
+                training.SetAbbruchBedingung(Setting.AbbruchBedingung.Time, Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text));
                 training.Continue();
                 buttonTrain.Text = "Stop training";
             }
@@ -125,7 +125,7 @@ namespace LearningDots
                     e.Graphics.FillRectangle(new SolidBrush(h.color), h.position.X, h.position.Y, h.breite, h.höhe);
             }
 
-            foreach (Pixel p in deathRegionDots)
+            foreach (Pixel p in Helper.deathRegionDots)
             {
                 e.Graphics.FillRegion(new SolidBrush(p.color), new Region(new Rectangle(p.location.X, p.location.Y, 5, 5)));
             }
@@ -181,14 +181,16 @@ namespace LearningDots
             panel1.Invalidate();
         }
 
-        private Setting GetActualSetting()
+        private Setting GetActualSetting(Setting.AbbruchBedingung abbruchBedingung)
         {
             Point zielPos = formStartEndpoint.zielPos;
             Point startPos = formStartEndpoint.startPos;
             int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
             int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);
-            Setting setting = new Setting(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps, checkBoxdiagonal.Checked,
-                    hindernisse, Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text), speed);
+            Dictionary<Setting.AbbruchBedingung, int> abbruchBedingungen = new Dictionary<Setting.AbbruchBedingung, int>();
+            abbruchBedingungen.Add(abbruchBedingung, Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text));
+            Setting setting = new Setting(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked,
+                maxSteps, checkBoxdiagonal.Checked,hindernisse,  speed, abbruchBedingungen);
             return setting;
         }
 
@@ -196,7 +198,7 @@ namespace LearningDots
         {
             // Sichere besten
             training.SafeBest();          
-            training.Reset(GetActualSetting());
+            training.Reset(GetActualSetting(Setting.AbbruchBedingung.Time));
             buttonTrain.Text = "Start training";
         }
 
@@ -206,88 +208,27 @@ namespace LearningDots
 
         private void checkBoxShowDeathDistribution_CheckedChanged(object sender, EventArgs e)
         {
-            deathRegionDots.Clear();
-            if (!checkBoxShowDeathDistribution.Checked)
+            if (checkBoxShowDeathDistribution.Checked)
             {
-                panel1.Refresh();
-                return;
+                Helper.GenerateDeathRegions(training);
+            }
+            else
+            {
+                Helper.deathRegionDots.Clear();
             }
 
-            /*                	
-                    linen #FAF0E6 250,240,230
-                    LightSalmon #FFA07A 255,160,122
-                    coral #FF7F50 255,127,80
-                    OrangeRed3 #CD3700 205,55,0
-                    firebrick #B22222 178,34,34
-                    red4 #8B0000 139,0,0     
-                */
-
-            if (training.GetDeathLocations().Count == 0)
-            {
-                return;
-            }
-
-            List<Color> colors = new List<Color>();
-            colors.Add(Color.FromArgb(250, 240, 230));
-            colors.Add(Color.FromArgb(255, 160, 122));
-            colors.Add(Color.FromArgb(255, 127, 80));
-            colors.Add(Color.FromArgb(205, 55, 0));
-            colors.Add(Color.FromArgb(178, 34, 34));
-            colors.Add(Color.FromArgb(139, 0, 0));
-            int highestVisit = training.GetDeathLocations().OrderByDescending(i => i.Value).First().Value;
-            int max = 0;
-
-            Dictionary<int, int> verteilung = new Dictionary<int, int>();
-            for (int a = 0; a < colors.Count; a++)
-                verteilung.Add(a, 0);
-
-            foreach (KeyValuePair<string, int> pair in training.GetDeathLocations())
-            {
-                string[] splits = pair.Key.Split(';');               
-
-                double compare = (0.0 + pair.Value) / ((0.0 + highestVisit) / colors.Count);
-
-                int index = GetIndex(colors.Count, compare);
-
-                if (index > colors.Count - 1) index--;
-
-                if (index == colors.Count - 1) 
-                    max++;
-
-                verteilung[index]++;
-
-                Color c = colors[index];
-                Point p = new Point(Convert.ToInt32(splits[0].ToString()),
-                    Convert.ToInt32(splits[1].ToString()));
-                deathRegionDots.Add(new Pixel(c, p));
-            }
             panel1.Invalidate();
         }
 
-        private int GetIndex(int count, double compare)
-        {
-            for (int a = count; a > 1; a--)
-            {
-                double log = Math.Log(a)/1.5;
-                if (compare > log)
-                    return a - 1;
-            }
 
-            return 0;
-        }
 
         private void buttonnextgen_Click(object sender, EventArgs e)
         {
             buttonresetTraining.Enabled = false;
             buttonnextgen.Enabled = false;
-
-            if (training.population.gen <= 1)
-                training.Reset(GetActualSetting());
-
-            training.SetEndBedingung(Setting.Endbedingung.NextGen);
+            training.Reset(GetActualSetting(Setting.AbbruchBedingung.NextGen));
             training.Continue();
             buttonTrain.Text = "Stop training";
-
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)

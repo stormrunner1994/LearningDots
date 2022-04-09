@@ -22,13 +22,14 @@ namespace LearningDots
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         public Verlauf verlauf;
         private bool zuschauen = false;
-        private Thread thread;
+        public Thread thread;
         private Dot loadedDot;
         private enum TimerAktion { trainieren, besteDot };
         private TimerAktion timeraktion = TimerAktion.trainieren;
         private Setting setting;
         private Form1 form;
-        public bool läuft = false;
+        public enum Status {Running, IsStopping, Stopped, Nothing, Paused, IsPausing }
+        public Status status = Status.Nothing;
 
         public Training(Panel panel, Setting setting, Form1 form)
         {
@@ -54,7 +55,7 @@ namespace LearningDots
             timer.Tick += Timer_Tick;
         }
 
-        public Dictionary<string,int> GetDeathLocations()
+        public Dictionary<string, int> GetDeathLocations()
         {
             return population.dictDeathLocations;
         }
@@ -73,21 +74,32 @@ namespace LearningDots
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, setting.startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
             population = new Population(setting.populationsGröße, form.panel1.Height, form.panel1.Width, ziel.position, start.position, setting.maxSteps,
-                setting.erlaubeDiagonaleZüge, setting.hindernisse,setting.speed);
+                setting.erlaubeDiagonaleZüge, setting.hindernisse, setting.speed);
         }
 
-        public void SetEndBedingung(int time)
+
+        public bool SetAbbruchBedingung(Setting.AbbruchBedingung abbruchBedingungen, int value = -1)
         {
-            setting.endValue = time;
-            SetEndBedingung(Setting.Endbedingung.Time);
+            setting.abbruchBedingungen.Clear();
+            setting.abbruchBedingungen.Add(abbruchBedingungen, value);
+
+            if (abbruchBedingungen == Setting.AbbruchBedingung.NextGen)
+                setting.abbruchBedingungen[abbruchBedingungen] = population.gen + 1;
+            return true;
         }
 
-        public void SetEndBedingung(Setting.Endbedingung endbedingung)
+        public bool SetAbbruchBedingungen(List<Setting.AbbruchBedingung> abbruchBedingungen, List<int> values)
         {
-            setting.endbedingung = endbedingung;
+            if (abbruchBedingungen.Count != values.Count) return false;
 
-            if (endbedingung == Setting.Endbedingung.NextGen)
-                setting.actualGen = population.gen;
+            setting.abbruchBedingungen.Clear();
+            for (int a = 0; a < abbruchBedingungen.Count; a++)
+            {
+                setting.abbruchBedingungen.Add(abbruchBedingungen[a], values[a]);
+                if (abbruchBedingungen[a] == Setting.AbbruchBedingung.NextGen)
+                    setting.abbruchBedingungen[abbruchBedingungen[a]] = population.gen + 1;
+            }
+            return true;
         }
 
         public void SetZuschauen(bool zuschauen)
@@ -178,7 +190,7 @@ namespace LearningDots
                 }
                 loadedDot.Move();
             }
-            läuft = false;
+            status = Status.Stopped;
             form.panel1.Invalidate();
         }
 
@@ -250,31 +262,34 @@ namespace LearningDots
 
         private void ThreadTrainieren()
         {
-            if (setting.endbedingung == Setting.Endbedingung.Time)
-            Invoker.invokeProgressBar(form.progressBar1, 0, 0, setting.endValue);
+            if (setting.abbruchBedingungen.ContainsKey(Setting.AbbruchBedingung.Time) && form != null)
+                Invoker.invokeProgressBar(form.progressBar1, 0, 0, setting.abbruchBedingungen[Setting.AbbruchBedingung.Time]);
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
             int secs = 0;
             while (true)
             {
-                if (setting.endbedingung == Setting.Endbedingung.Time
+                if (setting.abbruchBedingungen.ContainsKey(Setting.AbbruchBedingung.Time)
                     && (sw.ElapsedMilliseconds / 1000) > secs)
                 {
                     secs = (int)(sw.ElapsedMilliseconds / 1000);
 
-                    if (secs <= Invoker.invokeProgressBarGetMax(form.progressBar1))
-                        Invoker.invokeProgressBarValue(form.progressBar1, secs);
-                    Invoker.invokeTextSet(form.labelprogress, GetRestTime(secs, Invoker.invokeProgressBarGetMax(form.progressBar1)));
+                    if (form != null)
+                    {
+                        if (secs <= Invoker.invokeProgressBarGetMax(form.progressBar1))
+                            Invoker.invokeProgressBarValue(form.progressBar1, secs);
+                        Invoker.invokeTextSet(form.labelprogress, GetRestTime(secs, Invoker.invokeProgressBarGetMax(form.progressBar1)));
+                    }
                 }
 
                 if (population.allDotsFinished())
                 {
                     // Beende Loop
-                    if (setting.endbedingung == Setting.Endbedingung.Time && sw.ElapsedMilliseconds >= setting.endValue * 1000
-                        || setting.endbedingung == Setting.Endbedingung.NextGen && population.gen > setting.actualGen
-                        || setting.endbedingung == Setting.Endbedingung.FoundGoal && population.SoManyReachedGoal(1)
-                        || setting.endbedingung == Setting.Endbedingung.Generations && population.gen >= setting.endValue)
+                    if (setting.abbruchBedingungen.ContainsKey(Setting.AbbruchBedingung.Time) && sw.ElapsedMilliseconds >= setting.abbruchBedingungen[Setting.AbbruchBedingung.Time] * 1000
+                        || setting.abbruchBedingungen.ContainsKey(Setting.AbbruchBedingung.NextGen) && population.gen > setting.abbruchBedingungen[Setting.AbbruchBedingung.NextGen]
+                        || setting.abbruchBedingungen.ContainsKey(Setting.AbbruchBedingung.FoundGoal) && population.SoManyReachedGoal(1)
+                        || setting.abbruchBedingungen.ContainsKey(Setting.AbbruchBedingung.Generations) && population.gen >= setting.abbruchBedingungen[Setting.AbbruchBedingung.Generations])
                         break;
 
                     // safe places where dots have died
@@ -287,12 +302,17 @@ namespace LearningDots
                     verlauf.AddGenInfo(bestWorstAvgFitness[2], bestWorstAvgFitness[1], bestWorstAvgFitness[0],
                     deadReachedGoal[0], deadReachedGoal[1], population.maxSteps);
 
-                    var reihenfolge = population.GetReihenfolge();
+                    //  var reihenfolge = population.GetReihenfolge();
 
                     population.NaturalSelection(verlauf.GetLastGenInfo());
                     population.MutateBabies();
-                    var ratio = population.DurchschnittlicheÄnderungen();
-                    GenInfo last = verlauf.GetLastGenInfo();
+                    //var ratio = population.DurchschnittlicheÄnderungen();
+                    //GenInfo last = verlauf.GetLastGenInfo();
+
+
+                    // safe point to kill thread
+                    if (status == Status.IsStopping || status == Status.IsPausing)
+                        break;
                 }
                 else
                     population.Update();
@@ -300,15 +320,21 @@ namespace LearningDots
 
             sw.Stop();
             SafeBest();
-            Invoker.invokeInvalidate(form.panel1);
-            Invoker.invokeProgressBarValue(form.progressBar1, Invoker.invokeProgressBarGetMax(form.progressBar1));
-            Invoker.invokeTextSet(form.labelprogress.Text, secs + "/" + Invoker.invokeProgressBarGetMax(form.progressBar1));
-            UpdateStatusRichTextBox(true);
-            Invoker.invokeTextSet(form.buttonTrain, "Continue training");
-            Invoker.invokeEnable(form.buttonresetTraining, true);
-            Invoker.invokeEnable(form.buttonShowBestDot, true);
-            Invoker.invokeEnable(form.buttonnextgen, true);
-            läuft = false;
+            if (form != null)
+            {
+                Invoker.invokeInvalidate(form.panel1);
+                Invoker.invokeProgressBarValue(form.progressBar1, Invoker.invokeProgressBarGetMax(form.progressBar1));
+                Invoker.invokeTextSet(form.labelprogress.Text, secs + "/" + Invoker.invokeProgressBarGetMax(form.progressBar1));
+                UpdateStatusRichTextBox(true);
+                Invoker.invokeTextSet(form.buttonTrain, "Continue training");
+                Invoker.invokeEnable(form.buttonresetTraining, true);
+                Invoker.invokeEnable(form.buttonShowBestDot, true);
+                Invoker.invokeEnable(form.buttonnextgen, true);
+            }
+            if (status == Status.IsPausing)
+                status = Status.Paused;
+            else if (status == Status.IsStopping || status == Status.Running)
+                status = Status.Stopped;
         }
 
         public void SafeBest()
@@ -341,12 +367,16 @@ namespace LearningDots
 
         public void Continue()
         {
-            form.buttonShowBestDot.Enabled = false;
+            if (form != null)
+                form.buttonShowBestDot.Enabled = false;
             if (zuschauen)
             {
-                form.progressBar1.Minimum = 0;
-                form.progressBar1.Maximum = population.maxSteps;
-                form.progressBar1.Value = 0;
+                if (form != null)
+                {
+                    form.progressBar1.Minimum = 0;
+                    form.progressBar1.Maximum = population.maxSteps;
+                    form.progressBar1.Value = 0;
+                }
                 timer.Start();
             }
             else
@@ -354,7 +384,7 @@ namespace LearningDots
                 thread = new Thread(delegate () { ThreadTrainieren(); });
                 thread.Start();
             }
-            läuft = true;
+            status = Status.Running;
         }
 
         public void Starten()
@@ -364,12 +394,12 @@ namespace LearningDots
         }
 
         public void Reset(Setting setting)
-        {            
+        {
             SetSettings(setting);
             verlauf = new Verlauf(setting.populationsGröße);
         }
 
-        public void Stoppen()
+        public void Pause()
         {
             if (zuschauen)
             {
@@ -377,12 +407,21 @@ namespace LearningDots
             }
             else
             {
-                Invoker.invokeInvalidate(form.panel1);
-                UpdateStatusRichTextBox(true);
-                thread.Abort();
+                if (form != null)
+                {
+                    Invoker.invokeInvalidate(form.panel1);
+                    UpdateStatusRichTextBox(true);
+                }
             }
-            form.buttonShowBestDot.Enabled = true;
-            läuft = false;
+            if (form != null)
+                form.buttonShowBestDot.Enabled = true;
+            status = Status.IsPausing;
+        }
+
+        public void Stoppen()
+        {
+            Pause();
+            status = Status.Stopped;
         }
 
 

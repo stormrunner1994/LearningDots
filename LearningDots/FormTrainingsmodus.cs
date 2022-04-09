@@ -16,6 +16,25 @@ namespace LearningDots
         private int panelHeight, panelWidth, speed;
         private Point startPoint, endPoint;
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            modus.Skip();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (button3.Text == "Pause")
+            {
+                modus.Pause();
+                button3.Text = "Continue";
+            }
+            else
+            {
+                modus.Continue();
+                button3.Text = "Pause";
+            }
+        }
+
         public FormTrainingsmodus(Panel panel,Point startPoint, Point endPoint, int speed)
         {
             InitializeComponent();
@@ -32,7 +51,9 @@ namespace LearningDots
         {
             textBox1.Text = "5";
             textBox2.Text = "20";
-            comboBox1.SelectedIndex = 3;
+            comboBox1.SelectedIndex = 0;
+            comboBox2.SelectedIndex = 0;
+            checkBox1.Checked = true;
         }
 
         private void button1_Click(object sender, EventArgs e)

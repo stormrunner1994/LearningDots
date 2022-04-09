@@ -73,6 +73,7 @@
     <Compile Include="FormView.Designer.cs">
       <DependentUpon>FormView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helper.cs" />
     <Compile Include="Hindernis.cs" />
     <Compile Include="Invoker.cs" />
     <Compile Include="Pixel.cs" />
