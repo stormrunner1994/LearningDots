@@ -16,23 +16,21 @@ namespace LearningDots
         public Form1()
         {
             InitializeComponent();
-            defaultforecolor = textBoxstartX.ForeColor;
             labelprogress.BackColor = Color.Transparent;
-            Point zielPos = new Point(panel1.Width / 2, 0);
-            Point startPos = new Point(panel1.Width / 2, panel1.Height - Training.SPEZIALPUNKTEGRÖSSE);
-
-            Setting setting = new Setting(zielPos, startPos, 100, true, 1000, true, new List<Hindernis>(),1, speed);
-            training = new Training(panel1, setting, richTextBox1, progressBar1, labelprogress, buttonTrain, buttonresetTraining,
-                button1);
+            
+            formStartEndpoint = new FormStartEndpoint(panel1);
+            Setting setting = new Setting(formStartEndpoint.zielPos, formStartEndpoint.startPos, 100, true, 1000, true, new List<Hindernis>(),1, speed);
+            training = new Training(panel1, setting, this);
             panel1.MouseDown += Panel1_MouseDown;
             panel1.MouseUp += Panel1_MouseUp;
         }
 
+        private FormStartEndpoint formStartEndpoint;
+        FormTrainingsmodus ftm;
+
         private List<Pixel> deathRegionDots = new List<Pixel>();
         private int speed = 5;
         //private Setting setting;
-        private Color defaultforecolor;
-        enum Richtung { Höhe, Breite };
 
         private List<Hindernis> hindernisse = new List<Hindernis>();
         Training training;
@@ -69,10 +67,6 @@ namespace LearningDots
             comboBoxmaxSchritte.SelectedIndex = 0;
             comboBoxanzahldots.SelectedIndex = 8;
             comboBoxmaxtrainingszeit.SelectedIndex = 0;
-            textBoxstartX.Text = training.GetStartpunkt().X.ToString();
-            textBoxstartY.Text = training.GetStartpunkt().Y.ToString();
-            textBoxzielX.Text = training.GetZielpunkt().X.ToString();
-            textBoxzielY.Text = training.GetZielpunkt().Y.ToString();
             checkBoxZuschauen.Checked = false;
             checkBoxdiagonal.Checked = true;
             //buttonTrain_Click(sender, e);
@@ -86,7 +80,6 @@ namespace LearningDots
                 training.SetSettings(GetActualSetting());
                 training.Starten();
                 buttonTrain.Text = "Stop training";
-                textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = false;
             }
             else if (buttonTrain.Text == "Continue training")
             {
@@ -95,7 +88,6 @@ namespace LearningDots
                 training.SetEndBedingung(Setting.GetTimeInSecs(comboBoxmaxtrainingszeit.Text));
                 training.Continue();
                 buttonTrain.Text = "Stop training";
-                textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = false;
             }
             else
             {
@@ -104,124 +96,23 @@ namespace LearningDots
                 training.Stoppen();
                 buttonTrain.Text = "Continue training";
                 buttonresetTraining.Enabled = true;
-                textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = true;
             }
         }
-
-        private bool TextBoxValide(string text, Richtung richtung, bool bMessagebox)
-        {
-            int iout;
-            if (!Int32.TryParse(text, out iout))
-            {
-                if (bMessagebox)
-                MessageBox.Show("Wert muss eine Ganzzahl sein.");
-                return false;
-            }
-
-            int wert = Convert.ToInt32(text);
-            if (wert < 0)
-            {
-                if (bMessagebox)
-                    MessageBox.Show("Wert darf nicht kleiner 0 sein.");
-                return false;
-            }
-            if (richtung == Richtung.Breite && wert > panel1.Width)
-            {
-                if (bMessagebox)
-                    MessageBox.Show("Wert darf nicht größer als Feldbreite [" + panel1.Width + " sein.");
-                return false;
-            }
-            else if (richtung == Richtung.Höhe && wert > panel1.Height)
-            {
-                if (bMessagebox)
-                    MessageBox.Show("Wert darf nicht größer als Feldhöhe [" + panel1.Height + " sein.");
-                return false;
-            }
-            return true;
-        }
-
-        private void textBoxstartX_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData != Keys.Enter) return;
-
-            TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite, true))
-            {
-                buttonTrain.Enabled = false;
-                tb.ForeColor = Color.Red;
-                return;
-            }
-
-            buttonTrain.Enabled = true;
-            tb.ForeColor = defaultforecolor;
-            training.SetStartpunkt(new Point(Convert.ToInt32(tb.Text), training.GetStartpunkt().Y));
-        }
-
-        private void textBoxzielX_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData != Keys.Enter) return;
-
-            TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite, true))
-            {
-                buttonTrain.Enabled = false;
-                tb.ForeColor = Color.Red;
-                return;
-            }
-
-            buttonTrain.Enabled = true;
-            tb.ForeColor = defaultforecolor;
-            training.SetZielpunkt(new Point(Convert.ToInt32(tb.Text), training.GetZielpunkt().Y));
-
-        }
-
-        private void textBoxstartY_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData != Keys.Enter) return;
-
-            TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite, true))
-            {
-                buttonTrain.Enabled = false;
-                tb.ForeColor = Color.Red;
-                return;
-            }
-
-            buttonTrain.Enabled = true;
-            tb.ForeColor = defaultforecolor;
-            training.SetStartpunkt(new Point(training.GetStartpunkt().X, Convert.ToInt32(tb.Text)));
-        }
-
-        private void textBoxzielY_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData != Keys.Enter) return;
-
-            TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite, true))
-            {
-                buttonTrain.Enabled = false;
-                tb.ForeColor = Color.Red;
-                return;
-            }
-
-            buttonTrain.Enabled = true;
-            tb.ForeColor = defaultforecolor;
-            training.SetZielpunkt(new Point(training.GetZielpunkt().X, Convert.ToInt32(tb.Text)));
-        }
-
+             
+          
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (button1.Text == "Show best dot")
+            if (buttonShowBestDot.Text == "Show best dot")
             {
-                button1.Text = "Stop best dot";
+                buttonShowBestDot.Text = "Stop best dot";
                 training.LoadBest();
-                richTextBox1.Text =  training.GetLoadedDotStats();
+                richTextBoxstatus.Text =  training.GetLoadedDotStats();
                 training.LasseBestenAblaufen();
             }
             else
             {
-                button1.Text = "Show best dot";
+                buttonShowBestDot.Text = "Show best dot";
                 training.HalteBestenAn();
             }
         }
@@ -231,7 +122,7 @@ namespace LearningDots
             foreach (Hindernis h in hindernisse)
             {
                 if (h.typ == Hindernis.Typ.Rechteck)
-                    e.Graphics.FillRectangle(new SolidBrush(h.color), h.position.X, h.position.Y, h.länge, h.höhe);
+                    e.Graphics.FillRectangle(new SolidBrush(h.color), h.position.X, h.position.Y, h.breite, h.höhe);
             }
 
             foreach (Pixel p in deathRegionDots)
@@ -239,66 +130,7 @@ namespace LearningDots
                 e.Graphics.FillRegion(new SolidBrush(p.color), new Region(new Rectangle(p.location.X, p.location.Y, 5, 5)));
             }
         }
-
-        private void textBoxstartX_TextChanged(object sender, EventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite, false))
-            {
-                buttonTrain.Enabled = false;
-                tb.ForeColor = Color.Red;
-                return;
-            }
-
-            buttonTrain.Enabled = true;
-            tb.ForeColor = defaultforecolor;
-            training.SetStartpunkt(new Point(Convert.ToInt32(tb.Text), training.GetStartpunkt().Y));
-        }
-
-        private void textBoxstartY_TextChanged(object sender, EventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite, false))
-            {
-                buttonTrain.Enabled = false;
-                tb.ForeColor = Color.Red;
-                return;
-            }
-
-            buttonTrain.Enabled = true;
-            tb.ForeColor = defaultforecolor;
-            training.SetStartpunkt(new Point(training.GetStartpunkt().X, Convert.ToInt32(tb.Text)));
-        }
-
-        private void textBoxzielX_TextChanged(object sender, EventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite, false))
-            {
-                buttonTrain.Enabled = false;
-                tb.ForeColor = Color.Red;
-                return;
-            }
-
-            buttonTrain.Enabled = true;
-            tb.ForeColor = defaultforecolor;
-            training.SetZielpunkt(new Point(Convert.ToInt32(tb.Text), training.GetZielpunkt().Y));
-        }
-
-        private void textBoxzielY_TextChanged(object sender, EventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            if (!TextBoxValide(tb.Text, Richtung.Breite, false))
-            {
-                buttonTrain.Enabled = false;
-                tb.ForeColor = Color.Red;
-                return;
-            }
-
-            buttonTrain.Enabled = true;
-            tb.ForeColor = defaultforecolor;
-            training.SetZielpunkt(new Point(training.GetZielpunkt().X, Convert.ToInt32(tb.Text)));
-        }
+                                    
 
         private void checkBoxZuschauen_CheckedChanged(object sender, EventArgs e)
         {
@@ -351,8 +183,8 @@ namespace LearningDots
 
         private Setting GetActualSetting()
         {
-            Point zielPos = new Point(Convert.ToInt32(textBoxzielX.Text), Convert.ToInt32(textBoxzielY.Text));
-            Point startPos = new Point(Convert.ToInt32(textBoxstartX.Text), Convert.ToInt32(textBoxstartY.Text));
+            Point zielPos = formStartEndpoint.zielPos;
+            Point startPos = formStartEndpoint.startPos;
             int populationsGröße = Convert.ToInt32(comboBoxanzahldots.Text);
             int maxSteps = Convert.ToInt32(comboBoxmaxSchritte.Text);
             Setting setting = new Setting(zielPos, startPos, populationsGröße, checkBoxZuschauen.Checked, maxSteps, checkBoxdiagonal.Checked,
@@ -366,7 +198,6 @@ namespace LearningDots
             training.SafeBest();          
             training.Reset(GetActualSetting());
             buttonTrain.Text = "Start training";
-            textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -447,7 +278,8 @@ namespace LearningDots
 
         private void buttonnextgen_Click(object sender, EventArgs e)
         {
-            buttonresetTraining.Enabled = false;           
+            buttonresetTraining.Enabled = false;
+            buttonnextgen.Enabled = false;
 
             if (training.population.gen <= 1)
                 training.Reset(GetActualSetting());
@@ -455,7 +287,6 @@ namespace LearningDots
             training.SetEndBedingung(Setting.Endbedingung.NextGen);
             training.Continue();
             buttonTrain.Text = "Stop training";
-            textBoxstartX.Enabled = textBoxstartY.Enabled = textBoxzielX.Enabled = textBoxzielY.Enabled = false;
 
         }
 
@@ -463,6 +294,20 @@ namespace LearningDots
         {
             FormView fv = new FormView();
             fv.ShowDialog();
+        }
+
+        private void startEndpointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            formStartEndpoint.ShowDialog();
+            training.SetStartpunkt(formStartEndpoint.startPos);
+            training.SetZielpunkt(formStartEndpoint.zielPos);
+        }
+
+        private void trainingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ftm = new FormTrainingsmodus(panel1, formStartEndpoint.startPos,
+                formStartEndpoint.zielPos,speed);
+            ftm.ShowDialog();
         }
     }
 }

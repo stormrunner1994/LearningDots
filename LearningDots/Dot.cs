@@ -81,7 +81,7 @@ namespace LearningDots
             {
                 // Hängt davon ab, wie Viereck gedreht ist
                 // Liegt im Hindernis?
-                if (position.X >= h.position.X && position.X <= h.position.X + h.länge
+                if (position.X >= h.position.X && position.X <= h.position.X + h.breite
                     && position.Y >= h.position.Y && position.Y <= h.position.Y + h.höhe)
                     return true;
             }

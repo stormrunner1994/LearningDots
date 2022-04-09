@@ -37,7 +37,7 @@ namespace LearningDots
             this.buttonSaveObstacle = new System.Windows.Forms.Button();
             this.comboBoxobstacle = new System.Windows.Forms.ComboBox();
             this.checkBoxdiagonal = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonShowBestDot = new System.Windows.Forms.Button();
             this.comboBoxmaxSchritte = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.checkBoxZuschauen = new System.Windows.Forms.CheckBox();
@@ -45,16 +45,6 @@ namespace LearningDots
             this.comboBoxanzahldots = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBoxzielY = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBoxzielX = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBoxstartY = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxstartX = new System.Windows.Forms.TextBox();
             this.buttonTrain = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -63,12 +53,13 @@ namespace LearningDots
             this.buttonnextgen = new System.Windows.Forms.Button();
             this.labelprogress = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.richTextBoxstatus = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.showDeathDistributionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.obstaclesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startEndpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showDeathDistributionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trainingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -94,7 +85,7 @@ namespace LearningDots
             this.groupBox1.Controls.Add(this.buttonSaveObstacle);
             this.groupBox1.Controls.Add(this.comboBoxobstacle);
             this.groupBox1.Controls.Add(this.checkBoxdiagonal);
-            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.buttonShowBestDot);
             this.groupBox1.Controls.Add(this.comboBoxmaxSchritte);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.checkBoxZuschauen);
@@ -102,16 +93,6 @@ namespace LearningDots
             this.groupBox1.Controls.Add(this.comboBoxanzahldots);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.textBoxzielY);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.textBoxzielX);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.textBoxstartY);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.textBoxstartX);
             this.groupBox1.Controls.Add(this.buttonTrain);
             this.groupBox1.Location = new System.Drawing.Point(12, 59);
             this.groupBox1.Name = "groupBox1";
@@ -186,16 +167,16 @@ namespace LearningDots
             this.checkBoxdiagonal.Text = "allow diagonal moves";
             this.checkBoxdiagonal.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // buttonShowBestDot
             // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(646, 16);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 23);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "Show best dot";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonShowBestDot.Enabled = false;
+            this.buttonShowBestDot.Location = new System.Drawing.Point(646, 16);
+            this.buttonShowBestDot.Name = "buttonShowBestDot";
+            this.buttonShowBestDot.Size = new System.Drawing.Size(95, 23);
+            this.buttonShowBestDot.TabIndex = 18;
+            this.buttonShowBestDot.Text = "Show best dot";
+            this.buttonShowBestDot.UseVisualStyleBackColor = true;
+            this.buttonShowBestDot.Click += new System.EventHandler(this.button1_Click);
             // 
             // comboBoxmaxSchritte
             // 
@@ -286,96 +267,6 @@ namespace LearningDots
             this.label7.TabIndex = 2;
             this.label7.Text = "Number of dots:";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(132, 41);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(17, 13);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "Y:";
-            // 
-            // textBoxzielY
-            // 
-            this.textBoxzielY.Location = new System.Drawing.Point(155, 39);
-            this.textBoxzielY.Name = "textBoxzielY";
-            this.textBoxzielY.Size = new System.Drawing.Size(36, 20);
-            this.textBoxzielY.TabIndex = 11;
-            this.textBoxzielY.TextChanged += new System.EventHandler(this.textBoxzielY_TextChanged);
-            this.textBoxzielY.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxzielY_KeyDown);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(67, 41);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(17, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "X:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 42);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(52, 13);
-            this.label6.TabIndex = 8;
-            this.label6.Text = "Endpoint:";
-            // 
-            // textBoxzielX
-            // 
-            this.textBoxzielX.Location = new System.Drawing.Point(90, 39);
-            this.textBoxzielX.Name = "textBoxzielX";
-            this.textBoxzielX.Size = new System.Drawing.Size(36, 20);
-            this.textBoxzielX.TabIndex = 9;
-            this.textBoxzielX.TextChanged += new System.EventHandler(this.textBoxzielX_TextChanged);
-            this.textBoxzielX.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxzielX_KeyDown);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(132, 14);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(17, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Y:";
-            // 
-            // textBoxstartY
-            // 
-            this.textBoxstartY.Location = new System.Drawing.Point(155, 11);
-            this.textBoxstartY.Name = "textBoxstartY";
-            this.textBoxstartY.Size = new System.Drawing.Size(36, 20);
-            this.textBoxstartY.TabIndex = 6;
-            this.textBoxstartY.TextChanged += new System.EventHandler(this.textBoxstartY_TextChanged);
-            this.textBoxstartY.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxstartY_KeyDown);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(67, 16);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(17, 13);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "X:";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Startpoint:";
-            // 
-            // textBoxstartX
-            // 
-            this.textBoxstartX.Location = new System.Drawing.Point(90, 11);
-            this.textBoxstartX.Name = "textBoxstartX";
-            this.textBoxstartX.Size = new System.Drawing.Size(36, 20);
-            this.textBoxstartX.TabIndex = 3;
-            this.textBoxstartX.TextChanged += new System.EventHandler(this.textBoxstartX_TextChanged);
-            this.textBoxstartX.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxstartX_KeyDown);
-            // 
             // buttonTrain
             // 
             this.buttonTrain.Location = new System.Drawing.Point(530, 43);
@@ -413,7 +304,7 @@ namespace LearningDots
             this.groupBox2.Controls.Add(this.buttonnextgen);
             this.groupBox2.Controls.Add(this.labelprogress);
             this.groupBox2.Controls.Add(this.progressBar1);
-            this.groupBox2.Controls.Add(this.richTextBox1);
+            this.groupBox2.Controls.Add(this.richTextBoxstatus);
             this.groupBox2.Location = new System.Drawing.Point(603, 163);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(239, 464);
@@ -458,24 +349,25 @@ namespace LearningDots
             this.progressBar1.Size = new System.Drawing.Size(227, 21);
             this.progressBar1.TabIndex = 1;
             // 
-            // richTextBox1
+            // richTextBoxstatus
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.richTextBoxstatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.Location = new System.Drawing.Point(3, 47);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(230, 384);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.richTextBoxstatus.Location = new System.Drawing.Point(3, 47);
+            this.richTextBoxstatus.Name = "richTextBoxstatus";
+            this.richTextBoxstatus.ReadOnly = true;
+            this.richTextBoxstatus.Size = new System.Drawing.Size(230, 384);
+            this.richTextBoxstatus.TabIndex = 0;
+            this.richTextBoxstatus.Text = "";
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.obstaclesToolStripMenuItem,
-            this.startEndpointToolStripMenuItem});
+            this.startEndpointToolStripMenuItem,
+            this.trainingToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(854, 24);
@@ -491,6 +383,12 @@ namespace LearningDots
             this.toolStripMenuItem1.Text = "View";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
+            // showDeathDistributionToolStripMenuItem
+            // 
+            this.showDeathDistributionToolStripMenuItem.Name = "showDeathDistributionToolStripMenuItem";
+            this.showDeathDistributionToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.showDeathDistributionToolStripMenuItem.Text = "Show Death Distribution";
+            // 
             // obstaclesToolStripMenuItem
             // 
             this.obstaclesToolStripMenuItem.Name = "obstaclesToolStripMenuItem";
@@ -502,12 +400,14 @@ namespace LearningDots
             this.startEndpointToolStripMenuItem.Name = "startEndpointToolStripMenuItem";
             this.startEndpointToolStripMenuItem.Size = new System.Drawing.Size(96, 20);
             this.startEndpointToolStripMenuItem.Text = "Start/Endpoint";
+            this.startEndpointToolStripMenuItem.Click += new System.EventHandler(this.startEndpointToolStripMenuItem_Click);
             // 
-            // showDeathDistributionToolStripMenuItem
+            // trainingToolStripMenuItem
             // 
-            this.showDeathDistributionToolStripMenuItem.Name = "showDeathDistributionToolStripMenuItem";
-            this.showDeathDistributionToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.showDeathDistributionToolStripMenuItem.Text = "Show Death Distribution";
+            this.trainingToolStripMenuItem.Name = "trainingToolStripMenuItem";
+            this.trainingToolStripMenuItem.Size = new System.Drawing.Size(103, 20);
+            this.trainingToolStripMenuItem.Text = "Trainingsmodus";
+            this.trainingToolStripMenuItem.Click += new System.EventHandler(this.trainingToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -537,46 +437,37 @@ namespace LearningDots
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button buttonTrain;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBoxstartX;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBoxstartY;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBoxzielY;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBoxzielX;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ComboBox comboBoxanzahldots;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ComboBox comboBoxmaxtrainingszeit;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.CheckBox checkBoxZuschauen;
-        private System.Windows.Forms.ComboBox comboBoxmaxSchritte;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Label labelprogress;
-        private System.Windows.Forms.CheckBox checkBoxdiagonal;
-        private System.Windows.Forms.Button buttonprevgen;
-        private System.Windows.Forms.Button buttonnextgen;
-        private System.Windows.Forms.ComboBox comboBoxobstacle;
-        private System.Windows.Forms.Button buttonSaveObstacle;
-        private System.Windows.Forms.Button buttonLoadObstacle;
-        private System.Windows.Forms.Button buttonresetTraining;
-        private System.Windows.Forms.CheckBox checkBoxShowDeathDistribution;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem obstaclesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem startEndpointToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showDeathDistributionToolStripMenuItem;
+        public System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.GroupBox groupBox1;
+        public System.Windows.Forms.Button buttonTrain;
+        public System.Windows.Forms.Label label7;
+        public System.Windows.Forms.ComboBox comboBoxanzahldots;
+        public System.Windows.Forms.Label label8;
+        public System.Windows.Forms.ComboBox comboBoxmaxtrainingszeit;
+        public System.Windows.Forms.Label label9;
+        public System.Windows.Forms.Label label10;
+        public System.Windows.Forms.GroupBox groupBox2;
+        public System.Windows.Forms.RichTextBox richTextBoxstatus;
+        public System.Windows.Forms.CheckBox checkBoxZuschauen;
+        public System.Windows.Forms.ComboBox comboBoxmaxSchritte;
+        public System.Windows.Forms.Label label11;
+        public System.Windows.Forms.Button buttonShowBestDot;
+        public System.Windows.Forms.ProgressBar progressBar1;
+        public System.Windows.Forms.Label labelprogress;
+        public System.Windows.Forms.CheckBox checkBoxdiagonal;
+        public System.Windows.Forms.Button buttonprevgen;
+        public System.Windows.Forms.Button buttonnextgen;
+        public System.Windows.Forms.ComboBox comboBoxobstacle;
+        public System.Windows.Forms.Button buttonSaveObstacle;
+        public System.Windows.Forms.Button buttonLoadObstacle;
+        public System.Windows.Forms.Button buttonresetTraining;
+        public System.Windows.Forms.CheckBox checkBoxShowDeathDistribution;
+        public System.Windows.Forms.MenuStrip menuStrip1;
+        public System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        public System.Windows.Forms.ToolStripMenuItem obstaclesToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem startEndpointToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem showDeathDistributionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trainingToolStripMenuItem;
     }
 }
 

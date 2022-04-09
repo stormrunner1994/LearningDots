@@ -19,3 +19,5 @@ C:\Users\larsp\Programmierungen\GenericLearningDots\LearningDots\obj\Debug\Learn
 C:\Users\larsp\Programmierungen\GenericLearningDots\LearningDots\obj\Debug\LearningDots.exe
 C:\Users\larsp\Programmierungen\GenericLearningDots\LearningDots\obj\Debug\LearningDots.pdb
 C:\Users\larsp\Programmierungen\GenericLearningDots\LearningDots\obj\Debug\LearningDots.FormView.resources
+C:\Users\larsp\Programmierungen\GenericLearningDots\LearningDots\obj\Debug\LearningDots.FormStartEndpoint.resources
+C:\Users\larsp\Programmierungen\GenericLearningDots\LearningDots\obj\Debug\LearningDots.FormTrainingsmodus.resources

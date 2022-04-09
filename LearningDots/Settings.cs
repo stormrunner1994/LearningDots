@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace LearningDots
 {
     public class Setting
     {
-        public enum Endbedingung { Time, NextGen, FoundGoal}
+        public enum Endbedingung { Time, NextGen, FoundGoal, Generations}
         public Endbedingung endbedingung;
         public Point zielPos;
         public Point startPos;
@@ -18,16 +19,16 @@ namespace LearningDots
         public int maxSteps;
         public bool erlaubeDiagonaleZüge;
         public List<Hindernis> hindernisse;
-        public int maxTrainingTime;
+        public int endValue; // value, where it should stop trying
         public int speed;
         public int actualGen = 0;
 
         public Setting(Point zielPos, Point startPos, int populationsGröße, bool zuschauen, int maxSteps, bool erlaubeDiagonaleZüge
-            , List<Hindernis> hindernisse, int maxTrainingTime, int speed,
+            , List<Hindernis> hindernisse, int endValue, int speed,
             Endbedingung endbedingung = Endbedingung.Time)
         {
             this.endbedingung = endbedingung;
-            this.maxTrainingTime = maxTrainingTime;
+            this.endValue = endValue;
             this.zielPos = zielPos;
             this.startPos = startPos;
             this.populationsGröße = populationsGröße;
@@ -64,6 +65,16 @@ namespace LearningDots
             }
 
             return secs;
+        }
+
+        public bool SafeObstaclesInFile(string filename)
+        {
+            StreamWriter sw = new StreamWriter(filename);
+            sw.WriteLine("PosX,PosY;Width;Height;Type;Color");
+            foreach (Hindernis h in hindernisse)
+                sw.WriteLine(h.GetHindernis());
+            sw.Close();
+            return true;
         }
     }
 }

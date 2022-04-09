@@ -18,41 +18,38 @@ namespace LearningDots
         public static int SPEZIALPUNKTEGRÖSSE = 10;
         private Dot ziel;
         private Dot start;
-        private Panel panel;
         public Population population;
-        private int populationsGröße = -1;
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-        private RichTextBox rtbStatus;
         public Verlauf verlauf;
         private bool zuschauen = false;
         private Thread thread;
         private Dot loadedDot;
         private enum TimerAktion { trainieren, besteDot };
         private TimerAktion timeraktion = TimerAktion.trainieren;
-        private ProgressBar progressbar;
-        Label labelprogressbar;
         private Setting setting;
-        private Button buttonStart;
-        private Button buttonReset;
-        private Button buttonShowBestDot;
+        private Form1 form;
+        public bool läuft = false;
 
-        public Training(Panel panel, Setting setting, RichTextBox rtbStatus, ProgressBar progressbar, Label labelprogressbar,
-            Button buttonStart, Button buttonReset, Button buttonShowBestDot)
+        public Training(Panel panel, Setting setting, Form1 form)
         {
-            this.buttonShowBestDot = buttonShowBestDot;
-            this.buttonReset = buttonReset;
-            this.buttonStart = buttonStart;
+            this.form = form;
             this.setting = setting;
-            this.progressbar = progressbar;
-            this.labelprogressbar = labelprogressbar;
-            this.rtbStatus = rtbStatus;
-            this.populationsGröße = setting.populationsGröße;
-            verlauf = new Verlauf(populationsGröße);
+            verlauf = new Verlauf(setting.populationsGröße);
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, setting.startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps, setting.erlaubeDiagonaleZüge, setting.hindernisse, setting.speed);
-            this.panel = panel;
+            population = new Population(setting.populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps, setting.erlaubeDiagonaleZüge, setting.hindernisse, setting.speed);
             panel.Paint += new PaintEventHandler(panel_Paint);
+            timer.Interval = 10;
+            timer.Tick += Timer_Tick;
+        }
+
+        public Training(Setting setting, int panelHeight, int panelWidth)
+        {
+            this.setting = setting;
+            verlauf = new Verlauf(setting.populationsGröße);
+            start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, setting.startPos, -1);
+            ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
+            population = new Population(setting.populationsGröße, panelHeight, panelWidth, ziel.position, start.position, setting.maxSteps, setting.erlaubeDiagonaleZüge, setting.hindernisse, setting.speed);
             timer.Interval = 10;
             timer.Tick += Timer_Tick;
         }
@@ -72,17 +69,16 @@ namespace LearningDots
         public void SetSettings(Setting setting)
         {
             this.setting = setting;
-            populationsGröße = setting.populationsGröße;
             zuschauen = setting.zuschauen;
             start = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Green, setting.startPos, -1);
             ziel = new Dot(SPEZIALPUNKTEGRÖSSE, Color.Red, setting.zielPos, -1);
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, setting.maxSteps,
+            population = new Population(setting.populationsGröße, form.panel1.Height, form.panel1.Width, ziel.position, start.position, setting.maxSteps,
                 setting.erlaubeDiagonaleZüge, setting.hindernisse,setting.speed);
         }
 
         public void SetEndBedingung(int time)
         {
-            setting.maxTrainingTime = time;
+            setting.endValue = time;
             SetEndBedingung(Setting.Endbedingung.Time);
         }
 
@@ -101,7 +97,7 @@ namespace LearningDots
 
         public void ZeichneFeld()
         {
-            panel.Invalidate();
+            form.panel1.Invalidate();
         }
 
         public Point GetStartpunkt()
@@ -133,7 +129,7 @@ namespace LearningDots
         public void SetPopulationsGröße(int populationsGröße)
         {
             setting.populationsGröße = populationsGröße;
-            population = new Population(populationsGröße, panel.Height, panel.Width, ziel.position, start.position, population.maxSteps,
+            population = new Population(populationsGröße, form.panel1.Height, form.panel1.Width, ziel.position, start.position, population.maxSteps,
                 erlaubeDiagonaleZüge, population.hindernisse, setting.speed);
             ZeichneFeld();
         }
@@ -160,16 +156,16 @@ namespace LearningDots
                     population.MutateBabies();
                     UpdateStatusRichTextBox(false);
 
-                    progressbar.Value = 0;
-                    progressbar.Maximum = population.maxSteps;
+                    form.progressBar1.Value = 0;
+                    form.progressBar1.Maximum = population.maxSteps;
                 }
                 else
                 {
                     population.Update();
 
-                    if (progressbar.Value + 1 <= progressbar.Maximum)
-                        progressbar.Value++;
-                    labelprogressbar.Text = progressbar.Value + "/" + progressbar.Maximum;
+                    if (form.progressBar1.Value + 1 <= form.progressBar1.Maximum)
+                        form.progressBar1.Value++;
+                    form.labelprogress.Text = form.progressBar1.Value + "/" + form.progressBar1.Maximum;
                 }
             }
             else
@@ -182,7 +178,8 @@ namespace LearningDots
                 }
                 loadedDot.Move();
             }
-            panel.Invalidate();
+            läuft = false;
+            form.panel1.Invalidate();
         }
 
 
@@ -190,7 +187,7 @@ namespace LearningDots
         {
             if (!nurLetzte)
             {
-                Invoker.invokeTextSet(rtbStatus, "");
+                Invoker.invokeTextSet(form.richTextBoxstatus, "");
                 var genInfos = verlauf.GetGenInfos();
 
                 // zeige nur die letzen 20
@@ -200,17 +197,17 @@ namespace LearningDots
                     if (count == 20) break;
 
                     GenInfo gi = genInfos[a];
-                    if (Invoker.invokeTextGet(rtbStatus) != "") Invoker.invokeAppendText(rtbStatus, "\n\n" + gi.GetInfo());
-                    else Invoker.invokeAppendText(rtbStatus, gi.GetInfo());
+                    if (Invoker.invokeTextGet(form.richTextBoxstatus) != "") Invoker.invokeAppendText(form.richTextBoxstatus, "\n\n" + gi.GetInfo());
+                    else Invoker.invokeAppendText(form.richTextBoxstatus, gi.GetInfo());
                     count++;
                 }
             }
             else
             {
                 if (verlauf.GetLastGenInfo() != null)
-                    Invoker.invokeTextSet(rtbStatus, verlauf.GetLastGenInfo().GetInfo());
+                    Invoker.invokeTextSet(form.richTextBoxstatus, verlauf.GetLastGenInfo().GetInfo());
                 else
-                    Invoker.invokeTextSet(rtbStatus, "no Generation yet");
+                    Invoker.invokeTextSet(form.richTextBoxstatus, "no Generation yet");
             }
         }
 
@@ -254,7 +251,7 @@ namespace LearningDots
         private void ThreadTrainieren()
         {
             if (setting.endbedingung == Setting.Endbedingung.Time)
-            Invoker.invokeProgressBar(progressbar, 0, 0, setting.maxTrainingTime);
+            Invoker.invokeProgressBar(form.progressBar1, 0, 0, setting.endValue);
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
@@ -266,17 +263,18 @@ namespace LearningDots
                 {
                     secs = (int)(sw.ElapsedMilliseconds / 1000);
 
-                    if (secs <= Invoker.invokeProgressBarGetMax(progressbar))
-                        Invoker.invokeProgressBarValue(progressbar, secs);
-                    Invoker.invokeTextSet(labelprogressbar, GetRestTime(secs, Invoker.invokeProgressBarGetMax(progressbar)));
+                    if (secs <= Invoker.invokeProgressBarGetMax(form.progressBar1))
+                        Invoker.invokeProgressBarValue(form.progressBar1, secs);
+                    Invoker.invokeTextSet(form.labelprogress, GetRestTime(secs, Invoker.invokeProgressBarGetMax(form.progressBar1)));
                 }
 
                 if (population.allDotsFinished())
                 {
                     // Beende Loop
-                    if (setting.endbedingung == Setting.Endbedingung.Time && sw.ElapsedMilliseconds >= setting.maxTrainingTime * 1000
+                    if (setting.endbedingung == Setting.Endbedingung.Time && sw.ElapsedMilliseconds >= setting.endValue * 1000
                         || setting.endbedingung == Setting.Endbedingung.NextGen && population.gen > setting.actualGen
-                        || setting.endbedingung == Setting.Endbedingung.FoundGoal && population.SoManyReachedGoal(1))
+                        || setting.endbedingung == Setting.Endbedingung.FoundGoal && population.SoManyReachedGoal(1)
+                        || setting.endbedingung == Setting.Endbedingung.Generations && population.gen >= setting.endValue)
                         break;
 
                     // safe places where dots have died
@@ -302,13 +300,15 @@ namespace LearningDots
 
             sw.Stop();
             SafeBest();
-            Invoker.invokeInvalidate(panel);
-            Invoker.invokeProgressBarValue(progressbar, Invoker.invokeProgressBarGetMax(progressbar));
-            Invoker.invokeTextSet(labelprogressbar.Text, secs + "/" + Invoker.invokeProgressBarGetMax(progressbar));
+            Invoker.invokeInvalidate(form.panel1);
+            Invoker.invokeProgressBarValue(form.progressBar1, Invoker.invokeProgressBarGetMax(form.progressBar1));
+            Invoker.invokeTextSet(form.labelprogress.Text, secs + "/" + Invoker.invokeProgressBarGetMax(form.progressBar1));
             UpdateStatusRichTextBox(true);
-            Invoker.invokeTextSet(buttonStart, "Continue training");
-            Invoker.invokeEnable(buttonReset, true);
-            Invoker.invokeEnable(buttonShowBestDot, true);
+            Invoker.invokeTextSet(form.buttonTrain, "Continue training");
+            Invoker.invokeEnable(form.buttonresetTraining, true);
+            Invoker.invokeEnable(form.buttonShowBestDot, true);
+            Invoker.invokeEnable(form.buttonnextgen, true);
+            läuft = false;
         }
 
         public void SafeBest()
@@ -341,13 +341,12 @@ namespace LearningDots
 
         public void Continue()
         {
-
-            buttonShowBestDot.Enabled = false;
+            form.buttonShowBestDot.Enabled = false;
             if (zuschauen)
             {
-                progressbar.Minimum = 0;
-                progressbar.Maximum = population.maxSteps;
-                progressbar.Value = 0;
+                form.progressBar1.Minimum = 0;
+                form.progressBar1.Maximum = population.maxSteps;
+                form.progressBar1.Value = 0;
                 timer.Start();
             }
             else
@@ -355,11 +354,12 @@ namespace LearningDots
                 thread = new Thread(delegate () { ThreadTrainieren(); });
                 thread.Start();
             }
+            läuft = true;
         }
 
         public void Starten()
         {
-            verlauf = new Verlauf(populationsGröße);
+            verlauf = new Verlauf(setting.populationsGröße);
             Continue();
         }
 
@@ -377,11 +377,12 @@ namespace LearningDots
             }
             else
             {
-                Invoker.invokeInvalidate(panel);
+                Invoker.invokeInvalidate(form.panel1);
                 UpdateStatusRichTextBox(true);
                 thread.Abort();
             }
-            buttonShowBestDot.Enabled = true;
+            form.buttonShowBestDot.Enabled = true;
+            läuft = false;
         }
 
 
