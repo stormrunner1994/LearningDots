@@ -25,7 +25,12 @@ namespace LearningDots
             training = new Training(panel1, setting, this);
             panel1.MouseDown += Panel1_MouseDown;
             panel1.MouseUp += Panel1_MouseUp;
+            if (!Directory.Exists(OBSTACLEPATH))
+                Directory.CreateDirectory(OBSTACLEPATH);
+            LoadObstacles();
         }
+
+        private const string OBSTACLEPATH = "obstacles\\";
 
         private FormStartEndpoint formStartEndpoint;
         FormTrainingsmodus ftm;
@@ -61,6 +66,7 @@ namespace LearningDots
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            toolStripComboBox1.SelectedIndex = 0;
             buttonLoadObstacle.Enabled = File.Exists("obstacle.csv");
             buttonresetTraining.Enabled = false;
             comboBoxobstacle.SelectedIndex = 2;
@@ -154,6 +160,10 @@ namespace LearningDots
                 hindernisse.Add(new Hindernis(new Point(10, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
                 panel1.Invalidate();
             }
+            else if (comboBoxobstacle.SelectedIndex == 3)
+            {
+                panel1.Refresh();
+            }
         }
 
         private void buttonSaveObstacle_Click(object sender, EventArgs e)
@@ -200,6 +210,7 @@ namespace LearningDots
             training.SafeBest();          
             training.Reset(GetActualSetting(Setting.AbbruchBedingung.Time));
             buttonTrain.Text = "Start training";
+            buttonnextgen.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -249,6 +260,50 @@ namespace LearningDots
             ftm = new FormTrainingsmodus(panel1, formStartEndpoint.startPos,
                 formStartEndpoint.zielPos,speed);
             ftm.ShowDialog();
+        }
+
+        private void toolStripComboBox1_Click(object sender, EventArgs e)
+        {
+            if (toolStripComboBox1.SelectedIndex == 0) return;
+
+            string filepath = OBSTACLEPATH + toolStripComboBox1.Text;
+            if (!File.Exists(filepath))
+            {
+                MessageBox.Show("File not found");
+                return;
+            }
+
+            hindernisse.Clear();
+
+            StreamReader sr = new StreamReader(filepath);
+            sr.ReadLine(); // ignore first line
+            while (!sr.EndOfStream)
+            {
+                string zeile = sr.ReadLine();
+                Hindernis h = new Hindernis(zeile);
+                hindernisse.Add(h);
+            }
+            sr.Close();
+
+            panel1.Invalidate();
+        }
+
+        private void saveActualObstacleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (hindernisse.Count == 0) return;
+
+            string filename = OBSTACLEPATH + Directory.GetFiles(OBSTACLEPATH).Length + ".csv";
+            if (Setting.SafeObstaclesInFile(hindernisse, filename))
+            MessageBox.Show("Obstacle successfully saved as " + filename);
+            LoadObstacles();
+        }
+
+        private bool LoadObstacles()
+        {
+            // Load already saved Obstacles
+            foreach (string s in Directory.GetFiles(OBSTACLEPATH).OrderBy(i => i.Trim()))
+                toolStripComboBox1.Items.Add(s.Split('\\').Last());
+            return true;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace LearningDots
 {
     public class Setting
     {
-        public enum AbbruchBedingung { Time, NextGen, FoundGoal, Generations}
+        public enum AbbruchBedingung { Time, NextGen, FoundGoal, Generations }
         public Dictionary<AbbruchBedingung, int> abbruchBedingungen;
         public Point zielPos;
         public Point startPos;
@@ -64,7 +64,7 @@ namespace LearningDots
             return secs;
         }
 
-        public bool SafeObstaclesInFile(string filename)
+        public static bool SafeObstaclesInFile(List<Hindernis> hindernisse, string filename)
         {
             StreamWriter sw = new StreamWriter(filename);
             sw.WriteLine("PosX,PosY;Width;Height;Type;Color");
@@ -72,6 +72,11 @@ namespace LearningDots
                 sw.WriteLine(h.GetHindernis());
             sw.Close();
             return true;
+        }
+
+        public bool SafeObstaclesInFile(string filename)
+        {
+            return SafeObstaclesInFile(hindernisse, filename);
         }
     }
 }
