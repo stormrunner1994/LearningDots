@@ -67,7 +67,6 @@ namespace LearningDots
         private void Form1_Load(object sender, EventArgs e)
         {
             toolStripComboBox1.SelectedIndex = 0;
-            buttonLoadObstacle.Enabled = File.Exists("obstacle.csv");
             buttonresetTraining.Enabled = false;
             comboBoxobstacle.SelectedIndex = 2;
             comboBoxmaxSchritte.SelectedIndex = 0;
@@ -166,30 +165,6 @@ namespace LearningDots
             }
         }
 
-        private void buttonSaveObstacle_Click(object sender, EventArgs e)
-        {
-            StreamWriter sw = new StreamWriter("obstacle.csv");
-            foreach (Hindernis h in hindernisse)
-                sw.WriteLine(h.GetHindernis());
-            sw.Close();
-            buttonLoadObstacle.Enabled = File.Exists("obstacle.csv");
-        }
-
-        private void buttonLoadObstacle_Click(object sender, EventArgs e)
-        {
-            hindernisse.Clear();
-            StreamReader sr = new StreamReader("obstacle.csv");
-            while (!sr.EndOfStream)
-            {
-                string zeile = sr.ReadLine();
-                Hindernis h = new Hindernis(zeile);
-                hindernisse.Add(h);
-            }
-            sr.Close();
-
-            if (hindernisse.Count > 0)
-            panel1.Invalidate();
-        }
 
         private Setting GetActualSetting(Setting.AbbruchBedingung abbruchBedingung)
         {

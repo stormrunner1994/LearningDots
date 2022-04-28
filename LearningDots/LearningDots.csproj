@@ -75,7 +75,7 @@
     </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="Hindernis.cs" />
-    <Compile Include="Invoker.cs" />
+    <Compile Include="Invoker_.cs" />
     <Compile Include="Pixel.cs" />
     <Compile Include="Population.cs" />
     <Compile Include="Program.cs" />
