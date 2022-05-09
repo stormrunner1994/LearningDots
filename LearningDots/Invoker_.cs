@@ -148,6 +148,11 @@ namespace Invoker_
                 if (((Button)myobject).InvokeRequired) ((Button)myobject).Invoke((MethodInvoker)(() => ((Button)myobject).Enabled = enable));
                 else ((Button)myobject).Enabled = enable;
             }
+            else if (myobject is ToolStripMenuItem)
+            {
+                if (((ToolStripMenuItem)myobject).GetCurrentParent().InvokeRequired) ((ToolStripMenuItem)myobject).GetCurrentParent().Invoke((MethodInvoker)(() => ((ToolStripMenuItem)myobject).Enabled = enable));
+                else ((ToolStripMenuItem)myobject).Enabled = enable;
+            }
         }
 
         public static void invokeTextSet(object myobject, string text)
@@ -216,6 +221,36 @@ namespace Invoker_
 
             return text;
         }
+        public static void invokeClearRows(object myobject)
+        {
+            if (myobject is DataGridView)
+            {
+                if (((DataGridView)myobject).InvokeRequired) ((DataGridView)myobject).Invoke((MethodInvoker)(() => ((DataGridView)myobject).Rows.Clear()));
+                else ((DataGridView)myobject).Rows.Clear();
+            }
+        }
+
+        public static void invokeAutoResizeColumns(object myobject, DataGridViewAutoSizeColumnsMode mode)
+        {
+            if (myobject is DataGridView)
+            {
+                if (((DataGridView)myobject).InvokeRequired) ((DataGridView)myobject).Invoke((MethodInvoker)(() => ((DataGridView)myobject).AutoResizeColumns(mode)));
+                else ((DataGridView)myobject).AutoResizeColumns(mode);
+            }
+        }
+
+        
+
+        public static void invokeAddRow(object myobject, string[] cells)
+        {
+            if (myobject is DataGridView)
+            {
+                if (((DataGridView)myobject).InvokeRequired) ((DataGridView)myobject).Invoke((MethodInvoker)(() => ((DataGridView)myobject).Rows.Add(cells)));
+                else ((DataGridView)myobject).Rows.Add(cells);
+            }
+        }
+
+
 
         public static void invokeAppendText(object myobject, string text)
         {
