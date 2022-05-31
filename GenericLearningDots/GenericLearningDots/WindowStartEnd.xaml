@@ -1,16 +1,14 @@
-﻿<Window x:Class="GenericLearningDots.MainWindow"
+﻿<Window x:Class="GenericLearningDots.WindowStartEnd"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GenericLearningDots"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="WindowStartEnd" Height="450" Width="800">
     <Grid>
-        <Button x:Name="buttonStarten" Content="Starten" Margin="103,33,638,370" Click="button1_Click"/>
-        <Label x:Name="labelprogress" Content="Progress"/>
-        <PasswordBox Width="120"/>
-        <Grid x:Name="grid1"/>
+        <Label Content="Label" Margin="54,44,577,336"/>
+        <TextBlock TextWrapping="Wrap" Text="TextBlock" Margin="139,23,525,363"/>
 
     </Grid>
 </Window>

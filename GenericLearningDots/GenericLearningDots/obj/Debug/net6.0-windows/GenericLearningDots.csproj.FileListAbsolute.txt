@@ -1,0 +1,5 @@
+C:\Users\larsp\Programmierungen\GenericLearningDots\GenericLearningDots\GenericLearningDots\obj\Debug\net6.0-windows\GenericLearningDots.csproj.AssemblyReference.cache
+C:\Users\larsp\Programmierungen\GenericLearningDots\GenericLearningDots\GenericLearningDots\obj\Debug\net6.0-windows\MainWindow.g.cs
+C:\Users\larsp\Programmierungen\GenericLearningDots\GenericLearningDots\GenericLearningDots\obj\Debug\net6.0-windows\App.g.cs
+C:\Users\larsp\Programmierungen\GenericLearningDots\GenericLearningDots\GenericLearningDots\obj\Debug\net6.0-windows\GenericLearningDots_MarkupCompile.cache
+C:\Users\larsp\Programmierungen\GenericLearningDots\GenericLearningDots\GenericLearningDots\obj\Debug\net6.0-windows\GenericLearningDots_MarkupCompile.lref

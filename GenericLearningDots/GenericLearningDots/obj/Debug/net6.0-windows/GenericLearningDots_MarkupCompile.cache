@@ -1,5 +1,5 @@
 ﻿GenericLearningDots
-1.0.0.0
+
 
 winexe
 C#
@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\larsp\Programmierungen\GenericLearningDots\GenericLearningDots\GenericLearningDots\App.xaml
-2727885348
+11407045341
 
-17-1055390482
+14-1241437742
 1942030480316
-MainWindow.xaml;WindowStartEnd.xaml;
+MainWindow.xaml;
 
 True
 

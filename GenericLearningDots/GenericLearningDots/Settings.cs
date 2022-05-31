@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+
 
 namespace LearningDots
 {
@@ -12,7 +14,7 @@ namespace LearningDots
     {
         public enum AbbruchBedingung { Time, NextGen, FoundGoal, Generations }
         public Dictionary<AbbruchBedingung, int> abbruchBedingungen;
-        public Point zielPos;
+        public Window zielPos;
         public Point startPos;
         public int populationsGröße;
         public bool zuschauen;

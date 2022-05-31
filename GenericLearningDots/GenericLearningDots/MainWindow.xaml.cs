@@ -24,13 +24,19 @@ namespace GenericLearningDots
         public MainWindow()
         {
             InitializeComponent();
+
+            winStartEnd = new WindowStartEnd(grid1);
+
+            Setting setting = new Setting(winStartEnd.endpoint, winStartEnd.endpoint, 100, false, 500, true, new List<Hindernis>(), 5, new Dictionary<Setting.AbbruchBedingung, int>());
+
+            
         }
 
-        private Training
+        private WindowStartEnd winStartEnd;
+        private Training training;
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            Training 
         }
     }
 }
