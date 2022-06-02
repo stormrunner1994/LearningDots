@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace LearningDots
 {
+    hindernisse mit bilder von mauer, hintergrund
+        sand gelb
+
     public partial class Form1 : Form
     {
         public Form1()
