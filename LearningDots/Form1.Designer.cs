@@ -56,10 +56,11 @@ namespace LearningDots
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.showDeathDistributionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.obstaclesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveActualObstacleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.startEndpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trainingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
-            this.saveActualObstacleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printRanksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -345,7 +346,8 @@ namespace LearningDots
             this.toolStripMenuItem1,
             this.obstaclesToolStripMenuItem,
             this.startEndpointToolStripMenuItem,
-            this.trainingToolStripMenuItem});
+            this.trainingToolStripMenuItem,
+            this.printRanksToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(854, 24);
@@ -376,6 +378,22 @@ namespace LearningDots
             this.obstaclesToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
             this.obstaclesToolStripMenuItem.Text = "Obstacles";
             // 
+            // saveActualObstacleToolStripMenuItem
+            // 
+            this.saveActualObstacleToolStripMenuItem.Name = "saveActualObstacleToolStripMenuItem";
+            this.saveActualObstacleToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.saveActualObstacleToolStripMenuItem.Text = "Save current obstacle";
+            this.saveActualObstacleToolStripMenuItem.Click += new System.EventHandler(this.saveActualObstacleToolStripMenuItem_Click);
+            // 
+            // toolStripComboBox1
+            // 
+            this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBox1.Items.AddRange(new object[] {
+            "Saved obstacles"});
+            this.toolStripComboBox1.Name = "toolStripComboBox1";
+            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 23);
+            this.toolStripComboBox1.Click += new System.EventHandler(this.toolStripComboBox1_Click);
+            // 
             // startEndpointToolStripMenuItem
             // 
             this.startEndpointToolStripMenuItem.Name = "startEndpointToolStripMenuItem";
@@ -390,21 +408,12 @@ namespace LearningDots
             this.trainingToolStripMenuItem.Text = "Trainingsmodus";
             this.trainingToolStripMenuItem.Click += new System.EventHandler(this.trainingToolStripMenuItem_Click);
             // 
-            // toolStripComboBox1
+            // printRanksToolStripMenuItem
             // 
-            this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBox1.Items.AddRange(new object[] {
-            "Saved obstacles"});
-            this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox1.Click += new System.EventHandler(this.toolStripComboBox1_Click);
-            // 
-            // saveActualObstacleToolStripMenuItem
-            // 
-            this.saveActualObstacleToolStripMenuItem.Name = "saveActualObstacleToolStripMenuItem";
-            this.saveActualObstacleToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.saveActualObstacleToolStripMenuItem.Text = "Save current obstacle";
-            this.saveActualObstacleToolStripMenuItem.Click += new System.EventHandler(this.saveActualObstacleToolStripMenuItem_Click);
+            this.printRanksToolStripMenuItem.Name = "printRanksToolStripMenuItem";
+            this.printRanksToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
+            this.printRanksToolStripMenuItem.Text = "Print Ranks";
+            this.printRanksToolStripMenuItem.Click += new System.EventHandler(this.printRanksToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -465,6 +474,7 @@ namespace LearningDots
         private System.Windows.Forms.ToolStripMenuItem trainingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveActualObstacleToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
+        private System.Windows.Forms.ToolStripMenuItem printRanksToolStripMenuItem;
     }
 }
 

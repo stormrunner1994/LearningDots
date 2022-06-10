@@ -11,8 +11,8 @@ using System.Windows.Forms;
 
 namespace LearningDots
 {
-    hindernisse mit bilder von mauer, hintergrund
-        sand gelb
+    //hindernisse mit bilder von mauer, hintergrund
+     //   sand gelb
 
     public partial class Form1 : Form
     {
@@ -45,6 +45,7 @@ namespace LearningDots
         Point linienStart = new Point();
         Point linienZiel = new Point();
 
+       
         private void Panel1_MouseUp(object sender, MouseEventArgs e)
         {
             linienZiel = new Point(e.X, e.Y);
@@ -282,6 +283,11 @@ namespace LearningDots
             foreach (string s in Directory.GetFiles(OBSTACLEPATH).OrderBy(i => i.Trim()))
                 toolStripComboBox1.Items.Add(s.Split('\\').Last());
             return true;
+        }
+
+        private void printRanksToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            training.PrintRanks(@"ranks");
         }
     }
 }

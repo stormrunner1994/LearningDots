@@ -337,6 +337,15 @@ namespace LearningDots
                 status = Status.Stopped;
         }
 
+        public void PrintRanks(string pfad)
+        {
+            StreamWriter sw = new StreamWriter(pfad);
+            foreach (string s in population.ranks)
+                sw.WriteLine(s);
+            sw.Close();
+        }
+
+
         public void SafeBest()
         {
             StreamWriter sw = new StreamWriter("best.csv");

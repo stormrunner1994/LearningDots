@@ -22,6 +22,7 @@ namespace LearningDots
         public Dictionary<string, int> dictDeathLocations = new Dictionary<string, int>(); // x,y
         private Random rand = new Random();
         public List<Hindernis> hindernisse;
+        public List<string> ranks = new List<string>();
 
 
         public Population(int anzahl, int feldhöhe, int feldbreite, Point zielPosition, Point startPosition, int maxSteps, bool erlaubeDiagonaleZüge,
@@ -278,6 +279,7 @@ namespace LearningDots
         //finds the dot with the highest fitness and sets it as the best dot
         public int GetBestDotIndex()
         {
+            ranks = new List<string>();
             double max = 0;
             int maxIndex = 0;
             for (int i = 0; i < dots.Length; i++)
@@ -306,6 +308,11 @@ namespace LearningDots
 
                 }
                 d.rang = rang;
+            }
+
+            foreach (Dot d in dots.OrderBy(i => i.rang))
+            {
+                ranks.Add(d.rang + ";" + d.fitness);
             }
 
             //if this dot reached the goal then reset the minimum number of steps it takes to get to the goal
