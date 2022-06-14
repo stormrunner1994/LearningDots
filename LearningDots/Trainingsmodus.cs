@@ -82,7 +82,7 @@ namespace LearningDots
             foreach (Hindernis h in obstacles)
             {
                 if (h.typ == Hindernis.Typ.Rechteck)
-                    e.Graphics.FillRectangle(new SolidBrush(h.color), h.position.X, h.position.Y, h.breite, h.höhe);
+                    e.Graphics.FillRectangle(new SolidBrush(h.color), h.location.X, h.location.Y, h.breite, h.höhe);
             }
 
             foreach (Pixel p in Helper.deathRegionDots)

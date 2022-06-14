@@ -128,12 +128,6 @@ namespace LearningDots
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            foreach (Hindernis h in hindernisse)
-            {
-                if (h.typ == Hindernis.Typ.Rechteck)
-                    e.Graphics.FillRectangle(new SolidBrush(h.color), h.position.X, h.position.Y, h.breite, h.höhe);
-            }
-
             foreach (Pixel p in Helper.deathRegionDots)
             {
                 e.Graphics.FillRegion(new SolidBrush(p.color), new Region(new Rectangle(p.location.X, p.location.Y, 5, 5)));
@@ -146,6 +140,21 @@ namespace LearningDots
             comboBoxmaxtrainingszeit.Enabled = !checkBoxZuschauen.Checked;
         }
 
+        private void DrawObstacles()
+        {
+            foreach (Hindernis h in hindernisse)
+            {
+                PictureBox pb = new PictureBox();
+                pb.Image = Image.FromFile(@"wall.jpg");
+                pb.Location = h.location;
+                pb.Width = h.breite;
+                pb.Height = h.höhe;
+                h.pictureBox = pb;
+                pb.Visible = true;
+                panel1.Controls.Add(pb);
+            }
+        }
+
         private void comboBoxobstacle_SelectedIndexChanged(object sender, EventArgs e)
         {
             hindernisse.Clear();
@@ -154,7 +163,7 @@ namespace LearningDots
                 panel1.Refresh();
             }
             else if (comboBoxobstacle.SelectedIndex == 1)
-            {
+            {          
                 hindernisse.Add(new Hindernis(new Point(200, 200), 800, 10, Hindernis.Typ.Rechteck, Color.Blue));
                 panel1.Invalidate();
             }
@@ -167,6 +176,8 @@ namespace LearningDots
             {
                 panel1.Refresh();
             }
+
+            DrawObstacles();
         }
 
 
