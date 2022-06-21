@@ -72,9 +72,9 @@ namespace LearningDots
         {
             toolStripComboBox1.SelectedIndex = 0;
             buttonresetTraining.Enabled = false;
-            comboBoxobstacle.SelectedIndex = 2;
+            comboBoxobstacle.SelectedIndex = 0;
             comboBoxmaxSchritte.SelectedIndex = 0;
-            comboBoxanzahldots.SelectedIndex = 8;
+            comboBoxanzahldots.SelectedIndex = 6;
             comboBoxmaxtrainingszeit.SelectedIndex = 0;
             checkBoxZuschauen.Checked = false;
             checkBoxdiagonal.Checked = true;
@@ -142,6 +142,10 @@ namespace LearningDots
 
         private void DrawObstacles()
         {
+            // Delete all obstacles first
+            while(panel1.Controls.OfType<PictureBox>().Count() > 0)            
+                panel1.Controls.OfType<PictureBox>().First().Dispose();            
+
             foreach (Hindernis h in hindernisse)
             {
                 PictureBox pb = new PictureBox();
@@ -252,32 +256,6 @@ namespace LearningDots
             ftm.ShowDialog();
         }
 
-        private void toolStripComboBox1_Click(object sender, EventArgs e)
-        {
-            if (toolStripComboBox1.SelectedIndex == 0) return;
-
-            string filepath = OBSTACLEPATH + toolStripComboBox1.Text;
-            if (!File.Exists(filepath))
-            {
-                MessageBox.Show("File not found");
-                return;
-            }
-
-            hindernisse.Clear();
-
-            StreamReader sr = new StreamReader(filepath);
-            sr.ReadLine(); // ignore first line
-            while (!sr.EndOfStream)
-            {
-                string zeile = sr.ReadLine();
-                Hindernis h = new Hindernis(zeile);
-                hindernisse.Add(h);
-            }
-            sr.Close();
-
-            panel1.Invalidate();
-        }
-
         private void saveActualObstacleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (hindernisse.Count == 0) return;
@@ -299,6 +277,37 @@ namespace LearningDots
         private void printRanksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             training.PrintRanks(@"ranks");
+        }
+
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (toolStripComboBox1.SelectedIndex == 0)
+            {
+                hindernisse.Clear();
+                DrawObstacles();
+                return;
+            }
+
+            string filepath = OBSTACLEPATH + toolStripComboBox1.Text;
+            if (!File.Exists(filepath))
+            {
+                MessageBox.Show("File not found");
+                return;
+            }
+
+            hindernisse.Clear();
+
+            StreamReader sr = new StreamReader(filepath);
+            sr.ReadLine(); // ignore first line
+            while (!sr.EndOfStream)
+            {
+                string zeile = sr.ReadLine();
+                Hindernis h = new Hindernis(zeile);
+                hindernisse.Add(h);
+            }
+            sr.Close();
+
+            DrawObstacles();
         }
     }
 }

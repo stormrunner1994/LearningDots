@@ -433,7 +433,6 @@ namespace LearningDots
             status = Status.Stopped;
         }
 
-
         private void panel_Paint(object sender, PaintEventArgs e)
         {
             if (timeraktion == TimerAktion.trainieren)
